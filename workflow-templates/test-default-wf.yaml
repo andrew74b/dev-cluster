@@ -1,0 +1,231 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: test-default
+spec:
+  arguments:
+    parameters:
+      - name: truthy-value
+        value: "true"
+      - name: falsy-value
+        value: "false"
+  entrypoint: main
+  hooks:
+    exit:
+      arguments:
+        parameters:
+          - name: description
+            value: 'Step: `Completed`'
+      template: update-description
+  templates:
+    - name: main
+      steps:
+        - - hooks:
+              running:
+                arguments:
+                  parameters:
+                    - name: description
+                      value: 'Step: `get-value`'
+                expression: steps['get-value'].status == 'Running'
+                template: update-description
+            name: get-value
+            template: get-value
+        - - arguments:
+              parameters:
+                - default: test-default-input
+                  name: message
+                  value: '{{steps.get-value.outputs.result}}'
+            name: test-default-input
+            template: echo
+          - arguments:
+              parameters:
+                - default: test-default-argument
+                  name: message
+                  value: '{{=nil}}'
+            name: test-default-argument
+            template: echo
+          - arguments:
+              parameters:
+                - default: test-default-expression
+                  name: message
+                  value: '{{=lower(''TEST'')}}'
+            name: test-default-expression
+            template: echo
+          - arguments:
+              parameters:
+                - default: test-default-expression2
+                  name: message
+                  value: '{{=lower(''TEST'') == test ? nil : nil}}'
+            name: test-default-expression2
+            template: echo
+          - arguments:
+              parameters:
+                - default: test-default-expression3
+                  name: message
+                  value: '{{=lower(''TEST'') == ''test'' ? nil : nil}}'
+            name: test-default-expression3
+            template: echo
+          - arguments:
+              parameters:
+                - default: test-default-expression4
+                  name: message
+                  value: '{{=lower(''TEST'') == ''test'' ? ''Test'' : nil}}'
+            name: test-default-expression4
+            template: echo
+          - arguments:
+              parameters:
+                - name: message
+                  value: '{{=workflow.parameters[''truthy-value''] == true ? ''true'' : ''false''}}'
+            name: test-truthy-expression
+            template: echo
+          - arguments:
+              parameters:
+                - name: message
+                  value: '{{=workflow.parameters[''truthy-value''] == ''true'' ? ''true'' : ''false''}}'
+            name: test-truthy-expression2
+            template: echo
+          - arguments:
+              parameters:
+                - name: message
+                  value: '{{=workflow.parameters[''falsy-value''] == false ? ''true'' : ''false''}}'
+            name: test-falsy-expression
+            template: echo
+          - arguments:
+              parameters:
+                - name: message
+                  value: '{{=workflow.parameters[''falsy-value''] == ''false'' ? ''true'' : ''false''}}'
+            name: test-falsy-expression2
+            template: echo
+        - - arguments:
+              parameters:
+                - name: revision
+                  value: v4.0.0
+            name: test-output
+            template: output
+        - - arguments:
+              parameters:
+                - name: message
+                  value: '{{workflow.outputs.parameters.revision}}'
+            name: echo-output
+            template: echo
+        - - name: test-git-input
+            template: git
+        - - arguments:
+              parameters:
+                - name: revision
+                  value: v4.2.0
+            name: test-git-input2
+            template: git-param
+    - inputs:
+        parameters:
+          - default: get-value-default-value
+            name: value
+      name: get-value
+      script:
+        command:
+          - sh
+          - -c
+        image: busybox:1.37.0
+        name: main
+        source: |
+          echo "{{inputs.parameters.value}}"; sleep 15
+    - container:
+        args:
+          - |
+            echo "{{inputs.parameters.message}}"
+        command:
+          - sh
+          - -c
+        image: busybox:1.37.0
+        name: main
+      inputs:
+        parameters:
+          - name: message
+      name: echo
+    - container:
+        args:
+          - |
+            echo -n "{{inputs.parameters.revision}}" > /tmp/hello.txt
+        command:
+          - sh
+          - -c
+        image: busybox:1.37.0
+        name: main
+      inputs:
+        parameters:
+          - name: revision
+      name: output
+      outputs:
+        parameters:
+          - globalName: revision
+            name: revision
+            valueFrom:
+              path: /tmp/hello.txt
+    - container:
+        args:
+          - |
+            git rev-parse --short HEAD
+        command:
+          - sh
+          - -c
+        image: alpine/git:v2.47.1
+        name: main
+        workingDir: /src
+      inputs:
+        artifacts:
+          - git:
+              passwordSecret:
+                key: GIT_TOKEN
+                name: git-env
+              repo: https://github.com/DevalexLLC/infralytics-api
+              revision: '{{workflow.outputs.parameters.revision}}'
+              usernameSecret:
+                key: GIT_USER
+                name: git-env
+            name: source
+            path: /src
+      name: git
+    - container:
+        args:
+          - |
+            git rev-parse --short HEAD
+        command:
+          - sh
+          - -c
+        image: alpine/git:v2.47.1
+        name: main
+        workingDir: /src
+      inputs:
+        artifacts:
+          - git:
+              passwordSecret:
+                key: GIT_TOKEN
+                name: git-env
+              repo: https://github.com/DevalexLLC/infralytics-api
+              revision: '{{inputs.parameters.revision}}'
+              usernameSecret:
+                key: GIT_USER
+                name: git-env
+            name: source
+            path: /src
+        parameters:
+          - name: revision
+      name: git-param
+    - inputs:
+        parameters:
+          - name: description
+      name: update-description
+      resource:
+        action: apply
+        manifest: |-
+          apiVersion: argoproj.io/v1alpha1
+          kind: Workflow
+          metadata:
+            annotations:
+              workflows.argoproj.io/description: "{{inputs.parameters.description}}"
+            name: "{{workflow.name}}"
+          spec: {}
+  workflowMetadata:
+    annotations:
+      workflows.argoproj.io/description: 'Step: `Initializing`'
+      workflows.argoproj.io/title: '**{{=sprig.substr(0, lastIndexOf(workflow.name, ''-''), workflow.name)}}-{{workflow.creationTimestamp}}**'

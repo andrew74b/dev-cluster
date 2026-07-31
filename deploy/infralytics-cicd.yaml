@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: infralytics-cicd
+spec:
+  destination:
+    name: in-cluster
+    namespace: infralytics-cicd
+  project: default
+  sources:
+    - path: infralytics-cicd
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+    - path: workflow-config
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        linkerd.io/inject: enabled
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

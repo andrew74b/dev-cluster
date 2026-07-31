@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: trust-manager
+spec:
+  destination:
+    name: in-cluster
+    namespace: cert-manager
+  ignoreDifferences:
+    - jsonPointers:
+        - /data
+      kind: Secret
+      name: cluster-ca
+      namespace: default
+  project: default
+  sources:
+    - chart: trust-manager
+      helm:
+        parameters:
+          - name: crds.enabled
+            value: "true"
+          - name: app.trust.namespace
+            value: default
+          - name: secretTargets.enabled
+            value: "true"
+          - name: secretTargets.authorizedSecrets[0]
+            value: client-bundle
+          - name: secretTargets.authorizedSecrets[1]
+            value: ca-bundle
+      repoURL: https://charts.jetstack.io
+      targetRevision: 0.24.0
+    - path: trust-manager
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

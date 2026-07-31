@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - docubuilder-ci.yaml
+  - illumina-ci.yaml
+  - import-tasks-ci.yaml
+  - infralytics-api-ci.yaml
+  - infralytics-cfe-ci.yaml
+  - infralytics-collectors-ci.yaml
+  - infralytics-collectors-dev-ci.yaml
+  - ingest-file-ci.yaml
+  - materialized-views-ci.yaml
+  - static-content-ci.yaml
+  - sync-models-wftmpl.yaml

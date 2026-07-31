@@ -1,0 +1,3355 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: KeycloakRealmImport
+metadata:
+  name: public-realm
+spec:
+  keycloakCRName: keycloak
+  placeholders:
+    IMPULSE_CLIENT_SECRET:
+      secret:
+        key: impulse
+        name: public-clients
+  realm:
+    accessCodeLifespan: 60
+    accessCodeLifespanLogin: 1800
+    accessCodeLifespanUserAction: 300
+    accessTokenLifespan: 300
+    accessTokenLifespanForImplicitFlow: 900
+    accountTheme: ""
+    actionTokenGeneratedByAdminLifespan: 43200
+    actionTokenGeneratedByUserLifespan: 300
+    adminEventsDetailsEnabled: false
+    adminEventsEnabled: true
+    adminPermissionsEnabled: false
+    adminTheme: ""
+    attributes:
+      actionTokenGeneratedByUserLifespan.execute-actions: ""
+      actionTokenGeneratedByUserLifespan.idp-verify-account-via-email: ""
+      actionTokenGeneratedByUserLifespan.reset-credentials: ""
+      actionTokenGeneratedByUserLifespan.verify-email: ""
+      adminEventsExpiration: "7776000"
+      cibaAuthRequestedUserHint: login_hint
+      cibaBackchannelTokenDeliveryMode: poll
+      cibaExpiresIn: "120"
+      cibaInterval: "5"
+      clientOfflineSessionIdleTimeout: "0"
+      clientOfflineSessionMaxLifespan: "0"
+      clientSessionIdleTimeout: "0"
+      clientSessionMaxLifespan: "0"
+      oauth2DeviceCodeLifespan: "600"
+      oauth2DevicePollingInterval: "5"
+      parRequestUriLifespan: "60"
+      realmReusableOtpCode: "false"
+      shortVerificationUri: ""
+    authenticationFlows:
+      - alias: Account verification options
+        authenticationExecutions:
+          - authenticator: idp-email-verification
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: Verify Existing Account by Re-authentication
+            priority: 20
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+        builtIn: true
+        description: Method with which to verity the existing account
+        id: 98c8569b-87aa-4bb8-ba27-a39a411b6861
+        providerId: basic-flow
+        topLevel: false
+      - alias: Browser - Conditional OTP
+        authenticationExecutions:
+          - authenticator: conditional-user-configured
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: auth-otp-form
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: Flow to determine if the OTP is required for the authentication
+        id: bd2f132b-29cc-4cab-884f-0e7aad15c5f9
+        providerId: basic-flow
+        topLevel: false
+      - alias: Direct Grant - Conditional OTP
+        authenticationExecutions:
+          - authenticator: conditional-user-configured
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: direct-grant-validate-otp
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: Flow to determine if the OTP is required for the authentication
+        id: 91078716-0dae-4add-93b7-bbdae9851d9b
+        providerId: basic-flow
+        topLevel: false
+      - alias: First broker login - Conditional OTP
+        authenticationExecutions:
+          - authenticator: conditional-user-configured
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: auth-otp-form
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: Flow to determine if the OTP is required for the authentication
+        id: 51fa9cb4-467a-426e-a649-2884fcb85d2b
+        providerId: basic-flow
+        topLevel: false
+      - alias: Handle Existing Account
+        authenticationExecutions:
+          - authenticator: idp-confirm-link
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: Account verification options
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: Handle what to do if there is existing account with same email/username like authenticated identity provider
+        id: d399955b-6ab1-4e70-b41f-7c2a72adcb35
+        providerId: basic-flow
+        topLevel: false
+      - alias: Reset - Conditional OTP
+        authenticationExecutions:
+          - authenticator: conditional-user-configured
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: reset-otp
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.
+        id: d094da82-44a9-4bef-b94b-6753227f9f63
+        providerId: basic-flow
+        topLevel: false
+      - alias: User creation or linking
+        authenticationExecutions:
+          - authenticator: idp-create-user-if-unique
+            authenticatorConfig: create unique user config
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: Handle Existing Account
+            priority: 20
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+        builtIn: true
+        description: Flow for the existing/non-existing user alternatives
+        id: d6ba3d43-a6e1-48dc-9af3-c14ae6e29915
+        providerId: basic-flow
+        topLevel: false
+      - alias: Verify Existing Account by Re-authentication
+        authenticationExecutions:
+          - authenticator: idp-username-password-form
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: First broker login - Conditional OTP
+            priority: 20
+            requirement: CONDITIONAL
+            userSetupAllowed: false
+        builtIn: true
+        description: Reauthentication of existing account
+        id: a34c263c-b04a-4414-a488-24e0de5ff3c8
+        providerId: basic-flow
+        topLevel: false
+      - alias: browser
+        authenticationExecutions:
+          - authenticator: auth-cookie
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticator: auth-spnego
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: DISABLED
+            userSetupAllowed: false
+          - authenticator: identity-provider-redirector
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 25
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: forms
+            priority: 30
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+        builtIn: true
+        description: browser based authentication
+        id: 27416675-7a98-4df7-ad43-eedf4be76e15
+        providerId: basic-flow
+        topLevel: true
+      - alias: clients
+        authenticationExecutions:
+          - authenticator: client-secret
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticator: client-jwt
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticator: client-secret-jwt
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 30
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticator: client-x509
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 40
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+        builtIn: true
+        description: Base authentication for clients
+        id: a71bba14-8dad-4568-8f57-4f49500a09b6
+        providerId: client-flow
+        topLevel: true
+      - alias: direct grant
+        authenticationExecutions:
+          - authenticator: direct-grant-validate-username
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: direct-grant-validate-password
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: Direct Grant - Conditional OTP
+            priority: 30
+            requirement: CONDITIONAL
+            userSetupAllowed: false
+        builtIn: true
+        description: OpenID Connect Resource Owner Grant
+        id: 6f675c5c-0e44-485e-a0e4-aa49eddf4684
+        providerId: basic-flow
+        topLevel: true
+      - alias: docker auth
+        authenticationExecutions:
+          - authenticator: docker-http-basic-authenticator
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: Used by Docker clients to authenticate against the IDP
+        id: 3de374c4-0a36-44eb-886d-4d93f2816b85
+        providerId: basic-flow
+        topLevel: true
+      - alias: first broker login
+        authenticationExecutions:
+          - authenticator: idp-review-profile
+            authenticatorConfig: review profile config
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: User creation or linking
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account
+        id: af0b6f3e-d733-43c0-82ec-7433c89105c2
+        providerId: basic-flow
+        topLevel: true
+      - alias: forms
+        authenticationExecutions:
+          - authenticator: auth-username-password-form
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: Browser - Conditional OTP
+            priority: 20
+            requirement: CONDITIONAL
+            userSetupAllowed: false
+        builtIn: true
+        description: Username, password, otp and other auth forms.
+        id: 944f845d-2c30-4a4c-8c03-fc06af99fd20
+        providerId: basic-flow
+        topLevel: false
+      - alias: registration
+        authenticationExecutions:
+          - authenticator: registration-page-form
+            authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: registration form
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: registration flow
+        id: 00ef2bf7-dc97-4440-a9ce-7f708eeb435b
+        providerId: basic-flow
+        topLevel: true
+      - alias: registration form
+        authenticationExecutions:
+          - authenticator: registration-user-creation
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: registration-password-action
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 50
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: registration-recaptcha-action
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 60
+            requirement: DISABLED
+            userSetupAllowed: false
+        builtIn: true
+        description: registration form
+        id: cf1b240e-6c6b-4cfd-b5a2-f97d186117a4
+        providerId: form-flow
+        topLevel: false
+      - alias: reset credentials
+        authenticationExecutions:
+          - authenticator: reset-credentials-choose-user
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: reset-credential-email
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: reset-password
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 30
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: Reset - Conditional OTP
+            priority: 40
+            requirement: CONDITIONAL
+            userSetupAllowed: false
+        builtIn: true
+        description: Reset credentials for a user if they forgot their password or something
+        id: 54032f54-236b-43f0-99ec-b178398e6704
+        providerId: basic-flow
+        topLevel: true
+      - alias: saml ecp
+        authenticationExecutions:
+          - authenticator: http-basic-authenticator
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: true
+        description: SAML ECP Profile Authentication Flow
+        id: c43f227f-90a6-4ef9-badb-d9421050737a
+        providerId: basic-flow
+        topLevel: true
+      - alias: x509 browser
+        authenticationExecutions:
+          - authenticator: auth-cookie
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticator: auth-spnego
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: DISABLED
+            userSetupAllowed: false
+          - authenticator: identity-provider-redirector
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 25
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: x509 browser irongate
+            priority: 30
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: x509 browser forms
+            priority: 32
+            requirement: ALTERNATIVE
+            userSetupAllowed: false
+        builtIn: false
+        description: x509 browser based authentication
+        id: cad2d71e-cb2f-4bb1-aa18-0bc5b7d2743f
+        providerId: basic-flow
+        topLevel: true
+      - alias: x509 browser Browser - Conditional OTP
+        authenticationExecutions:
+          - authenticator: conditional-user-configured
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: auth-otp-form
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 20
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: false
+        description: Flow to determine if the OTP is required for the authentication
+        id: 3ee53fd6-17af-4ad8-8783-0debb7d09f17
+        providerId: basic-flow
+        topLevel: false
+      - alias: x509 browser forms
+        authenticationExecutions:
+          - authenticator: auth-username-password-form
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 10
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticatorFlow: true
+            autheticatorFlow: true
+            flowAlias: x509 browser Browser - Conditional OTP
+            priority: 20
+            requirement: CONDITIONAL
+            userSetupAllowed: false
+        builtIn: false
+        description: Username, password, otp and other auth forms.
+        id: bcd521db-3ad8-49c1-b484-cfefc9873e3a
+        providerId: basic-flow
+        topLevel: false
+      - alias: x509 browser irongate
+        authenticationExecutions:
+          - authenticator: script-irongate-init-user.js
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 0
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: auth-x509-client-username-form
+            authenticatorConfig: x509-browser-form
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 0
+            requirement: REQUIRED
+            userSetupAllowed: false
+          - authenticator: script-irongate-validate-user.js
+            authenticatorFlow: false
+            autheticatorFlow: false
+            priority: 1
+            requirement: REQUIRED
+            userSetupAllowed: false
+        builtIn: false
+        description: ""
+        id: 26f2f14c-5c91-4f9e-b817-b527eaebe447
+        providerId: basic-flow
+        topLevel: false
+    authenticatorConfig:
+      - alias: create unique user config
+        config:
+          require.password.update.after.registration: "false"
+        id: d2e2763e-7d82-4db3-a7d2-55d3c9a733c2
+      - alias: review profile config
+        config:
+          update.profile.on.first.login: missing
+        id: ac88f370-87e8-4e75-9f22-6ef7b426aadd
+      - alias: x509-browser-form
+        config:
+          x509-cert-auth.canonical-dn-enabled: "false"
+          x509-cert-auth.certificate-policy-mode: All
+          x509-cert-auth.confirmation-page-disallowed: "true"
+          x509-cert-auth.crl-checking-enabled: "false"
+          x509-cert-auth.crldp-checking-enabled: "false"
+          x509-cert-auth.mapper-selection: Username or Email
+          x509-cert-auth.mapping-source-selection: Subject's Common Name
+          x509-cert-auth.ocsp-checking-enabled: "false"
+          x509-cert-auth.ocsp-fail-open: "false"
+          x509-cert-auth.regular-expression: (.*?)(?:$)
+          x509-cert-auth.revalidate-certificate-enabled: "false"
+          x509-cert-auth.serialnumber-hex-enabled: "false"
+          x509-cert-auth.timestamp-validation-enabled: "false"
+        id: 8aceffd4-f909-4da6-9e7c-ae4b0f2519e6
+    browserFlow: x509 browser
+    browserSecurityHeaders:
+      contentSecurityPolicy: frame-src 'self'; frame-ancestors 'self'; object-src 'none';
+      contentSecurityPolicyReportOnly: ""
+      referrerPolicy: no-referrer
+      strictTransportSecurity: max-age=31536000; includeSubDomains
+      xContentTypeOptions: nosniff
+      xFrameOptions: SAMEORIGIN
+      xRobotsTag: none
+      xXSSProtection: 1; mode=block
+    bruteForceProtected: false
+    bruteForceStrategy: MULTIPLE
+    clientAuthenticationFlow: clients
+    clientOfflineSessionIdleTimeout: 0
+    clientOfflineSessionMaxLifespan: 0
+    clientPolicies:
+      policies: []
+    clientProfiles:
+      profiles: []
+    clientScopeMappings:
+      account:
+        - client: account-console
+          roles:
+            - manage-account
+            - view-groups
+    clientScopes:
+      - attributes:
+          display.on.consent.screen: "false"
+          include.in.token.scope: "false"
+        description: OpenID Connect scope for add all basic claims to the token
+        id: fbc0ac32-d110-45d6-9539-b9a050bd4038
+        name: basic
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              introspection.token.claim: "true"
+            consentRequired: false
+            id: 6e7528f4-e310-497a-aa04-430fb4d227b5
+            name: sub
+            protocol: openid-connect
+            protocolMapper: oidc-sub-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: auth_time
+              id.token.claim: "true"
+              introspection.token.claim: "true"
+              jsonType.label: long
+              user.session.note: AUTH_TIME
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 99dbe4c2-efe6-43a6-b0b4-7a9e25778981
+            name: auth_time
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+      - attributes:
+          consent.screen.text: ${addressScopeConsentText}
+          display.on.consent.screen: "true"
+          include.in.token.scope: "true"
+        description: 'OpenID Connect built-in scope: address'
+        id: b232021e-71d3-4d00-a188-ebb20b24124e
+        name: address
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              id.token.claim: "true"
+              user.attribute.country: country
+              user.attribute.formatted: formatted
+              user.attribute.locality: locality
+              user.attribute.postal_code: postal_code
+              user.attribute.region: region
+              user.attribute.street: street
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 4866f974-57fa-45d6-93b9-cee14dde60a8
+            name: address
+            protocol: openid-connect
+            protocolMapper: oidc-address-mapper
+      - attributes:
+          consent.screen.text: ${emailScopeConsentText}
+          display.on.consent.screen: "true"
+          include.in.token.scope: "true"
+        description: 'OpenID Connect built-in scope: email'
+        id: ad9f941d-747a-482a-ad70-ea31b96436f8
+        name: email
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: email
+              id.token.claim: "true"
+              multivalued: "false"
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 37d49ccf-8466-4a82-a579-84d4d4cd5a3e
+            name: irongate email
+            protocol: openid-connect
+            protocolMapper: script-irongate-email-mapper.js
+          - config:
+              access.token.claim: "true"
+              claim.name: email_verified
+              id.token.claim: "true"
+              jsonType.label: boolean
+              user.attribute: emailVerified
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: c3c6c5a7-0d81-43b3-8915-782224987428
+            name: email verified
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-property-mapper
+      - attributes:
+          consent.screen.text: ${samlRoleListScopeConsentText}
+          display.on.consent.screen: "true"
+        description: SAML role list
+        id: d1c5106e-c628-4cee-a3af-52b4973f81fb
+        name: role_list
+        protocol: saml
+        protocolMappers:
+          - config:
+              attribute.name: Role
+              attribute.nameformat: Basic
+              single: "false"
+            consentRequired: false
+            id: 689b0706-1e86-43d0-8a1b-b07e5fb9c78c
+            name: role list
+            protocol: saml
+            protocolMapper: saml-role-list-mapper
+      - attributes:
+          display.on.consent.screen: "false"
+          include.in.token.scope: "false"
+        description: Specific scope for a client enabled for service accounts
+        id: b082bb6c-280f-423b-ab7d-4962aab21665
+        name: service_account
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: clientHost
+              id.token.claim: "true"
+              introspection.token.claim: "true"
+              jsonType.label: String
+              user.session.note: clientHost
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: bd97bdcd-192c-4889-851c-abbc55107db0
+            name: Client Host
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: clientAddress
+              id.token.claim: "true"
+              introspection.token.claim: "true"
+              jsonType.label: String
+              user.session.note: clientAddress
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: fc2c7333-65c8-4e28-ad58-86bab8e2e82c
+            name: Client IP Address
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: client_id
+              id.token.claim: "true"
+              introspection.token.claim: "true"
+              jsonType.label: String
+              user.session.note: client_id
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: ae344573-11c8-4d7e-b0b7-dae2e7a22935
+            name: Client ID
+            protocol: openid-connect
+            protocolMapper: oidc-usersessionmodel-note-mapper
+      - attributes:
+          consent.screen.text: ""
+          display.on.consent.screen: "false"
+          gui.order: ""
+          include.in.token.scope: "true"
+        description: ""
+        id: 51922417-14c5-4758-8a5c-6b229daef96d
+        name: groups
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: groups
+              full.path: "false"
+              id.token.claim: "true"
+              multivalued: "true"
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 28258b8e-9edb-49de-b2b2-add1a84f693a
+            name: groups
+            protocol: openid-connect
+            protocolMapper: oidc-group-membership-mapper
+      - attributes:
+          display.on.consent.screen: "false"
+          include.in.token.scope: "false"
+        description: OpenID Connect scope for add acr (authentication context class reference) to the token
+        id: a194f145-37ea-48a3-9736-ad59eed3ce50
+        name: acr
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              id.token.claim: "true"
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 011e9f77-023f-418a-a33a-8f735c7f8634
+            name: acr loa level
+            protocol: openid-connect
+            protocolMapper: oidc-acr-mapper
+      - attributes:
+          consent.screen.text: ""
+          display.on.consent.screen: "false"
+          include.in.token.scope: "false"
+        description: OpenID Connect scope for add allowed web origins to the access token
+        id: 27e7dda6-d4bf-4f78-ae4e-be5616aa1c33
+        name: web-origins
+        protocol: openid-connect
+        protocolMappers:
+          - config: {}
+            consentRequired: false
+            id: ab621672-a01e-4138-9808-5556433cd272
+            name: allowed web origins
+            protocol: openid-connect
+            protocolMapper: oidc-allowed-origins-mapper
+      - attributes:
+          consent.screen.text: ""
+          display.on.consent.screen: "false"
+          gui.order: ""
+          include.in.token.scope: "true"
+        description: ""
+        id: 9f073689-a0f3-4f34-a0d1-f5842b8b27eb
+        name: tenants
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: tenant_ids
+              id.token.claim: "true"
+              multivalued: "true"
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 4db15f83-3ec5-4714-8a94-f959ddf27941
+            name: tenantIds
+            protocol: openid-connect
+            protocolMapper: script-irongate-tenant-mapper.js
+      - attributes:
+          consent.screen.text: ${offlineAccessScopeConsentText}
+          display.on.consent.screen: "true"
+        description: 'OpenID Connect built-in scope: offline_access'
+        id: 599df90c-065a-4127-b3ec-47ee46888bbc
+        name: offline_access
+        protocol: openid-connect
+      - attributes:
+          consent.screen.text: ${phoneScopeConsentText}
+          display.on.consent.screen: "true"
+          include.in.token.scope: "true"
+        description: 'OpenID Connect built-in scope: phone'
+        id: 0c1bca19-3f72-45bc-81dc-18246e32dbef
+        name: phone
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: phone_number
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: phoneNumber
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 7e244b2a-7742-43d5-b587-8d7afe5bdbeb
+            name: phone number
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: phone_number_verified
+              id.token.claim: "true"
+              jsonType.label: boolean
+              user.attribute: phoneNumberVerified
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: ee5ecb5a-1e9c-43e1-93a8-93a4579e4f0c
+            name: phone number verified
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+      - attributes:
+          consent.screen.text: ${profileScopeConsentText}
+          display.on.consent.screen: "true"
+          include.in.token.scope: "true"
+        description: 'OpenID Connect built-in scope: profile'
+        id: df515692-d054-4fe1-83a9-88f03b56feca
+        name: profile
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              id.token.claim: "true"
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 75d09118-4d21-43a6-ac19-ff6b1efc2508
+            name: full name
+            protocol: openid-connect
+            protocolMapper: oidc-full-name-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: zoneinfo
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: zoneinfo
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 44967c8b-406d-4e59-9346-523c77d1e331
+            name: zoneinfo
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: preferred_username
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: username
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: aed897c5-4f14-495d-9d97-aa6ba080f7ac
+            name: username
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-property-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: birthdate
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: birthdate
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: c954f9ec-e32b-4cca-b91f-bf7d81578018
+            name: birthdate
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: profile
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: profile
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: ce9238a1-4202-4f65-8d36-82b1ab0717b3
+            name: profile
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: updated_at
+              id.token.claim: "true"
+              jsonType.label: long
+              user.attribute: updatedAt
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 21aa3281-25f7-45df-8f87-e293e79f3c3a
+            name: updated at
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: picture
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: picture
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 67f9fea5-c942-4dc8-8c7c-e6b9bf77045d
+            name: picture
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: gender
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: gender
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 417aa77a-3cb4-46c7-8c13-360e6e42bd2d
+            name: gender
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: nickname
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: nickname
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: ac070b0e-8099-4952-b18f-c7090829da36
+            name: nickname
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: middle_name
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: middleName
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 383c37be-e509-41d8-899f-d6ce016cba80
+            name: middle name
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: family_name
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: lastName
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 1b00f19d-b380-4d12-bf20-4914924b18e2
+            name: family name
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-property-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: given_name
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: firstName
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: d5c4308e-8ebf-4e41-af28-e9f9f063f30c
+            name: given name
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-property-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: website
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: website
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 18f995e7-141f-410f-a2d1-94ebc1594479
+            name: website
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: locale
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: locale
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 19c78b63-871c-46be-9f16-98cb23b64751
+            name: locale
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+      - attributes:
+          display.on.consent.screen: "false"
+          include.in.token.scope: "true"
+        description: Microprofile - JWT built-in scope
+        id: 80d89b9d-d913-4857-aad1-34ed69d105c2
+        name: microprofile-jwt
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: groups
+              id.token.claim: "true"
+              jsonType.label: String
+              multivalued: "true"
+              user.attribute: foo
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: ee08dcdb-1c1d-4b7d-aaf6-0098c0ce1cc3
+            name: groups
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-realm-role-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: upn
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: username
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 0aee5d5a-e0cf-48ed-93b3-ade283f8c11b
+            name: upn
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-property-mapper
+      - attributes:
+          consent.screen.text: ${rolesScopeConsentText}
+          display.on.consent.screen: "true"
+          include.in.token.scope: "false"
+        description: OpenID Connect scope for add user roles to the access token
+        id: 8aeb8ca2-c9e6-4127-9aef-a4d29ba80299
+        name: roles
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: resource_access.${client_id}.roles
+              jsonType.label: String
+              multivalued: "true"
+              user.attribute: foo
+            consentRequired: false
+            id: 470a6151-0d1f-45c6-9517-8c7520ffbbdf
+            name: client roles
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-client-role-mapper
+          - config: {}
+            consentRequired: false
+            id: b009ccd5-3579-428e-946a-57bd99a1117e
+            name: audience resolve
+            protocol: openid-connect
+            protocolMapper: oidc-audience-resolve-mapper
+          - config:
+              access.token.claim: "true"
+              claim.name: realm_access.roles
+              jsonType.label: String
+              multivalued: "true"
+              user.attribute: foo
+            consentRequired: false
+            id: 5980f814-6ffc-4573-aa28-8ad778c636d5
+            name: realm roles
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-realm-role-mapper
+      - attributes:
+          consent.screen.text: ""
+          display.on.consent.screen: "false"
+          gui.order: ""
+          include.in.token.scope: "true"
+        description: ""
+        id: db05cec8-fc9a-481b-bdb6-9687aa2653f7
+        name: internal_groups
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: internal_groups
+              id.token.claim: "true"
+              multivalued: "true"
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 243513b2-21cd-455e-9731-56795217b7a3
+            name: internal groups
+            protocol: openid-connect
+            protocolMapper: script-irongate-internal-mapper.js
+    clientSessionIdleTimeout: 0
+    clientSessionMaxLifespan: 0
+    clients:
+      - alwaysDisplayInConsole: false
+        attributes:
+          post.logout.redirect.uris: +
+          realm_client: "false"
+        authenticationFlowBindingOverrides: {}
+        baseUrl: /realms/public/account/
+        bearerOnly: false
+        clientAuthenticatorType: client-secret
+        clientId: account
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - basic
+          - email
+        directAccessGrantsEnabled: false
+        enabled: true
+        frontchannelLogout: false
+        fullScopeAllowed: false
+        id: c451993f-d6e1-4d0b-a962-cb500eee0847
+        implicitFlowEnabled: false
+        name: ${client_account}
+        nodeReRegistrationTimeout: 0
+        notBefore: 0
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        protocol: openid-connect
+        publicClient: true
+        redirectUris:
+          - /realms/public/account/*
+        rootUrl: ${authBaseUrl}
+        serviceAccountsEnabled: false
+        standardFlowEnabled: true
+        surrogateAuthRequired: false
+        webOrigins: []
+      - alwaysDisplayInConsole: false
+        attributes:
+          pkce.code.challenge.method: S256
+          post.logout.redirect.uris: +
+          realm_client: "false"
+        authenticationFlowBindingOverrides: {}
+        baseUrl: /realms/public/account/
+        bearerOnly: false
+        clientAuthenticatorType: client-secret
+        clientId: account-console
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - basic
+          - email
+        directAccessGrantsEnabled: false
+        enabled: true
+        frontchannelLogout: false
+        fullScopeAllowed: false
+        id: a4037754-ab5c-4621-bfa5-9976dfe6e469
+        implicitFlowEnabled: false
+        name: ${client_account-console}
+        nodeReRegistrationTimeout: 0
+        notBefore: 0
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        protocol: openid-connect
+        protocolMappers:
+          - config: {}
+            consentRequired: false
+            id: 2b3ce055-91c1-421a-abee-5a7b67490df1
+            name: audience resolve
+            protocol: openid-connect
+            protocolMapper: oidc-audience-resolve-mapper
+        publicClient: true
+        redirectUris:
+          - /realms/public/account/*
+        rootUrl: ${authBaseUrl}
+        serviceAccountsEnabled: false
+        standardFlowEnabled: true
+        surrogateAuthRequired: false
+        webOrigins: []
+      - alwaysDisplayInConsole: false
+        attributes:
+          client.use.lightweight.access.token.enabled: "true"
+          post.logout.redirect.uris: +
+          realm_client: "false"
+        authenticationFlowBindingOverrides: {}
+        bearerOnly: false
+        clientAuthenticatorType: client-secret
+        clientId: admin-cli
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - basic
+          - email
+        directAccessGrantsEnabled: true
+        enabled: true
+        frontchannelLogout: false
+        fullScopeAllowed: true
+        id: 849769bf-35d2-4c03-ae97-e2a91297f85b
+        implicitFlowEnabled: false
+        name: ${client_admin-cli}
+        nodeReRegistrationTimeout: 0
+        notBefore: 0
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        protocol: openid-connect
+        publicClient: true
+        redirectUris: []
+        serviceAccountsEnabled: false
+        standardFlowEnabled: false
+        surrogateAuthRequired: false
+        webOrigins: []
+      - alwaysDisplayInConsole: false
+        attributes:
+          post.logout.redirect.uris: +
+          realm_client: "true"
+        authenticationFlowBindingOverrides: {}
+        bearerOnly: true
+        clientAuthenticatorType: client-secret
+        clientId: broker
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - email
+        directAccessGrantsEnabled: false
+        enabled: true
+        frontchannelLogout: false
+        fullScopeAllowed: false
+        id: 5f1bc69e-3570-4d4d-ab82-e670b1340f3a
+        implicitFlowEnabled: false
+        name: ${client_broker}
+        nodeReRegistrationTimeout: 0
+        notBefore: 0
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        protocol: openid-connect
+        publicClient: false
+        redirectUris: []
+        serviceAccountsEnabled: false
+        standardFlowEnabled: true
+        surrogateAuthRequired: false
+        webOrigins: []
+      - adminUrl: https://illumina.pandathedog.com
+        alwaysDisplayInConsole: false
+        attributes:
+          backchannel.logout.revoke.offline.tokens: "false"
+          backchannel.logout.session.required: "true"
+          display.on.consent.screen: "false"
+          frontchannel.logout.session.required: "true"
+          oauth2.device.authorization.grant.enabled: "false"
+          oidc.ciba.grant.enabled: "false"
+          post.logout.redirect.uris: +
+          realm_client: "false"
+        authenticationFlowBindingOverrides: {}
+        baseUrl: ""
+        bearerOnly: false
+        clientAuthenticatorType: client-secret
+        clientId: illumina
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - basic
+          - email
+        description: ""
+        directAccessGrantsEnabled: false
+        enabled: true
+        frontchannelLogout: true
+        fullScopeAllowed: true
+        id: bc736265-b415-4a80-8f56-e0f9fddc28f2
+        implicitFlowEnabled: false
+        name: Illumina Client
+        nodeReRegistrationTimeout: -1
+        notBefore: 0
+        optionalClientScopes:
+          - tenants
+          - address
+          - phone
+          - offline_access
+          - internal_groups
+          - groups
+          - microprofile-jwt
+        protocol: openid-connect
+        publicClient: true
+        redirectUris:
+          - /api/auth/callback/keycloak
+          - https://localhost:8443/api/auth/callback/keycloak
+        rootUrl: https://illumina.pandathedog.com
+        serviceAccountsEnabled: false
+        standardFlowEnabled: true
+        surrogateAuthRequired: false
+        webOrigins:
+          - https://localhost:8443
+          - https://illumina.pandathedog.com
+      - adminUrl: ""
+        alwaysDisplayInConsole: false
+        attributes:
+          backchannel.logout.revoke.offline.tokens: "false"
+          backchannel.logout.session.required: "true"
+          client.secret.creation.time: "1765546679"
+          display.on.consent.screen: "false"
+          frontchannel.logout.session.required: "true"
+          oauth2.device.authorization.grant.enabled: "false"
+          oidc.ciba.grant.enabled: "false"
+          post.logout.redirect.uris: +
+          realm_client: "false"
+        authenticationFlowBindingOverrides: {}
+        baseUrl: ""
+        bearerOnly: false
+        clientAuthenticatorType: client-secret
+        clientId: impulse-web
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - basic
+          - email
+        description: ""
+        directAccessGrantsEnabled: false
+        enabled: true
+        frontchannelLogout: true
+        fullScopeAllowed: true
+        id: c5731ade-f2a8-4fe4-91bf-065815c6b760
+        implicitFlowEnabled: false
+        name: Impulse Web
+        nodeReRegistrationTimeout: -1
+        notBefore: 0
+        optionalClientScopes:
+          - tenants
+          - address
+          - phone
+          - offline_access
+          - internal_groups
+          - groups
+          - microprofile-jwt
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              id.token.claim: "false"
+              included.client.audience: impulse-web
+              introspection.token.claim: "true"
+              lightweight.claim: "false"
+              userinfo.token.claim: "false"
+            consentRequired: false
+            id: 43f233ee-b9b3-45ee-80a1-7658cf6d9f20
+            name: impulse-web-audience-mapper
+            protocol: openid-connect
+            protocolMapper: oidc-audience-mapper
+        publicClient: false
+        redirectUris:
+          - http://localhost:3000/api/auth/callback/keycloak
+          - https://localhost:8443/api/auth/callback/keycloak
+        rootUrl: ""
+        secret: ${IMPULSE_CLIENT_SECRET}
+        serviceAccountsEnabled: false
+        standardFlowEnabled: true
+        surrogateAuthRequired: false
+        webOrigins:
+          - https://localhost:8443
+          - http://localhost:3000
+      - alwaysDisplayInConsole: false
+        attributes:
+          post.logout.redirect.uris: +
+          realm_client: "true"
+        authenticationFlowBindingOverrides: {}
+        bearerOnly: true
+        clientAuthenticatorType: client-secret
+        clientId: realm-management
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - email
+        directAccessGrantsEnabled: false
+        enabled: true
+        frontchannelLogout: false
+        fullScopeAllowed: false
+        id: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+        implicitFlowEnabled: false
+        name: ${client_realm-management}
+        nodeReRegistrationTimeout: 0
+        notBefore: 0
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        protocol: openid-connect
+        publicClient: false
+        redirectUris: []
+        serviceAccountsEnabled: false
+        standardFlowEnabled: true
+        surrogateAuthRequired: false
+        webOrigins: []
+      - alwaysDisplayInConsole: false
+        attributes:
+          client.use.lightweight.access.token.enabled: "true"
+          pkce.code.challenge.method: S256
+          post.logout.redirect.uris: +
+          realm_client: "false"
+        authenticationFlowBindingOverrides: {}
+        baseUrl: /admin/public/console/
+        bearerOnly: false
+        clientAuthenticatorType: client-secret
+        clientId: security-admin-console
+        consentRequired: false
+        defaultClientScopes:
+          - web-origins
+          - acr
+          - profile
+          - roles
+          - basic
+          - email
+        directAccessGrantsEnabled: false
+        enabled: true
+        frontchannelLogout: false
+        fullScopeAllowed: true
+        id: 75011b0e-eb7d-4cb6-8c75-f8f1a823ba53
+        implicitFlowEnabled: false
+        name: ${client_security-admin-console}
+        nodeReRegistrationTimeout: 0
+        notBefore: 0
+        optionalClientScopes:
+          - address
+          - phone
+          - offline_access
+          - microprofile-jwt
+        protocol: openid-connect
+        protocolMappers:
+          - config:
+              access.token.claim: "true"
+              claim.name: locale
+              id.token.claim: "true"
+              jsonType.label: String
+              user.attribute: locale
+              userinfo.token.claim: "true"
+            consentRequired: false
+            id: 3c7264f8-4db7-4f98-a4a5-3ca198eaa751
+            name: locale
+            protocol: openid-connect
+            protocolMapper: oidc-usermodel-attribute-mapper
+        publicClient: true
+        redirectUris:
+          - /admin/public/console/*
+        rootUrl: ${authAdminUrl}
+        serviceAccountsEnabled: false
+        standardFlowEnabled: true
+        surrogateAuthRequired: false
+        webOrigins:
+          - +
+    components:
+      org.keycloak.keys.KeyProvider:
+        - config:
+            priority:
+              - "100"
+          id: 2fea2a56-9470-4d39-9ad9-edee4b76e657
+          name: aes-generated
+          providerId: aes-generated
+          subComponents: {}
+        - config:
+            priority:
+              - "100"
+          id: db7329be-e3f2-4b62-b9c7-2ef3808dd4fa
+          name: rsa-generated
+          providerId: rsa-generated
+          subComponents: {}
+        - config:
+            algorithm:
+              - RSA-OAEP
+            priority:
+              - "100"
+          id: f3068f38-f7ad-4148-b13f-33f1aacc51c5
+          name: rsa-enc-generated
+          providerId: rsa-enc-generated
+          subComponents: {}
+        - config:
+            algorithm:
+              - HS256
+            priority:
+              - "100"
+          id: c16ab8d1-a95c-4af5-a8a3-18fa91aae9b1
+          name: hmac-generated
+          providerId: hmac-generated
+          subComponents: {}
+        - config:
+            algorithm:
+              - HS512
+            priority:
+              - "100"
+          id: 2b4ef237-f48d-4880-9adb-b1d35a195e69
+          name: hmac-generated-hs512
+          providerId: hmac-generated
+          subComponents: {}
+      org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy:
+        - config: {}
+          id: a8fa35ff-4f8d-474e-8413-bb6494d1cde6
+          name: Full Scope Disabled
+          providerId: scope
+          subComponents: {}
+          subType: anonymous
+        - config:
+            max-clients:
+              - "200"
+          id: eef7f340-8362-4eea-a723-baa9fdef6f8f
+          name: Max Clients Limit
+          providerId: max-clients
+          subComponents: {}
+          subType: anonymous
+        - config:
+            allowed-protocol-mapper-types:
+              - oidc-sha256-pairwise-sub-mapper
+              - oidc-full-name-mapper
+              - saml-user-attribute-mapper
+              - saml-user-property-mapper
+              - oidc-usermodel-attribute-mapper
+              - oidc-address-mapper
+              - saml-role-list-mapper
+              - oidc-usermodel-property-mapper
+          id: b73ecfe8-a142-4a2e-b402-6af5d68fd311
+          name: Allowed Protocol Mapper Types
+          providerId: allowed-protocol-mappers
+          subComponents: {}
+          subType: anonymous
+        - config:
+            allowed-protocol-mapper-types:
+              - oidc-usermodel-property-mapper
+              - saml-user-property-mapper
+              - oidc-address-mapper
+              - oidc-usermodel-attribute-mapper
+              - saml-user-attribute-mapper
+              - saml-role-list-mapper
+              - oidc-full-name-mapper
+              - oidc-sha256-pairwise-sub-mapper
+          id: d98d78af-0a4a-4880-bbbf-1c9e7ed3d850
+          name: Allowed Protocol Mapper Types
+          providerId: allowed-protocol-mappers
+          subComponents: {}
+          subType: authenticated
+        - config:
+            allow-default-scopes:
+              - "true"
+          id: cd2eadcd-6933-4b54-8ad3-beaa086c9f12
+          name: Allowed Client Scopes
+          providerId: allowed-client-templates
+          subComponents: {}
+          subType: authenticated
+        - config:
+            allow-default-scopes:
+              - "true"
+          id: 1ff9a7be-bc1d-4005-9a72-a6234a7f4ed8
+          name: Allowed Client Scopes
+          providerId: allowed-client-templates
+          subComponents: {}
+          subType: anonymous
+        - config: {}
+          id: f4d40747-f3d1-401d-8862-f9ab06d48cbd
+          name: Consent Required
+          providerId: consent-required
+          subComponents: {}
+          subType: anonymous
+        - config:
+            client-uris-must-match:
+              - "true"
+            host-sending-registration-request-must-match:
+              - "true"
+          id: d14267c1-e107-4d7e-bf9d-d87f9f43e2b3
+          name: Trusted Hosts
+          providerId: trusted-hosts
+          subComponents: {}
+          subType: anonymous
+      org.keycloak.userprofile.UserProfileProvider:
+        - config:
+            kc.user.profile.config:
+              - '{"attributes":[{"name":"username","displayName":"${username}","validations":{"length":{"min":3,"max":255},"up-username-not-idn-homograph":{}},"annotations":{},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"email","displayName":"${email}","validations":{"email":{},"length":{"max":255}},"required":{"roles":["user"]},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"firstName","displayName":"${firstName}","validations":{"length":{"max":255},"person-name-prohibited-characters":{}},"required":{"roles":["user"]},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false},{"name":"lastName","displayName":"${lastName}","validations":{"length":{"max":255},"person-name-prohibited-characters":{}},"required":{"roles":["user"]},"permissions":{"view":["admin","user"],"edit":["admin","user"]},"multivalued":false}],"groups":[{"name":"user-metadata","displayHeader":"User metadata","displayDescription":"Attributes, which refer to user metadata"}],"unmanagedAttributePolicy":"ENABLED"}'
+          id: d60d6a14-0b55-424e-ae66-eb8abe07c5d9
+          providerId: declarative-user-profile
+          subComponents: {}
+    defaultDefaultClientScopes:
+      - role_list
+      - profile
+      - email
+      - roles
+      - web-origins
+      - acr
+      - basic
+    defaultOptionalClientScopes:
+      - offline_access
+      - address
+      - phone
+      - microprofile-jwt
+      - groups
+      - tenants
+      - internal_groups
+    defaultRole:
+      clientRole: false
+      composite: true
+      containerId: 5f81d036-8138-4174-bf42-48cd97e58824
+      description: ${role_default-roles}
+      id: e19d9752-61e6-4892-bd90-1b94316c2f5a
+      name: default-roles-public
+    defaultSignatureAlgorithm: RS256
+    directGrantFlow: direct grant
+    dockerAuthenticationFlow: docker auth
+    duplicateEmailsAllowed: false
+    editUsernameAllowed: false
+    emailTheme: ""
+    enabled: true
+    enabledEventTypes:
+      - UPDATE_CONSENT_ERROR
+      - SEND_RESET_PASSWORD
+      - GRANT_CONSENT
+      - VERIFY_PROFILE_ERROR
+      - UPDATE_TOTP
+      - REMOVE_TOTP
+      - REVOKE_GRANT
+      - LOGIN_ERROR
+      - CLIENT_LOGIN
+      - RESET_PASSWORD_ERROR
+      - UPDATE_CREDENTIAL
+      - IMPERSONATE_ERROR
+      - CODE_TO_TOKEN_ERROR
+      - CUSTOM_REQUIRED_ACTION
+      - OAUTH2_DEVICE_CODE_TO_TOKEN_ERROR
+      - RESTART_AUTHENTICATION
+      - UPDATE_PROFILE_ERROR
+      - IMPERSONATE
+      - LOGIN
+      - UPDATE_PASSWORD_ERROR
+      - OAUTH2_DEVICE_VERIFY_USER_CODE
+      - CLIENT_INITIATED_ACCOUNT_LINKING
+      - USER_DISABLED_BY_PERMANENT_LOCKOUT
+      - OAUTH2_EXTENSION_GRANT
+      - REMOVE_CREDENTIAL_ERROR
+      - TOKEN_EXCHANGE
+      - REGISTER
+      - LOGOUT
+      - AUTHREQID_TO_TOKEN
+      - DELETE_ACCOUNT_ERROR
+      - CLIENT_REGISTER
+      - IDENTITY_PROVIDER_LINK_ACCOUNT
+      - USER_DISABLED_BY_TEMPORARY_LOCKOUT
+      - UPDATE_PASSWORD
+      - DELETE_ACCOUNT
+      - FEDERATED_IDENTITY_LINK_ERROR
+      - CLIENT_DELETE
+      - IDENTITY_PROVIDER_FIRST_LOGIN
+      - VERIFY_EMAIL
+      - CLIENT_DELETE_ERROR
+      - CLIENT_LOGIN_ERROR
+      - RESTART_AUTHENTICATION_ERROR
+      - REMOVE_FEDERATED_IDENTITY_ERROR
+      - EXECUTE_ACTIONS
+      - TOKEN_EXCHANGE_ERROR
+      - PERMISSION_TOKEN
+      - FEDERATED_IDENTITY_OVERRIDE_LINK
+      - SEND_IDENTITY_PROVIDER_LINK_ERROR
+      - UPDATE_CREDENTIAL_ERROR
+      - EXECUTE_ACTION_TOKEN_ERROR
+      - SEND_VERIFY_EMAIL
+      - OAUTH2_EXTENSION_GRANT_ERROR
+      - OAUTH2_DEVICE_AUTH
+      - EXECUTE_ACTIONS_ERROR
+      - REMOVE_FEDERATED_IDENTITY
+      - OAUTH2_DEVICE_CODE_TO_TOKEN
+      - IDENTITY_PROVIDER_POST_LOGIN
+      - IDENTITY_PROVIDER_LINK_ACCOUNT_ERROR
+      - FEDERATED_IDENTITY_OVERRIDE_LINK_ERROR
+      - UPDATE_EMAIL
+      - OAUTH2_DEVICE_VERIFY_USER_CODE_ERROR
+      - REGISTER_ERROR
+      - REVOKE_GRANT_ERROR
+      - LOGOUT_ERROR
+      - UPDATE_EMAIL_ERROR
+      - EXECUTE_ACTION_TOKEN
+      - CLIENT_UPDATE_ERROR
+      - UPDATE_PROFILE
+      - AUTHREQID_TO_TOKEN_ERROR
+      - INVITE_ORG_ERROR
+      - FEDERATED_IDENTITY_LINK
+      - CLIENT_REGISTER_ERROR
+      - INVITE_ORG
+      - SEND_VERIFY_EMAIL_ERROR
+      - SEND_IDENTITY_PROVIDER_LINK
+      - RESET_PASSWORD
+      - CLIENT_INITIATED_ACCOUNT_LINKING_ERROR
+      - OAUTH2_DEVICE_AUTH_ERROR
+      - REMOVE_CREDENTIAL
+      - UPDATE_CONSENT
+      - REMOVE_TOTP_ERROR
+      - VERIFY_EMAIL_ERROR
+      - SEND_RESET_PASSWORD_ERROR
+      - CLIENT_UPDATE
+      - IDENTITY_PROVIDER_POST_LOGIN_ERROR
+      - CUSTOM_REQUIRED_ACTION_ERROR
+      - UPDATE_TOTP_ERROR
+      - CODE_TO_TOKEN
+      - VERIFY_PROFILE
+      - GRANT_CONSENT_ERROR
+      - IDENTITY_PROVIDER_FIRST_LOGIN_ERROR
+    eventsEnabled: true
+    eventsExpiration: 7776000
+    eventsListeners:
+      - jboss-logging
+    failureFactor: 30
+    firstBrokerLoginFlow: first broker login
+    groups:
+      - attributes: {}
+        clientRoles: {}
+        id: 4e8d0c03-73bd-49fe-a58e-e8ff164cada5
+        name: Apps
+        path: /Apps
+        realmRoles: []
+        subGroups:
+          - attributes: {}
+            clientRoles: {}
+            id: 6c8ed4d6-30e2-43b1-b1c0-76fa67ac9759
+            name: Ada
+            parentId: 4e8d0c03-73bd-49fe-a58e-e8ff164cada5
+            path: /Apps/Ada
+            realmRoles: []
+            subGroups:
+              - attributes: {}
+                clientRoles: {}
+                id: af5667a8-8f59-4c82-b25a-7e99e5055078
+                name: ada-admins
+                parentId: 6c8ed4d6-30e2-43b1-b1c0-76fa67ac9759
+                path: /Apps/Ada/ada-admins
+                realmRoles: []
+                subGroups: []
+              - attributes: {}
+                clientRoles: {}
+                id: c1b00425-329b-49d8-b794-fdd45d814d39
+                name: ada-users
+                parentId: 6c8ed4d6-30e2-43b1-b1c0-76fa67ac9759
+                path: /Apps/Ada/ada-users
+                realmRoles: []
+                subGroups: []
+          - attributes: {}
+            clientRoles: {}
+            id: cf8cdfec-2921-43ca-a615-59afa52a5a32
+            name: Impulse
+            parentId: 4e8d0c03-73bd-49fe-a58e-e8ff164cada5
+            path: /Apps/Impulse
+            realmRoles: []
+            subGroups:
+              - attributes: {}
+                clientRoles: {}
+                id: 869e5fc8-850d-426b-b329-6227ad2c5b63
+                name: impulse-admins
+                parentId: cf8cdfec-2921-43ca-a615-59afa52a5a32
+                path: /Apps/Impulse/impulse-admins
+                realmRoles: []
+                subGroups: []
+              - attributes: {}
+                clientRoles: {}
+                id: d585c64b-305e-4c56-bb4a-5d9af1befffa
+                name: impulse-operators
+                parentId: cf8cdfec-2921-43ca-a615-59afa52a5a32
+                path: /Apps/Impulse/impulse-operators
+                realmRoles: []
+                subGroups: []
+              - attributes: {}
+                clientRoles: {}
+                id: fc026e44-2b8a-4349-912c-3e1ac3712ce6
+                name: impulse-system-a-operators
+                parentId: cf8cdfec-2921-43ca-a615-59afa52a5a32
+                path: /Apps/Impulse/impulse-system-a-operators
+                realmRoles: []
+                subGroups: []
+              - attributes: {}
+                clientRoles: {}
+                id: 47360fb8-2bad-4da7-8e62-be399c9204e1
+                name: impulse-system-a-viewers
+                parentId: cf8cdfec-2921-43ca-a615-59afa52a5a32
+                path: /Apps/Impulse/impulse-system-a-viewers
+                realmRoles: []
+                subGroups: []
+              - attributes: {}
+                clientRoles: {}
+                id: 1e8c1360-17e1-4ffc-8d21-db9492b0e736
+                name: impulse-viewers
+                parentId: cf8cdfec-2921-43ca-a615-59afa52a5a32
+                path: /Apps/Impulse/impulse-viewers
+                realmRoles: []
+                subGroups: []
+              - attributes: {}
+                clientRoles: {}
+                id: 51980cc6-96de-4ec8-baea-5788518ca498
+                name: test-group
+                parentId: cf8cdfec-2921-43ca-a615-59afa52a5a32
+                path: /Apps/Impulse/test-group
+                realmRoles: []
+                subGroups: []
+      - attributes: {}
+        clientRoles: {}
+        id: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+        name: Devalex
+        path: /Devalex
+        realmRoles: []
+        subGroups:
+          - attributes:
+              createdDate:
+                - "2022-04-04T12:37:49.838Z"
+              tags:
+                - hidden
+              updatedDate:
+                - "2022-04-04T12:37:49.838Z"
+            clientRoles: {}
+            id: 96e318d9-64fb-463f-bf99-73c330a14227
+            name: Infralytics Admins
+            parentId: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+            path: /Devalex/Infralytics Admins
+            realmRoles: []
+            subGroups: []
+          - attributes:
+              createdDate:
+                - "2022-04-04T12:37:33.985Z"
+              tags:
+                - hidden
+              updatedDate:
+                - "2022-04-04T12:37:33.985Z"
+            clientRoles: {}
+            id: 2ded812e-7de5-4058-91c3-492b52d756aa
+            name: Infralytics Users
+            parentId: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+            path: /Devalex/Infralytics Users
+            realmRoles: []
+            subGroups: []
+          - attributes:
+              createdDate:
+                - "2020-12-30T15:33:38.282Z"
+              tags:
+                - hidden
+              updatedDate:
+                - "2021-08-07T20:25:19.551Z"
+            clientRoles: {}
+            id: 1659cfa2-3448-4ffc-9f82-557acfb19219
+            name: Insight Admins
+            parentId: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+            path: /Devalex/Insight Admins
+            realmRoles: []
+            subGroups: []
+          - attributes:
+              createdDate:
+                - "2020-12-30T15:34:03.383Z"
+              managers:
+                - Ann
+              tags:
+                - hidden
+              updatedDate:
+                - "2021-08-07T20:25:05.015Z"
+            clientRoles: {}
+            id: e1b837a5-cdf4-4d47-86e6-5c4d230421f7
+            name: Insight Users
+            parentId: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+            path: /Devalex/Insight Users
+            realmRoles: []
+            subGroups: []
+          - attributes:
+              createdDate:
+                - "2020-05-25T13:20:46.601Z"
+              managers:
+                - Ann
+                - admin
+              tags:
+                - hidden
+              updatedDate:
+                - "2021-08-09T17:40:03.361Z"
+            clientRoles:
+              realm-management:
+                - realm-admin
+            id: fd9352a5-6945-4a26-9b39-8700bd601533
+            name: Irongate Admins
+            parentId: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+            path: /Devalex/Irongate Admins
+            realmRoles: []
+            subGroups: []
+          - attributes:
+              createdDate:
+                - "2020-05-25T13:20:46.601Z"
+              tags:
+                - hidden
+              updatedDate:
+                - "2020-05-25T13:20:46.601Z"
+            clientRoles: {}
+            id: fc5ca2f9-6305-4859-9647-738148bc10c0
+            name: Irongate Managers
+            parentId: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+            path: /Devalex/Irongate Managers
+            realmRoles: []
+            subGroups: []
+          - attributes:
+              createdDate:
+                - "2020-05-25T13:20:46.601Z"
+              tags:
+                - hidden
+              updatedDate:
+                - "2021-08-09T17:40:04.901Z"
+            clientRoles: {}
+            id: 3e337a49-e264-4641-af81-de3e31abb320
+            name: Irongate Users
+            parentId: 5fdb3f84-1196-402b-9afa-29967eb3fbc1
+            path: /Devalex/Irongate Users
+            realmRoles: []
+            subGroups: []
+      - attributes: {}
+        clientRoles: {}
+        id: 0615643a-dde5-4a10-827e-a6cbdb4522fe
+        name: Org
+        path: /Org
+        realmRoles: []
+        subGroups:
+          - attributes:
+              tags:
+                - internal-root
+            clientRoles: {}
+            id: d3999b46-a2aa-4130-8f42-ba6bb462f765
+            name: Internal
+            parentId: 0615643a-dde5-4a10-827e-a6cbdb4522fe
+            path: /Org/Internal
+            realmRoles: []
+            subGroups:
+              - attributes:
+                  createdDate:
+                    - "2021-01-22T15:39:32.341Z"
+                  updatedDate:
+                    - "2021-08-07T20:25:37.170Z"
+                clientRoles: {}
+                id: acd90ca7-2505-41f6-b75f-f5a37924132d
+                name: SMARTeam
+                parentId: d3999b46-a2aa-4130-8f42-ba6bb462f765
+                path: /Org/Internal/SMARTeam
+                realmRoles: []
+                subGroups: []
+          - attributes:
+              createdDate:
+                - "2022-04-04T11:14:59.608Z"
+              tags:
+                - country
+                - insight-root
+              updatedDate:
+                - "2023-03-31T13:55:42.120Z"
+            clientRoles: {}
+            id: dd46dc4e-db12-425b-906d-f476f8494f6c
+            name: United States
+            parentId: 0615643a-dde5-4a10-827e-a6cbdb4522fe
+            path: /Org/United States
+            realmRoles: []
+            subGroups:
+              - attributes:
+                  createdDate:
+                    - "2022-04-04T11:19:15.119Z"
+                  tags:
+                    - region
+                  updatedDate:
+                    - "2022-04-04T16:32:51.300Z"
+                clientRoles: {}
+                id: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                name: Midwest
+                parentId: dd46dc4e-db12-425b-906d-f476f8494f6c
+                path: /Org/United States/Midwest
+                realmRoles: []
+                subGroups:
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:24:02.723Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - IA
+                      updatedDate:
+                        - "2022-04-04T15:28:59.355Z"
+                    clientRoles: {}
+                    id: 4c7f033c-c2e0-4505-8d27-43d3bc5957de
+                    name: IA Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/IA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:23:38.451Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - IL
+                      updatedDate:
+                        - "2022-04-04T15:29:12.867Z"
+                    clientRoles: {}
+                    id: 1627234d-ac6f-4623-af62-5835dba8386f
+                    name: IL Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/IL Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:23:51.473Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - IN
+                      updatedDate:
+                        - "2022-04-04T15:33:53.399Z"
+                    clientRoles: {}
+                    id: 9e0bcb7c-5bc3-4761-bf69-e67886574336
+                    name: IN Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/IN Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:24:17.040Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - KS
+                      updatedDate:
+                        - "2022-04-04T15:34:02.020Z"
+                    clientRoles: {}
+                    id: d7f5117f-185f-4114-9062-d716e968b98f
+                    name: KS Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/KS Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2020-06-14T17:24:48.183Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - MI
+                      updatedDate:
+                        - "2022-04-04T16:31:24.944Z"
+                    clientRoles: {}
+                    id: 60f4aaab-d6b4-4a50-82c9-bdc9141b7349
+                    name: MI Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/MI Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:47:54.733Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - MN
+                      updatedDate:
+                        - "2022-04-04T16:56:02.250Z"
+                    clientRoles: {}
+                    id: 7af757e3-168a-41cd-b016-379ce3190c22
+                    name: MN Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/MN Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:48:29.391Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - MO
+                      updatedDate:
+                        - "2022-04-04T15:48:29.391Z"
+                    clientRoles: {}
+                    id: 621b8cae-9223-45b8-a1ce-298f3f21c1c8
+                    name: MO Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/MO Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:23:10.356Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - ND
+                      updatedDate:
+                        - "2022-04-04T16:23:10.356Z"
+                    clientRoles: {}
+                    id: 19a89f5e-24fb-4da6-b2c5-c549734ed07a
+                    name: ND Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/ND Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:49:03.471Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - NE
+                      updatedDate:
+                        - "2022-04-04T15:49:03.471Z"
+                    clientRoles: {}
+                    id: 99cbd1ac-83da-45ef-ba37-4d53e08138cc
+                    name: NE Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/NE Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:23:28.010Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - OH
+                      updatedDate:
+                        - "2022-04-04T16:23:28.010Z"
+                    clientRoles: {}
+                    id: 074f71f2-e492-4272-b4d5-83a7049d6778
+                    name: OH Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/OH Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:25:44.515Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - SD
+                      updatedDate:
+                        - "2022-04-04T16:25:44.515Z"
+                    clientRoles: {}
+                    id: c279ea52-d867-4caa-8eaf-6890ee9e33fe
+                    name: SD Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/SD Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:27:20.873Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - WI
+                      updatedDate:
+                        - "2022-04-04T16:27:20.873Z"
+                    clientRoles: {}
+                    id: 7f5464a6-ef25-4973-a978-71d2c16bfe9d
+                    name: WI Users
+                    parentId: 6eef01dd-d374-485f-97c1-b17c9cb4abd8
+                    path: /Org/United States/Midwest/WI Users
+                    realmRoles: []
+                    subGroups: []
+              - attributes:
+                  createdDate:
+                    - "2022-04-04T11:19:52.631Z"
+                  tags:
+                    - region
+                  updatedDate:
+                    - "2022-04-04T16:33:42.581Z"
+                clientRoles: {}
+                id: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                name: Northeast
+                parentId: dd46dc4e-db12-425b-906d-f476f8494f6c
+                path: /Org/United States/Northeast
+                realmRoles: []
+                subGroups:
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:05:44.757Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - CT
+                      updatedDate:
+                        - "2022-04-04T15:27:56.234Z"
+                    clientRoles: {}
+                    id: fc0374c4-afd3-4514-a47f-f45d177e3d47
+                    name: CT Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/CT Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:47:37.534Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - MA
+                      updatedDate:
+                        - "2022-04-04T15:47:37.534Z"
+                    clientRoles: {}
+                    id: 078e84d9-7549-4c61-a05f-d85d03675e0d
+                    name: MA Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/MA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:47:07.699Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - ME
+                      updatedDate:
+                        - "2022-04-04T15:47:07.699Z"
+                    clientRoles: {}
+                    id: 67ce1d40-106b-4af0-a52e-be4d26da5107
+                    name: ME Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/ME Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:49:37.622Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - NH
+                      updatedDate:
+                        - "2022-04-04T15:49:37.622Z"
+                    clientRoles: {}
+                    id: 89870b70-94ca-492f-9527-5149496e04e4
+                    name: NH Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/NH Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:50:02.534Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - NJ
+                      updatedDate:
+                        - "2022-04-04T15:50:02.534Z"
+                    clientRoles: {}
+                    id: bc47bd26-b531-4a40-8893-b974e897bab1
+                    name: NJ Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/NJ Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:50:15.132Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - NY
+                      updatedDate:
+                        - "2022-04-04T15:50:15.132Z"
+                    clientRoles: {}
+                    id: e0747269-d583-4702-88d5-7ab77dd168fc
+                    name: NY Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/NY Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:24:56.271Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - PA
+                      updatedDate:
+                        - "2022-04-04T16:24:56.271Z"
+                    clientRoles: {}
+                    id: 8ae327f4-32e0-4225-af24-8dd9979c4b38
+                    name: PA Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/PA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:25:10.247Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - RI
+                      updatedDate:
+                        - "2022-04-04T16:25:10.247Z"
+                    clientRoles: {}
+                    id: fec6b8c0-5fa1-4738-9f64-3d760f7bbd99
+                    name: RI Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/RI Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:26:40.200Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - VT
+                      updatedDate:
+                        - "2022-04-04T16:26:40.200Z"
+                    clientRoles: {}
+                    id: c4f1b75c-09dd-4d88-a756-c693c97c6436
+                    name: VT Users
+                    parentId: 65662a20-5fdf-4235-b8d3-d7f16376b2f9
+                    path: /Org/United States/Northeast/VT Users
+                    realmRoles: []
+                    subGroups: []
+              - attributes:
+                  createdDate:
+                    - "2022-04-04T11:15:29.872Z"
+                  tags:
+                    - region
+                  updatedDate:
+                    - "2022-04-04T16:34:36.287Z"
+                clientRoles: {}
+                id: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                name: Southeast
+                parentId: dd46dc4e-db12-425b-906d-f476f8494f6c
+                path: /Org/United States/Southeast
+                realmRoles: []
+                subGroups:
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T10:55:21.037Z"
+                      managers:
+                        - Ann
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - AL
+                      updatedDate:
+                        - "2022-04-04T15:27:13.571Z"
+                    clientRoles: {}
+                    id: 99e5a663-1cd2-4cad-b089-494cddb2e9c7
+                    name: AL Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/AL Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:05:15.242Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - AR
+                      updatedDate:
+                        - "2022-04-04T15:27:22.711Z"
+                    clientRoles: {}
+                    id: 0354297f-32c5-4d27-a40b-7910c0a11d86
+                    name: AR Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/AR Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:21:01.697Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - DC
+                      updatedDate:
+                        - "2022-04-04T15:28:05.081Z"
+                    clientRoles: {}
+                    id: bad5a049-c802-4705-9e06-3b3f4df0e2a8
+                    name: DC Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/DC Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:20:45.553Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - DE
+                      updatedDate:
+                        - "2022-04-04T15:28:12.741Z"
+                    clientRoles: {}
+                    id: afcc3ee4-8bbf-409d-9ebc-9d47e9ffca0d
+                    name: DE Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/DE Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:21:16.066Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - FL
+                      updatedDate:
+                        - "2022-04-04T15:28:24.927Z"
+                    clientRoles: {}
+                    id: b5771eda-7af8-4465-a433-e6299de0053d
+                    name: FL Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/FL Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:21:31.744Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - GA
+                      updatedDate:
+                        - "2022-04-04T15:28:48.021Z"
+                    clientRoles: {}
+                    id: 8a907a64-3c1f-463a-a08a-f4992a55f866
+                    name: GA Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/GA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:44:27.594Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - KY
+                      updatedDate:
+                        - "2022-04-04T16:31:10.242Z"
+                    clientRoles: {}
+                    id: e3d8f9ad-59dd-4dc8-a08a-3aebfe1a7e16
+                    name: KY Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/KY Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:26:49.884Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - LA
+                      updatedDate:
+                        - "2022-04-04T15:26:49.884Z"
+                    clientRoles: {}
+                    id: 4a07a528-2f63-4982-8a49-3cf22cc68501
+                    name: LA Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/LA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:47:23.948Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - MD
+                      updatedDate:
+                        - "2022-04-04T15:47:23.948Z"
+                    clientRoles: {}
+                    id: 6197698d-721b-45c5-8fe2-d4dce48eee1b
+                    name: MD Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/MD Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:48:11.078Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - MS
+                      updatedDate:
+                        - "2022-04-04T15:48:11.078Z"
+                    clientRoles: {}
+                    id: 5952381d-6240-49f3-af56-074eff7c21fd
+                    name: MS Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/MS Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:50:29.663Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - NC
+                      updatedDate:
+                        - "2022-04-04T15:50:29.663Z"
+                    clientRoles: {}
+                    id: 253f977f-4385-4fff-b7b7-043ee7d28ef0
+                    name: NC Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/NC Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:25:29.803Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - SC
+                      updatedDate:
+                        - "2022-04-04T16:25:29.803Z"
+                    clientRoles: {}
+                    id: 50fdd777-1134-4ca0-a738-2c90f36f3414
+                    name: SC Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/SC Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:25:59.336Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - TN
+                      updatedDate:
+                        - "2022-04-04T16:25:59.336Z"
+                    clientRoles: {}
+                    id: 2c41af63-af3e-4c3f-a690-20ec0ed409a9
+                    name: TN Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/TN Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2020-05-08T16:05:09.191Z"
+                      managers:
+                        - Don
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - VA
+                      updatedDate:
+                        - "2022-07-05T17:43:26.666Z"
+                    clientRoles: {}
+                    id: b107348e-a89e-44cb-867c-18064370e6c1
+                    name: VA Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/VA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:31:37.356Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - WV
+                      updatedDate:
+                        - "2022-04-04T16:31:37.356Z"
+                    clientRoles: {}
+                    id: f6e2947a-2da3-4a93-b2e1-f49711f66786
+                    name: WV Users
+                    parentId: d3713d2b-5119-47f7-ad10-e9ad0165c6ff
+                    path: /Org/United States/Southeast/WV Users
+                    realmRoles: []
+                    subGroups: []
+              - attributes:
+                  createdDate:
+                    - "2022-04-04T11:19:31.520Z"
+                  tags:
+                    - region
+                  updatedDate:
+                    - "2022-04-04T16:34:58.771Z"
+                clientRoles: {}
+                id: d0a2fdb7-e328-47c1-99ba-11d6a8629fd4
+                name: Southwest
+                parentId: dd46dc4e-db12-425b-906d-f476f8494f6c
+                path: /Org/United States/Southwest
+                realmRoles: []
+                subGroups:
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:04:55.940Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - AZ
+                      updatedDate:
+                        - "2022-04-04T15:27:31.399Z"
+                    clientRoles: {}
+                    id: 1b9c49ff-a126-42a3-9708-459cb37dface
+                    name: AZ Users
+                    parentId: d0a2fdb7-e328-47c1-99ba-11d6a8629fd4
+                    path: /Org/United States/Southwest/AZ Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2020-05-08T23:46:24.620Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - NM
+                      updatedDate:
+                        - "2022-04-04T15:34:11.771Z"
+                    clientRoles: {}
+                    id: f1e0be20-f640-4212-9683-424c814dd9b4
+                    name: NM Users
+                    parentId: d0a2fdb7-e328-47c1-99ba-11d6a8629fd4
+                    path: /Org/United States/Southwest/NM Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:23:45.032Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - OK
+                      updatedDate:
+                        - "2022-04-04T16:23:45.032Z"
+                    clientRoles: {}
+                    id: 5d49be78-f066-46f4-a4c8-5bfc122376b6
+                    name: OK Users
+                    parentId: d0a2fdb7-e328-47c1-99ba-11d6a8629fd4
+                    path: /Org/United States/Southwest/OK Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:26:11.587Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - TX
+                      updatedDate:
+                        - "2022-04-04T16:26:11.587Z"
+                    clientRoles: {}
+                    id: c8826665-4f44-40ad-bd65-cab10f3b00b0
+                    name: TX Users
+                    parentId: d0a2fdb7-e328-47c1-99ba-11d6a8629fd4
+                    path: /Org/United States/Southwest/TX Users
+                    realmRoles: []
+                    subGroups: []
+              - attributes:
+                  createdDate:
+                    - "2022-04-04T11:18:54.970Z"
+                  tags:
+                    - region
+                  updatedDate:
+                    - "2022-06-17T14:34:04.015Z"
+                clientRoles: {}
+                id: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                name: West
+                parentId: dd46dc4e-db12-425b-906d-f476f8494f6c
+                path: /Org/United States/West
+                realmRoles: []
+                subGroups:
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T10:56:05.356Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - AK
+                      updatedDate:
+                        - "2022-04-04T15:27:01.591Z"
+                    clientRoles: {}
+                    id: 1c076ced-ef4e-41fc-88de-38e82fbd2d70
+                    name: AK Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/AK Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2020-06-14T17:23:45.588Z"
+                      managers:
+                        - Ann
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - CA
+                      updatedDate:
+                        - "2022-04-04T15:27:39.458Z"
+                    clientRoles: {}
+                    id: 236b4ab8-38cb-4c30-8e72-0b11138fbe96
+                    name: CA Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/CA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2020-05-08T23:48:47.731Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - CO
+                      updatedDate:
+                        - "2022-04-04T15:27:46.405Z"
+                    clientRoles: {}
+                    id: 82569602-a9a5-4139-9295-77eb850a3a0b
+                    name: CO Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/CO Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:21:47.859Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - HI
+                      updatedDate:
+                        - "2022-04-04T15:34:58.963Z"
+                    clientRoles: {}
+                    id: 5b030dd6-1f2f-4db2-b770-d6eb8be0f33c
+                    name: HI Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/HI Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T11:23:24.510Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - ID
+                      updatedDate:
+                        - "2022-04-04T15:29:05.604Z"
+                    clientRoles: {}
+                    id: 11f14538-dc3d-4512-907c-4fcccca54479
+                    name: ID Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/ID Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:48:46.375Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - MT
+                      updatedDate:
+                        - "2022-04-04T15:48:46.375Z"
+                    clientRoles: {}
+                    id: 249e344f-2929-48eb-b3e3-1ccf2c8806b2
+                    name: MT Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/MT Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T15:49:21.042Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - NV
+                      updatedDate:
+                        - "2022-04-04T15:49:21.042Z"
+                    clientRoles: {}
+                    id: 3047ccfc-ed33-457a-b230-2cd7e013052b
+                    name: NV Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/NV Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:24:34.888Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - OR
+                      updatedDate:
+                        - "2022-04-04T16:24:34.888Z"
+                    clientRoles: {}
+                    id: a41b749a-4cb2-454c-9891-ceb327d12ca8
+                    name: OR Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/OR Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:26:26.353Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - UT
+                      updatedDate:
+                        - "2022-04-04T16:26:26.353Z"
+                    clientRoles: {}
+                    id: 32a67eaa-0b27-44a3-ba9d-93461aa2a78a
+                    name: UT Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/UT Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:26:54.652Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - WA
+                      updatedDate:
+                        - "2022-04-04T16:26:54.652Z"
+                    clientRoles: {}
+                    id: da0731a9-8e7f-4924-9fb0-f24140a6fd93
+                    name: WA Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/WA Users
+                    realmRoles: []
+                    subGroups: []
+                  - attributes:
+                      createdDate:
+                        - "2022-04-04T16:27:35.127Z"
+                      tags:
+                        - tenant
+                        - state
+                      tenantId:
+                        - WY
+                      updatedDate:
+                        - "2022-04-04T16:27:35.127Z"
+                    clientRoles: {}
+                    id: 64d7c101-b6cd-4220-9879-ef9d33d1e211
+                    name: WY Users
+                    parentId: e516a58d-8ae3-4529-809b-4d46be2c4d78
+                    path: /Org/United States/West/WY Users
+                    realmRoles: []
+                    subGroups: []
+    id: 5f81d036-8138-4174-bf42-48cd97e58824
+    identityProviderMappers: []
+    identityProviders: []
+    internationalizationEnabled: false
+    keycloakVersion: 26.4.4
+    localizationTexts: {}
+    loginTheme: irongate
+    loginWithEmailAllowed: true
+    maxDeltaTimeSeconds: 43200
+    maxFailureWaitSeconds: 900
+    maxTemporaryLockouts: 0
+    minimumQuickLoginWaitSeconds: 60
+    notBefore: 0
+    oauth2DeviceCodeLifespan: 600
+    oauth2DevicePollingInterval: 5
+    offlineSessionIdleTimeout: 2592000
+    offlineSessionMaxLifespan: 5184000
+    offlineSessionMaxLifespanEnabled: false
+    organizationsEnabled: false
+    otpPolicyAlgorithm: HmacSHA1
+    otpPolicyCodeReusable: false
+    otpPolicyDigits: 6
+    otpPolicyInitialCounter: 0
+    otpPolicyLookAheadWindow: 1
+    otpPolicyPeriod: 30
+    otpPolicyType: totp
+    otpSupportedApplications:
+      - totpAppFreeOTPName
+      - totpAppGoogleName
+      - totpAppMicrosoftAuthenticatorName
+    permanentLockout: false
+    quickLoginCheckMilliSeconds: 1000
+    realm: public
+    refreshTokenMaxReuse: 0
+    registrationAllowed: false
+    registrationEmailAsUsername: false
+    registrationFlow: registration
+    rememberMe: false
+    requiredActions:
+      - alias: CONFIGURE_TOTP
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Configure OTP
+        priority: 10
+        providerId: CONFIGURE_TOTP
+      - alias: TERMS_AND_CONDITIONS
+        config: {}
+        defaultAction: false
+        enabled: false
+        name: Terms and Conditions
+        priority: 20
+        providerId: TERMS_AND_CONDITIONS
+      - alias: UPDATE_PASSWORD
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Update Password
+        priority: 30
+        providerId: UPDATE_PASSWORD
+      - alias: UPDATE_PROFILE
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Update Profile
+        priority: 40
+        providerId: UPDATE_PROFILE
+      - alias: VERIFY_EMAIL
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Verify Email
+        priority: 50
+        providerId: VERIFY_EMAIL
+      - alias: delete_account
+        config: {}
+        defaultAction: false
+        enabled: false
+        name: Delete Account
+        priority: 60
+        providerId: delete_account
+      - alias: webauthn-register
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Webauthn Register
+        priority: 70
+        providerId: webauthn-register
+      - alias: webauthn-register-passwordless
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Webauthn Register Passwordless
+        priority: 80
+        providerId: webauthn-register-passwordless
+      - alias: delete_credential
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Delete Credential
+        priority: 100
+        providerId: delete_credential
+      - alias: idp_link
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Linking Identity Provider
+        priority: 120
+        providerId: idp_link
+      - alias: update_user_locale
+        config: {}
+        defaultAction: false
+        enabled: true
+        name: Update User Locale
+        priority: 1000
+        providerId: update_user_locale
+    requiredCredentials:
+      - password
+    resetCredentialsFlow: reset credentials
+    resetPasswordAllowed: false
+    revokeRefreshToken: true
+    roles:
+      client:
+        account:
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_view-groups}
+            id: 13102463-a159-4d6f-ae41-7afcf2e86d73
+            name: view-groups
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_delete-account}
+            id: 6d22293b-fa98-478b-92c6-a96b3cbd3d37
+            name: delete-account
+          - attributes: {}
+            clientRole: true
+            composite: true
+            composites:
+              client:
+                account:
+                  - manage-account-links
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_manage-account}
+            id: 53bd55b0-570f-48b4-852d-37cffa447f04
+            name: manage-account
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_view-profile}
+            id: 9d06ee94-c91e-4693-8a6d-0784af9ae269
+            name: view-profile
+          - attributes: {}
+            clientRole: true
+            composite: true
+            composites:
+              client:
+                account:
+                  - view-consent
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_manage-consent}
+            id: fe4e5ed9-3038-44dc-84b4-cae75e85bae1
+            name: manage-consent
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_view-applications}
+            id: c9fdf336-fd70-406d-a78b-0a49fcee68f5
+            name: view-applications
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_view-consent}
+            id: 3f33b61a-015e-4920-b789-e88e45e857ad
+            name: view-consent
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: c451993f-d6e1-4d0b-a962-cb500eee0847
+            description: ${role_manage-account-links}
+            id: 0e71076b-6ab1-4402-b41a-6cd28989fd80
+            name: manage-account-links
+        account-console: []
+        admin-cli: []
+        broker:
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 5f1bc69e-3570-4d4d-ab82-e670b1340f3a
+            description: ${role_read-token}
+            id: d3325370-d77a-48fe-a445-820721f6a737
+            name: read-token
+        illumina: []
+        impulse-web: []
+        realm-management:
+          - attributes: {}
+            clientRole: true
+            composite: true
+            composites:
+              client:
+                realm-management:
+                  - query-groups
+                  - query-users
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_view-users}
+            id: ad677015-d6e1-4a78-8145-4907c576c63f
+            name: view-users
+          - attributes: {}
+            clientRole: true
+            composite: true
+            composites:
+              client:
+                realm-management:
+                  - query-clients
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_view-clients}
+            id: 279cf5bf-c8f2-460b-80eb-d7227a5de76b
+            name: view-clients
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_query-groups}
+            id: 79edfa93-bae6-4094-92ba-6fa0cd55b892
+            name: query-groups
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_query-realms}
+            id: bd774b8e-225b-416d-8f42-b85765dd07c7
+            name: query-realms
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_query-clients}
+            id: 3241904f-b84b-4fa2-8be9-04f8256a2316
+            name: query-clients
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_manage-identity-providers}
+            id: 322bdfb5-926e-4e72-81f7-076b4bdf264b
+            name: manage-identity-providers
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_manage-authorization}
+            id: a1cd05bd-9b12-4f4f-a245-24cd5493c735
+            name: manage-authorization
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_manage-realm}
+            id: 5cfd89eb-0d95-4a48-b61d-66e13a4bde96
+            name: manage-realm
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_manage-users}
+            id: b511ca93-1f06-4e0e-933b-9abe2d34024c
+            name: manage-users
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_impersonation}
+            id: a4d63ffe-4e0b-47ff-aa5b-fcb3cd21e13e
+            name: impersonation
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_manage-clients}
+            id: 960fb9b8-82d5-4e7d-8b1a-b6df520abb26
+            name: manage-clients
+          - attributes: {}
+            clientRole: true
+            composite: true
+            composites:
+              client:
+                realm-management:
+                  - view-users
+                  - view-clients
+                  - query-groups
+                  - query-realms
+                  - query-clients
+                  - manage-identity-providers
+                  - manage-authorization
+                  - manage-realm
+                  - manage-users
+                  - impersonation
+                  - manage-clients
+                  - query-users
+                  - view-authorization
+                  - view-events
+                  - manage-events
+                  - create-client
+                  - view-realm
+                  - view-identity-providers
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_realm-admin}
+            id: ad553c4a-77c0-48e9-9ed2-b1343a842c08
+            name: realm-admin
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_query-users}
+            id: 32a03279-c6ac-48e8-aec7-fa5db75db6fc
+            name: query-users
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_view-authorization}
+            id: 33237aa2-167f-49d5-b634-1054ed40b864
+            name: view-authorization
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_view-events}
+            id: b2a06ac9-8116-46a3-ac31-0024ea87069d
+            name: view-events
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_manage-events}
+            id: e52d9a35-98d8-4fdd-9c02-c52de81ec41a
+            name: manage-events
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_create-client}
+            id: 32030ea7-4e1f-4426-a2a2-6b3d607276bd
+            name: create-client
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_view-realm}
+            id: 2fa3305b-67e0-4435-889b-996e8f84f2cc
+            name: view-realm
+          - attributes: {}
+            clientRole: true
+            composite: false
+            containerId: 77658bf7-fb5c-4b5d-9fcb-0437d9df12d9
+            description: ${role_view-identity-providers}
+            id: 0be5604b-dfa1-44d3-95a3-dff75b6a7b89
+            name: view-identity-providers
+        security-admin-console: []
+      realm:
+        - attributes: {}
+          clientRole: false
+          composite: true
+          composites:
+            client:
+              account:
+                - manage-account
+                - view-profile
+            realm:
+              - offline_access
+              - uma_authorization
+          containerId: 5f81d036-8138-4174-bf42-48cd97e58824
+          description: ${role_default-roles}
+          id: e19d9752-61e6-4892-bd90-1b94316c2f5a
+          name: default-roles-public
+        - attributes: {}
+          clientRole: false
+          composite: false
+          containerId: 5f81d036-8138-4174-bf42-48cd97e58824
+          description: ${role_uma_authorization}
+          id: 19a163b4-570f-4376-a5e3-7a1bf30b1951
+          name: uma_authorization
+        - attributes: {}
+          clientRole: false
+          composite: false
+          containerId: 5f81d036-8138-4174-bf42-48cd97e58824
+          description: ${role_offline-access}
+          id: 9e5e19ee-ea26-4c87-982c-540f226d4002
+          name: offline_access
+    scopeMappings:
+      - clientScope: offline_access
+        roles:
+          - offline_access
+    smtpServer: {}
+    sslRequired: external
+    ssoSessionIdleTimeout: 1800
+    ssoSessionIdleTimeoutRememberMe: 0
+    ssoSessionMaxLifespan: 36000
+    ssoSessionMaxLifespanRememberMe: 0
+    userManagedAccessAllowed: false
+    verifiableCredentialsEnabled: false
+    verifyEmail: false
+    waitIncrementSeconds: 60
+    webAuthnPolicyAcceptableAaguids: []
+    webAuthnPolicyAttestationConveyancePreference: not specified
+    webAuthnPolicyAuthenticatorAttachment: not specified
+    webAuthnPolicyAvoidSameAuthenticatorRegister: false
+    webAuthnPolicyCreateTimeout: 0
+    webAuthnPolicyExtraOrigins: []
+    webAuthnPolicyPasswordlessAcceptableAaguids: []
+    webAuthnPolicyPasswordlessAttestationConveyancePreference: not specified
+    webAuthnPolicyPasswordlessAuthenticatorAttachment: not specified
+    webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister: false
+    webAuthnPolicyPasswordlessCreateTimeout: 0
+    webAuthnPolicyPasswordlessExtraOrigins: []
+    webAuthnPolicyPasswordlessRequireResidentKey: not specified
+    webAuthnPolicyPasswordlessRpEntityName: keycloak
+    webAuthnPolicyPasswordlessRpId: ""
+    webAuthnPolicyPasswordlessSignatureAlgorithms:
+      - ES256
+    webAuthnPolicyPasswordlessUserVerificationRequirement: not specified
+    webAuthnPolicyRequireResidentKey: not specified
+    webAuthnPolicyRpEntityName: keycloak
+    webAuthnPolicyRpId: ""
+    webAuthnPolicySignatureAlgorithms:
+      - ES256
+    webAuthnPolicyUserVerificationRequirement: not specified

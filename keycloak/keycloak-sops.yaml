@@ -1,0 +1,48 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: c97040a13d9c17a2a6daad36d0e2fedcaac5af07
+  name: keycloak
+spec:
+  secretTemplates:
+    - name: internal-clients
+      stringData:
+        argo: ENC[AES256_GCM,data:SLBYaSHsiQ5LtvohwY8XUKdDvzS6oZ3X2U26NAphsYo=,iv:4T+nUX9t6XLTEqswljcy8gXntcKnBU5bdpwKBNbcfDg=,tag:1DzRAUoIj4qD7QYeqmwGFg==,type:str]
+        argocd: ENC[AES256_GCM,data:F0ZSywtipz0S8Xuu3qu6a9uiLtxZbXpEdtqKBWFNhsY=,iv:31GsI8qVCjj41pLPYJkkr98qtx5ex3aiNG6sV8Pv/7I=,tag:itbybV51m+HkYPAXEWOnqA==,type:str]
+        gitea: ENC[AES256_GCM,data:khQu48BtfnsYRJThing989+iY/q2V6lx5mxd2hfec/w=,iv:lZ/MbiMoeJpyBKotYcYHAT1174ID1+dYnoqP9++0qBs=,tag:9gdaeM6rDEvlMgXJytDB5Q==,type:str]
+        grafana: ENC[AES256_GCM,data:ylNWZ+tfXQy/jx802sYYloc8f64tbXCIChyB4lFYNAg=,iv:X3aF4ikbXO9f/g99Fka4Z82u2W35GldFi2JMt2EYJiU=,tag:9kOlZb25IBDHFAHrdryuDg==,type:str]
+        harbor: ENC[AES256_GCM,data:2bBhIwBQzF1Hv6j5CCS9ktaO8zqq06/DcpCSTdxvNYY=,iv:hMErt78QfpRvoLqPvhaZrOIUJR86Us9VTT8yWhNZVmI=,tag:jJQIuPmGdu69d5kRNGzEyA==,type:str]
+        minio: ENC[AES256_GCM,data:QPO7sPngWywCgUY+c0+8frxR+DhD1MIBNKxD2YSSXbo=,iv:HoSFlh8Tdx2lEcw9a1vKjOTvtKivq+AMZS9yMpj/gzY=,tag:EetpXIQxYEOTfJK6tItTAA==,type:str]
+        openbao: ENC[AES256_GCM,data:ITPkxAcBkHJ1j/CfrfJIVsLVGX4PN+e11VYbSwdoU+0=,iv:66GM+oqLnSyzbgodwrdoa2UUylI62k/RA2AWvcGLncA=,tag:q6lhQ4zgzkYhck4+JJDTCg==,type:str]
+        openwebui: ENC[AES256_GCM,data:X62re9omV4zUOSrnInGo70lx4lUUSD1lWJJOkOFYumM=,iv:0iIBn4p8YPHn3r1jADkMNrTizy6DUp31IMbYAQTCa/0=,tag:fdhuP3WpjwfObGWE4rZxvQ==,type:str]
+        outline: ENC[AES256_GCM,data:gAjuGaJ/rYrFPWWCyydhuLoWwlonnJmmlYje3OSYXvA=,iv:M48cBWZWYpos1UOZ+4lVyXXz6kMsYY6jJzrchhbRTTA=,tag:OL9VtcapdUzkEf4b35Dqqg==,type:str]
+    - name: public-clients
+      stringData:
+        impulse: ENC[AES256_GCM,data:dMQ5kMOxPs1GtFNKSx7VzEN+kMErx0aqO9CkycMzYY0=,iv:qizwTovjD2B+T897iNBqKxP4QuyCEWeY2I05LWNx8lE=,tag:0jv9To+EX4fIsTJXnG32Ow==,type:str]
+    - name: keycloak-options
+      stringData:
+        base-url: ENC[AES256_GCM,data:NoQjzCKDXRQDXQleCuu3z1s7Y1bO0XcQWi4lBjUGgdvMNsxMdKYZ,iv:Jw/bHCHAQwqp4Iu2OIn9/08B2Cudl4SbbCIW+BAD/h4=,tag:lCSG40rk7ACQUCB1f1lQDw==,type:str]
+        client-id: ENC[AES256_GCM,data:HwIOtQ0=,iv:5pMfnfjMawE98jJX7fUlaLNIHaC7F9P2Nn8FDut0PIg=,tag:ETfp4gxiqZDQxHUS1onGQA==,type:str]
+        client-secret: ENC[AES256_GCM,data:a3solmLB2tQabTIkKadtZ5VCC3+7zmVf3hV1WH7cVI+YkJjZ,iv:gSNk4F0HwdJvvNbIE+FpaR9LXELsiWoHl07l8SHZrI8=,tag:7JAWhrZBEWbgtI4W4tXK6w==,type:str]
+        log-console-level: ENC[AES256_GCM,data:nOHQ4DQ=,iv:XuESVRKqtNaLz3FYugwxmAJedK5XslJyACwAiaxWfYQ=,tag:avkGrr/zGio7FPgukgRLgQ==,type:str]
+        log-console-output: ENC[AES256_GCM,data:gGCH5g==,iv:zA285lcLxTRtu8sS4YPdD+cVAo0RXfuqliHTnzYTEVk=,tag:vQbAt5vv5Sg8t6bKmyszIQ==,type:str]
+        log-level: ENC[AES256_GCM,data:97T1cOHyavOcYxfKWjYMEpUT8TbHfIam7vEAF0Mp55HRCM3cR16tuqNJfSe4rs9hrF3AQKxwyGVupf/0lOs60QmC3scrxEd1epM1FP5Jb6RFT7T1jbo=,iv:NwUZaFLX62Bd6TJvMjeaytiqAAJm2/+gUwajSh+Exy4=,tag:pgYVRBLIDdR2hxbc0bwiJQ==,type:str]
+        oidc-url: ENC[AES256_GCM,data:UpCnC6pVfNtjUPhQudJY/LbqvPi+4rs/B8xzS5Z8mjEEOwDlbQ==,iv:X4UH2fYOUjj1DQw3Ir9kJ06JYRii2yaMQEgwu6vFkGo=,tag:nLi1CkTMaoiMhcsPCJ2zfw==,type:str]
+        tenant-tag: ENC[AES256_GCM,data:oRzUJDiKPWkiwQSk,iv:khEkIzRnr1e1OtOM2F7LBaHHgGShA8E0rGF1wET7Y8Y=,tag:PiAuZVsQ5p5PMHeI9LxgSg==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3Y21UQjFyT2dVSXo4YjhG
+        c3lKSHh6RUtZd0locVpOYUxBSjIvQTBFTDJRClVsOE1VOGdFU2tKc2htNGU3UnVt
+        ZzA0SGRlTy9hazJuWSswMDQ1YmtoMmsKLS0tIFdkMnZXMTQ3Zk5OZXlmdFRuS3JT
+        ZDNiT1NVTzF0NWJ2dHB0bWlCanhZcFkKvZvJnmgYoug4lRVFkQEyfyVgxrckHC+4
+        G6XWxIeAwqPLnTxjOh31Fq0fvey4XYlHzRBF3FKxiE5UCIl5cTEdOQ==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:fOfQzd393T7f1cBkiTfyL35sOi/+mpCSIgHblL2nU4tE3GlVk9v+mUgJLkfQcqs/KOqnExJwvyAv5zhy166f+BoFl/VHVfPgTJKqZesSM7hwAw9qx2TBRJd1fNJMkynRr0AehRVv3kenX+XthIgLILLfAe+qp8V9K/atM82avrI=,iv:gPs8c0UzHQvsLkCwkOq5+apQRiHZ5u0AtMEjEfJUlPw=,tag:o1piBMlQSFSLh5Fud91Z1Q==,type:str]
+  version: 3.13.3

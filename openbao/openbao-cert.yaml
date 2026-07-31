@@ -1,0 +1,24 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: openbao-cert
+spec:
+  commonName: system:node:*.openbao-internal
+  dnsNames:
+    - '*.openbao-internal'
+    - openbao-active
+    - openbao-active.openbao
+    - openbao-active.openbao.svc
+    - openbao-active.openbao.svc.cluster.local
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cluster-issuer
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS1
+    size: 384
+  secretName: openbao-tls
+  subject:
+    organizations:
+      - system:nodes

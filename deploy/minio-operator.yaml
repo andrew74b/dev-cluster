@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: minio-operator
+spec:
+  destination:
+    name: in-cluster
+    namespace: minio-operator
+  project: default
+  source:
+    chart: operator
+    helm:
+      valuesObject:
+        operator:
+          replicaCount: 1
+    repoURL: https://operator.min.io
+    targetRevision: 7.1.1
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

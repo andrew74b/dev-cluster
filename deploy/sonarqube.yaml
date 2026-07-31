@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: sonarqube
+spec:
+  destination:
+    name: in-cluster
+    namespace: sonarqube
+  project: default
+  sources:
+    - chart: sonarqube
+      helm:
+        valuesObject:
+          community:
+            enabled: true
+          elasticsearch:
+            bootstrapChecks: false
+          env:
+            - name: SONAR_JDBC_URL
+              valueFrom:
+                secretKeyRef:
+                  key: jdbc-uri
+                  name: sonardb-app
+            - name: SONAR_JDBC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: user
+                  name: sonardb-app
+          ingress:
+            annotations:
+              nginx.ingress.kubernetes.io/proxy-body-size: 25m
+            enabled: true
+            hosts:
+              - name: sonarqube.pandathedog.com
+                path: /
+            ingressClassName: nginx
+            tls:
+              - hosts:
+                  - '*.pandathedog.com'
+          initFs:
+            enabled: false
+          initSysctl:
+            enabled: false
+          jdbcOverwrite:
+            enabled: true
+            jdbcSecretName: sonardb-app
+            jdbcSecretPasswordKey: password
+          livenessProbe:
+            initialDelaySeconds: 120
+          monitoringPasscode: define_it
+          postgresql:
+            enabled: false
+          resources:
+            limits:
+              memory: 4Gi
+          sonarProperties:
+            sonar.auth.saml.applicationId: sonarqube
+            sonar.auth.saml.certificate.secured: MIICnzCCAYcCBgGbI/LShzANBgkqhkiG9w0BAQsFADATMREwDwYDVQQDDAhpbnRlcm5hbDAeFw0yNTEyMTUyMTM2MTRaFw0zNTEyMTUyMTM3NTRaMBMxETAPBgNVBAMMCGludGVybmFsMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArI9D7IpITCNDKAvI93hyNFBTHG644v12rg1dp21mNEIyGYZU/BA+srHp5bL9FVSl21pimwfowbTLcPS7KaBtDmxfKUxK7WANvXOWrRr8xsWSc1KP6uyQqa/iwNP/kwUFj80wQyL7UIWFJusq2FPAk5iyP9pnCjcSh0T9mU2YDtb8oc498fFjIYjDSYd+LqmAUvDy2RHqHSIYf9p6aPqRnKAY+/Cy1Qx1WGJzkW/3G6wByiSnCBTRV7PLp5kTFbN/kP1wvNw/LCzMa8k2u0CY3k8urbcvL3UQKAAUX7C1d2TbdPO50S559AishzGQah3OBhWw8qsGOvdUd1hJudlwGQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQCMwtBd4QRE2J64eyjV/u3OUYnRZKqjmpIB12kxSFSNYW6qMVe6e3cD43do8CQrMcNgLriDV6nnEjSF8XwvS8pkK0MM1laGr9/buhNySB4Sa1BE9SaBKzCNJJQxJbEezZ5D/7fAfmFR4WRrtU9MFuQDXgLgd3oL2NlHGxKdJnL1zb1lrdHT7sWyUpcXO+nNz6CB39nrjuJ3phDuC431AL3e14NMEq6JHWjFbNclcWcHTgI+83qlUqnR7H9rGQ+/85rUUnrRL5jjHDVucQMghwdwLZUKiyrIRtGnh5QGWy7c0NjEvCCr1PJrca1o1ej158qD9xQ0dTLsSPjy4wPEHNXJ
+            sonar.auth.saml.enabled: true
+            sonar.auth.saml.group.name: groups
+            sonar.auth.saml.loginUrl: https://auth.pandathedog.com/realms/internal/protocol/saml
+            sonar.auth.saml.providerId: https://auth.pandathedog.com/realms/internal
+            sonar.auth.saml.providerName: Keycloak
+            sonar.auth.saml.signature.enabled: false
+            sonar.auth.saml.user.email: email
+            sonar.auth.saml.user.login: login
+            sonar.auth.saml.user.name: name
+            sonar.core.serverBaseURL: https://sonarqube.pandathedog.com
+      repoURL: https://SonarSource.github.io/helm-chart-sonarqube
+      targetRevision: 2025.6.1
+    - path: sonarqube
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,122 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+    nginx.ingress.kubernetes.io/auth-tls-secret: default/client-ca
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: optional
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "2"
+    nginx.ingress.kubernetes.io/cors-allow-headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,Accept,Content-Type,X-Client-ID,X-Route-ID
+    nginx.ingress.kubernetes.io/cors-allow-methods: GET, PUT, POST, DELETE, PATCH, OPTIONS, HEAD
+    nginx.ingress.kubernetes.io/cors-allow-origin: https://*.pandathedog.com
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  name: irongate-api
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: irongate.pandathedog.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: irongate-api
+                port:
+                  name: http
+            path: /(oidc.*)
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: irongate-api
+                port:
+                  name: http
+            path: /(oidc-interaction.*)
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: static-content
+                port:
+                  name: http
+            path: /(redoc.*)
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: irongate-api
+                port:
+                  name: http
+            path: /api/v1/(.*)
+            pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: irongate-api
+                port:
+                  name: http
+            path: /ws/(.*)
+            pathType: ImplementationSpecific
+  tls:
+    - hosts:
+        - '*.pandathedog.com'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: irongate-api
+spec:
+  ports:
+    - name: http
+      port: 3000
+  selector:
+    app.kubernetes.io/name: irongate-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: irongate-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: irongate-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: irongate-api
+    spec:
+      containers:
+        - command:
+            - node
+            - dist/src/main.js
+          env:
+            - name: NODE_EXTRA_CA_CERTS
+              value: /certs/ca-bundle.pem
+          envFrom:
+            - secretRef:
+                name: irongate-env
+          image: harbor.pandathedog.com/library/infralytics-api
+          name: irongate-api
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - mountPath: /certs/ca-bundle.pem
+              name: ca-bundle
+              subPath: ca-bundle.pem
+            - mountPath: /infralytics/config/irongate
+              name: irongate-config
+          workingDir: /infralytics/apps/irongate-api
+      initContainers:
+        - command:
+            - sh
+            - -c
+            - nc -z -w 2 redis 6379
+          image: busybox:1.37.0
+          name: wait-for-redis
+      volumes:
+        - configMap:
+            name: ca-bundle
+          name: ca-bundle
+        - name: irongate-config
+          secret:
+            secretName: irongate-config

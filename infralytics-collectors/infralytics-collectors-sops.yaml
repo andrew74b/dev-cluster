@@ -1,0 +1,27 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: d7bfc4d555d25f43f3ecf7fd38129073dd116117
+  name: infralytics-collectors
+spec:
+  secretTemplates:
+    - name: infralytics-mongodb-config
+      stringData:
+        config.json: ENC[AES256_GCM,data:gCTzkD6xNiMpc1zTBNWIQf7O1vAA4C7yLN9wpCcB34Mvxj3BzIO3fy12UCTK170AaFELS+2vIorLf/h91FZ9+JIvdPFFfPsbmKNPSodrAvMPYV5sT18tpRydY42vLdeaT0cGyfmpeQYZg/cGmvR1zOe1lSxO81rjcoKxdKus7/6tYzP+yc1N8cDKLNJID7wStuBcfbvA7YoMJDrTUYtQe0oHXGFRf6vHk2L1RciS5AZW6VWmhiYFq+fONE1D10NKzu+1SsoAtqiE6Tei7kb4zzy6AeXWD3zyuva+DoyMWQnNHcS5IZPH9gT2dHg+sPPha7RjMJNPGX7Y30+vxkBULdiLvM5gJQxzp+0x0R7Vci3vFK0gD+JF4qheh1qDxcP4WGjPiMCjU38GEoUCp02aTOW99+R+P6FpgEpvFOSVtjiKvJtvIFLjMvY9OizWz6LbzRjIUw678zPUyg==,iv:WIHirc/jcwma8jmvj+3xvO9hq+GNDJ9ccoNTdUw0Eu4=,tag:wYKkEFeSrswOsW8QX3KUag==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBUUlFhTkEwbzRNbk96NFhh
+        S2toSjhITnFiUnM2KzQzbWpMa1V2TEhZN1dJCkRlMEVmbjJlMkR2c0g4Q3NHZ2pB
+        WVQ5OGhlVkFveG9RRjZBUlZKK2d2OUkKLS0tIG9tTlpPcFFzVHc4bVdROGNFSmlu
+        TUZuYXhpK3Q0YWRpMDJnSVhsZXJJTEUK3wlOXcuAImf2CKN2wzQqGOuwSBdzqd8S
+        aQm7ueo01eCj1yTnC4V9nbc1kO9ypye+PYzf0yhSlf8EU0mqrq22/w==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:7wt7k/BZwaqPiYmnYk/kozfqcq8XwtolXPD3aG0HaK9vOZroPPi55W3GM3inQm4VNHU6uvcE6PxWRFtT/ax30vhMx9vH4r3O+pmOvzktG+05Rg3BiGyBxGXSbDR99FHwIDmokqQbPoBtkKXiTdxTRwCL191ZKXp5lHhDdzObmCw=,iv:el1Uc6V8fJTKAUj7427lgYs1XmAG9l8kyFgAf8/LACg=,tag:GaYKH0vbodnLj2j8X23cAg==,type:str]
+  version: 3.13.3

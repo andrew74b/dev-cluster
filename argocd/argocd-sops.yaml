@@ -1,0 +1,30 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: c7245669db665aa495422c5482573e59e00d96c2
+  name: argocd
+spec:
+  secretTemplates:
+    - labels:
+        app.kubernetes.io/part-of: argocd
+      name: oidc-config
+      stringData:
+        oidc.keycloak.clientID: ENC[AES256_GCM,data:41n4h/U9,iv:qByVUApI86wU00rMqqHzaPCiHHzkRJB/5KbGadCMRjQ=,tag:IiTAZ+2+BBENnffeH4TpgA==,type:str]
+        oidc.keycloak.clientSecret: ENC[AES256_GCM,data:q68RvRsgZ+CZbaDKSz/G3YDU4A8ox1nEeQBDIJPZN44=,iv:yFSGpenDd1yMP3xUr4IUJhkN6WQwcYLt0nRtFuY8fG8=,tag:gMQ0nXtmI0ViUD/yf18QmA==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4d0U4OXdjRnhVQmlkOHl6
+        YU0xeUQwNUhkL1I4dmx4TCtoWGpPTS9TeEhRCmJWWjRBb2x6aWorUHpwaFpBR2Ja
+        ZEpwZXBteXV6REJCV1F2d2ZKNk1lT2MKLS0tIFhFR0dieStQL25qdnhDMnFlTlJH
+        aHVvQ20vM21nT2puYnRmZVMveHRhLzgKBINBtDL3cTKiUyS+cUoqpG4Bn30HMuWm
+        loLYpQKOLJTygn3T7f7tPUC+oCSM46lnJ2Coc2AqyX3NvGAKBpLVvg==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:YGtq5YGCpAkehmE5FQWzbIQTFIlu4sOeV/nmHb2NPHX95nHVV74R7L5O6nTkXzTkPwlamcWEUhuMTSYz31fRou6eWSPsBmYb7PRkvxhAniH+OYNcedZWl6DrDGE5Ruz4OaQYC/i1yq274u8eCGKkc0k1AvRGJztngX0y5D07kVY=,iv:voRPBUC6zv6LseEBrXVgYd6WaufTiGRHyQI5UHU9Xyw=,tag:5TZnCqZegrixNDsbfUPXnw==,type:str]
+  version: 3.13.3

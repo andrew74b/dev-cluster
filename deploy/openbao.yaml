@@ -1,0 +1,144 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: openbao
+spec:
+  destination:
+    name: in-cluster
+    namespace: openbao
+  project: default
+  sources:
+    - chart: openbao
+      helm:
+        valuesObject:
+          global:
+            enabled: true
+            tlsDisable: false
+          injector:
+            enabled: false
+          server:
+            auditStorage:
+              enabled: true
+            extraEnvironmentVars:
+              BAO_CACERT: /openbao/userconfig/certs/ca.crt
+            ha:
+              enabled: false
+              raft:
+                config: |
+                  ui = true
+
+                  listener "tcp" {
+                  	address = "[::]:8200"
+                  	cluster_address = "[::]:8201"
+                  	tls_cert_file = "/openbao/userconfig/certs/tls.crt"
+                  	tls_key_file = "/openbao/userconfig/certs/tls.key"
+                  	tls_client_ca_file = "/openbao/userconfig/certs/ca.crt"
+                  }
+
+                  seal "static" {
+                  	current_key_id = "20251208-1"
+                  	current_key = "file:///openbao/userconfig/secrets/unseal-20251208-1.key"
+                  	previous_key_id = "20251208-2"
+                  	previous_key = "file:///openbao/userconfig/secrets/unseal-20251208-2.key"
+                  }
+
+                  storage "raft" {
+                  	path = "/openbao/data"
+
+                  	retry_join {
+                  		leader_api_addr = "https://openbao-active:8200"
+                  		leader_client_cert_file = "/openbao/userconfig/certs/tls.crt"
+                  		leader_client_key_file = "/openbao/userconfig/certs/tls.key"
+                  		leader_ca_cert_file = "/openbao/userconfig/certs/ca.crt"
+                  	}
+                  }
+
+                  service_registration "kubernetes" {}
+                enabled: true
+                setNodeId: true
+              replicas: 1
+            image:
+              registry: quay.io
+              repository: openbao/openbao
+              tag: ""
+            ingress:
+              annotations:
+                nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+              enabled: true
+              hosts:
+                - host: openbao.pandathedog.com
+                  paths:
+                    - /
+              ingressClassName: nginx
+              tls:
+                - hosts:
+                    - '*.pandathedog.com'
+            livenessProbe:
+              enabled: true
+              initialDelaySeconds: 300
+            readinessProbe:
+              enabled: true
+              path: /v1/sys/health?standbyok=true&sealedcode=204&uninitcode=204
+            resources:
+              limits:
+                cpu: 500m
+                memory: 128Mi
+              requests:
+                cpu: 100m
+                memory: 64Mi
+            standalone:
+              config: |
+                ui = true
+
+                listener "tcp" {
+                	address = "[::]:8200"
+                	cluster_address = "[::]:8201"
+                	tls_cert_file = "/openbao/userconfig/certs/tls.crt"
+                	tls_key_file = "/openbao/userconfig/certs/tls.key"
+                	tls_client_ca_file = "/openbao/userconfig/certs/ca.crt"
+                }
+
+                seal "static" {
+                	current_key_id = "20251208-1"
+                	current_key = "file:///openbao/userconfig/secrets/unseal-20251208-1.key"
+                	previous_key_id = "20251208-2"
+                	previous_key = "file:///openbao/userconfig/secrets/unseal-20251208-2.key"
+                }
+
+                storage "file" {
+                	path = "/openbao/data"
+                }
+              enabled: true
+            volumeMounts:
+              - mountPath: /openbao/userconfig/certs
+                name: userconfig-openbao-tls
+                readOnly: true
+              - mountPath: /openbao/userconfig/secrets
+                name: userconfig-unseal-keys
+                readOnly: true
+            volumes:
+              - name: userconfig-openbao-tls
+                secret:
+                  secretName: openbao-tls
+              - name: userconfig-unseal-keys
+                secret:
+                  secretName: openbao-unseal-keys
+      repoURL: https://openbao.github.io/openbao-helm
+      targetRevision: 0.21.0
+    - path: openbao
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        linkerd.io/inject: enabled
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

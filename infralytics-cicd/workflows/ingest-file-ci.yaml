@@ -1,0 +1,152 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |-
+      Ingests various files in CSV format into MongoDB
+  labels:
+    run_type: ingest
+  name: ingest-csv-ci
+spec:
+  arguments:
+    parameters:
+      - name: key
+      - name: image-tag
+        value: latest
+  entrypoint: main
+  templates:
+    - container:
+        args:
+          - |-
+            $ErrorActionPreference = "Continue"
+            $file = "{{=sprig.osBase(inputs.artifacts.src.path)}}"
+            $dir = "{{=sprig.osDir(inputs.artifacts.src.path)}}"
+            Import-Module csvimporter
+            $date = ([datetime][regex]::Match($file, "[0-9]{2}-[a-zA-Z]{3}-[0-9]{4}").Value).ToShortDateString()
+            $class = $file.Split("_")[0]
+            $name = "ingest_$class"
+            $command = "Invoke-FileIngester -filePath '$dir/$file' -Date $date -fileType $class"
+            Invoke-InfralyticsTask -name $name -isPartial:$False -command $command
+        command:
+          - pwsh
+          - -c
+        image: harbor.pandathedog.com/library/infralytics-collectors:{{workflow.parameters.image-tag}}
+        name: main
+        volumeMounts:
+          - mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+            name: trust-bundle
+            subPath: ca-bundle.pem
+          - mountPath: /infralytics/config/infralytics/
+            name: config
+      inputs:
+        artifacts:
+          - name: src
+            path: /tmp/{{=sprig.base(workflow.parameters.key)}}
+            s3:
+              accessKeySecret:
+                key: accessKey
+                name: infralytics-minio-creds
+              bucket: ingest
+              endpoint: s3.pandathedog.com
+              insecure: false
+              key: '{{workflow.parameters.key}}'
+              secretKeySecret:
+                key: secretKey
+                name: infralytics-minio-creds
+      name: main
+      retryStrategy:
+        backoff:
+          duration: 1m
+          factor: 2
+          maxDuration: 12h
+        limit: 2
+        retryPolicy: Always
+      volumes:
+        - configMap:
+            name: ca-bundle
+          name: trust-bundle
+        - name: config
+          secret:
+            secretName: infralytics-mongodb-config
+  workflowMetadata:
+    annotations:
+      workflows.argoproj.io/description: '*{{workflow.parameters.key}}*'
+      workflows.argoproj.io/title: '{{workflow.name}}'
+    labels:
+      run_type: ingest
+---
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |-
+      Ingests MongoDB JSON files in a ZIP archive from various environments into MongoDB
+  labels:
+    run_type: ingest
+  name: ingest-mongodb-ci
+spec:
+  arguments:
+    parameters:
+      - name: key
+      - name: image-tag
+        value: latest
+  entrypoint: main
+  templates:
+    - container:
+        args:
+          - |-
+            $ErrorActionPreference = "Continue"
+            $file = "{{=sprig.osBase(inputs.artifacts.src.path)}}"
+            $dir = "{{=sprig.osDir(inputs.artifacts.src.path)}}"
+            Import-Module mongoImport
+            $network = [regex]::Match($file, "un|sc").Value
+            $name = "ingest_dbfile_$network"
+            $command = "Import-MongoDBFiles -sourcePath '$dir' -network $network -stagingDir /tmp -noClean"
+            Invoke-InfralyticsTask -name $name -isPartial:$False -command $command
+        command:
+          - pwsh
+          - -c
+        image: harbor.pandathedog.com/library/infralytics-collectors:{{workflow.parameters.image-tag}}
+        name: main
+        volumeMounts:
+          - mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+            name: trust-bundle
+            subPath: ca-bundle.pem
+          - mountPath: /infralytics/config/infralytics/
+            name: config
+      inputs:
+        artifacts:
+          - name: src
+            path: /tmp/{{=sprig.base(workflow.parameters.key)}}
+            s3:
+              accessKeySecret:
+                key: accessKey
+                name: infralytics-minio-creds
+              bucket: ingest
+              endpoint: s3.pandathedog.com
+              insecure: false
+              key: '{{workflow.parameters.key}}'
+              secretKeySecret:
+                key: secretKey
+                name: infralytics-minio-creds
+      name: main
+      retryStrategy:
+        backoff:
+          duration: 1m
+          factor: 2
+          maxDuration: 12h
+        limit: 2
+        retryPolicy: Always
+      volumes:
+        - configMap:
+            name: ca-bundle
+          name: trust-bundle
+        - name: config
+          secret:
+            secretName: infralytics-mongodb-config
+  workflowMetadata:
+    annotations:
+      workflows.argoproj.io/description: '*mongodb_{{workflow.parameters.key}}*'
+      workflows.argoproj.io/title: '{{workflow.name}}'
+    labels:
+      run_type: ingest

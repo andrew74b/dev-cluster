@@ -1,0 +1,71 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: harbor
+spec:
+  destination:
+    name: in-cluster
+    namespace: harbor
+  project: default
+  sources:
+    - chart: harbor
+      helm:
+        valuesObject:
+          core:
+            existingSecret: harbor-env
+            existingXsrfSecret: harbor-env
+            extraEnvVars:
+              - name: CONFIG_OVERWRITE_JSON
+                valueFrom:
+                  secretKeyRef:
+                    key: CONFIG_OVERWRITE_JSON
+                    name: harbor-env
+            secretName: harbor-token-tls
+          existingSecretAdminPassword: harbor-env
+          expose:
+            ingress:
+              className: nginx
+              hosts:
+                core: harbor.pandathedog.com
+            tls:
+              certSource: none
+              enabled: true
+            type: ingress
+          externalURL: https://harbor.pandathedog.com
+          internalTLS:
+            enabled: false
+          jobservice:
+            existingSecret: harbor-env
+          persistence:
+            imageChartStorage:
+              disableredirect: true
+              s3:
+                bucket: registry
+                existingSecret: minio-creds
+                region: us-east-1
+                regionendpoint: s3.pandathedog.com
+                secure: true
+                skipverify: true
+              type: s3
+          registry:
+            credentials:
+              existingSecret: harbor-env
+            existingSecret: harbor-env
+      repoURL: https://helm.goharbor.io
+      targetRevision: 1.19.1
+    - path: harbor
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,34 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: 27c4e6ed4f5f4dfe89c1957a5ece05430bd45c2d
+  name: outline
+spec:
+  secretTemplates:
+    - name: outline-env
+      stringData:
+        AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:BN4Wr0hpRBKcdk0iLY6R2hG6,iv:pCiYcz8VgT9ZkB+ZpyDWQIh25WrBhkM5K/apN0dXJ38=,tag:IDqn+GmkxnJj7TGnwcVwpw==,type:str]
+        AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:y5UKx4DPKEnTGM5LZYY+JtSM7SsnBskOO4rPidCvIRBMAaqrkgZLtA==,iv:qX2UxvFSFLLNU8/znyRjLQbEhXgSNyO1aNM6YGY2mPo=,tag:zaPGVtKKfSq1fBqKPIdKLQ==,type:str]
+        OIDC_CLIENT_ID: ENC[AES256_GCM,data:ku+TmxzABw==,iv:54RUyxErxUkHsfT0jpERGJnVSyulsbDf8pod0RMkWQ8=,tag:b+lRuGQtsinjsTK4tPhe2w==,type:str]
+        OIDC_CLIENT_SECRET: ENC[AES256_GCM,data:BAtkuLR++xYQKxkbiooZ4awknlKHlWgCtrsRXxOngMA=,iv:SB6xaxaCWZGPWGJ2jLMWq+uncYyREu/VhmrSPDEcfSk=,tag:AkEoHbiIMOoNIx0PqgX2oQ==,type:str]
+        SECRET_KEY: ENC[AES256_GCM,data:hLu44eF2Gug2TSMihVhp6AY8U+GT/gSHxOWGC1rWwO+l60eXfM1TPF+0UKO2m1I+P3JjTA6n2S6NaUpjuMC2pw==,iv:M/qF2tm19AXPZA/WDD0HM6+T2txcFIjoIagEONe59lI=,tag:FMuFv4AxyvQK8Xwe8NdCxg==,type:str]
+        SMTP_PASSWORD: ""
+        SMTP_USERNAME: ""
+        UTILS_SECRET: ENC[AES256_GCM,data:/bd1Z3I4mtRdyzQpV/OS88VFgUPDPNyc90qThCiv4n2pJA2MDkqbDtf/98U2vSLED36VVWpr+YFX9iMJeKFVXQ==,iv:bVFIel2p970hZa2q8sGacnrTFGRPiH3ksT38eHiHvDI=,tag:PmoixBANyVIZhU13evW7yQ==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB1QUIwbU1CZ2NTUGZTV2ZZ
+        RkViM0hUcjZqRy9YWnI2SGoxZDRhcTAzVmdRCnFSTzR6bnZFSHUyZmFWS2hCRzlv
+        ZWtYWFBXNXhuM25rMUwwc21WTDhiTG8KLS0tIFo3bHVncFJyTVlqaTllUmVLRUps
+        Mmdrdkd0RnpCeGF4aTVsclE4SzFYVkEKLVIR44LY6wsmCxjk8d4wnFU2BGVzPgzd
+        N/K+aT/hH/UycwCvhOOXzsRyE5YK6wDyX4mEfFWCtG02Yc5CqiXXCA==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:q9VNbZQju6erxiCf3udbu526TWg5ghxX5U7j3Nyzq+3cqIkX0qZSIdrD7SbmTN5k8rkBgAvLtbkqhQ9SqoR3bNaNQQdkWEU6+GAtxFm09/4sFqs/weD6+gosYoktoYYi1F5W+I4V+nlyunwfjCBr4/EcDMo1SrtTTUO0xfZl+U0=,iv:SmAIDAMS7Ro7hM0NFlZfnq6lZuBgMBKETF9QuU3EVeo=,tag:AG8lK+6F9FeAx9H3IzxdfQ==,type:str]
+  version: 3.13.3

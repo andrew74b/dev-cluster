@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: outline-service
+spec:
+  ports:
+    - name: http-outline
+      port: 3000
+  selector:
+    app.kubernetes.io/name: outline
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: outline
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: outline
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: outline
+    spec:
+      containers:
+        - env:
+            - name: NODE_EXTRA_CA_CERTS
+              value: /etc/ssl/certs/ca-bundle.pem
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: uri
+                  name: outlinedb-app
+          envFrom:
+            - configMapRef:
+                name: outline-env
+            - secretRef:
+                name: outline-env
+          image: outlinewiki/outline:1.9.2
+          name: outline
+          ports:
+            - containerPort: 3000
+          volumeMounts:
+            - mountPath: /opt/outline/build/app/index.html
+              name: app-index
+              subPath: index.html
+            - mountPath: /etc/ssl/certs/ca-bundle.pem
+              name: ca-bundle
+              subPath: ca-bundle.pem
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: OnRootMismatch
+      volumes:
+        - configMap:
+            name: outline-index
+          name: app-index
+        - configMap:
+            name: ca-bundle
+          name: ca-bundle

@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: argo-events
+spec:
+  destination:
+    name: in-cluster
+    namespace: argo-events
+  project: default
+  source:
+    chart: argo-events
+    helm:
+      valuesObject:
+        createAggregateRoles: true
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: 2.4.22
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

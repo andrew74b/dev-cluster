@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+configMapGenerator:
+  - literals:
+      - allow-cross-namespace-resources=true
+      - use-http2=false
+      - hide-headers=x-powered-by
+    name: nginx-load-balancer-microk8s-conf
+    options:
+      disableNameSuffixHash: true
+kind: Kustomization
+resources:
+  - ingress-service.yaml

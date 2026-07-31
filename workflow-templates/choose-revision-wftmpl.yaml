@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  name: choose-revision
+spec:
+  entrypoint: main
+  templates:
+    - inputs:
+        parameters:
+          - default: https://github.com/octocat/Hello-World
+            name: repo
+      name: main
+      outputs:
+        parameters:
+          - name: revision
+            valueFrom:
+              parameter: '{{steps.choose-item.outputs.parameters.revision}}'
+      steps:
+        - - arguments:
+              parameters:
+                - name: repo
+                  value: '{{inputs.parameters.repo}}'
+            name: generate-list
+            template: generate-list
+        - - arguments:
+              parameters:
+                - name: revision
+                  value: '{{steps.generate-list.outputs.result}}'
+            name: choose-item
+            template: choose-item
+    - inputs:
+        parameters:
+          - name: repo
+          - default: v*
+            name: pattern
+      name: generate-list
+      script:
+        command:
+          - sh
+          - -c
+        env:
+          - name: HOME
+            value: /tmp
+        envFrom:
+          - secretRef:
+              name: git-env
+        image: alpine/git:v2.47.1
+        name: main
+        source: |
+          git config --global credential.helper '!f() { echo username=author; echo "password=$GIT_TOKEN"; };f'
+          TAGS=$(git ls-remote --tags --refs --sort=-v:refname "{{inputs.parameters.repo}}" "{{inputs.parameters.pattern}}" | head | cut -f2)
+          LIST=$(echo $TAGS | xargs | sed -r 's/[[:space:]]/,/g; s|refs/([^/]+)/([^,]+)|"\2"|g')
+          echo "{ \"enum\": [$LIST] }"
+    - inputs:
+        parameters:
+          - description: Choose a revision to checkout
+            name: revision
+      name: choose-item
+      outputs:
+        parameters:
+          - name: revision
+            valueFrom:
+              supplied: {}
+      suspend: {}

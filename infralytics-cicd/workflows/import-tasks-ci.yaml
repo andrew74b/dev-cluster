@@ -1,0 +1,327 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |
+      Import existing task definitions from MongoDB and create or update the corresponding CronWorkflow.
+  name: import-tasks-ci
+spec:
+  arguments:
+    parameters:
+      - name: image-tag
+        value: latest
+      - name: task-filter
+        value: ""
+      - name: sample
+        value: "false"
+      - name: document-count
+        value: "10"
+      - name: workload-count
+        value: "3"
+  artifactGC:
+    strategy: OnWorkflowCompletion
+  entrypoint: main
+  podGC:
+    deleteDelayDuration: 5s
+    strategy: OnPodCompletion
+  templates:
+    - name: main
+      steps:
+        - - name: import-tasks
+            template: import-tasks
+        - - arguments:
+              artifacts:
+                - from: '{{steps.import-tasks.outputs.artifacts.json}}'
+                  name: json
+              parameters:
+                - name: index
+                  value: '{{item}}'
+            name: batch-create
+            template: batch-create
+            withSequence:
+              count: '{{steps.import-tasks.outputs.parameters.count}}'
+    - inputs:
+        artifacts:
+          - name: json
+        parameters:
+          - name: index
+      name: batch-create
+      parallelism: 1
+      retryStrategy:
+        backoff:
+          duration: 1m
+          factor: 2
+          maxDuration: 12h
+        limit: 2
+        retryPolicy: Always
+      steps:
+        - - arguments:
+              artifacts:
+                - from: '{{inputs.artifacts.json}}'
+                  name: json
+              parameters:
+                - name: index
+                  value: '{{inputs.parameters.index}}'
+            name: get-task
+            template: get-task
+        - - arguments:
+              parameters:
+                - name: task
+                  value: '{{item}}'
+            name: create-cron
+            template: create-cron
+            when: '{{item.run_type}} == daily'
+            withParam: '{{steps.get-task.outputs.result}}'
+    - container:
+        args:
+          - |
+            Import-Module infralytics-core 5>$null
+
+            $col = Get-MongoCollection task_definitions -Core 5>$null
+            [array]$allTasks = $col.Find(@{run_type="daily"; task=@{'$regex'='{{workflow.parameters.task-filter}}'}}, (New-MongoFindOptions -limit {{workflow.parameters.document-count}})) | ConvertTo-PSObject
+            if ("{{workflow.parameters.sample}}" -eq "true")
+            {
+                [array]$allTasks = $allTasks | group {$_.metadata.type} | %{$_.group[0]}
+            }
+
+            $submodules = (gci ./apps/powershellmodules/infralytics-collectors -Recurse -File -Filter *.psd1 -Exclude "*vmware.psd1").FullName
+            $moduleDict = @{}
+
+            foreach ($submodule in $submodules)
+            {
+                $moduleCommands = (Get-Module $submodule -ListAvailable).ExportedCommands.Keys
+                $moduleCommands | %{$moduleDict[$_] = $submodule}
+            }
+
+            $output = New-Object System.Collections.Arraylist
+            $suboutput = New-Object System.Collections.Arraylist
+            $count = 0
+            foreach ($task in $allTasks)
+            {
+                $module = $moduleDict[$task.name]
+                $taskCommand = "$($task.name)"
+
+                foreach ($key in $task.run_parameters.Keys)
+                {
+                    $paramVals = $task.run_parameters.$key
+                    if ($paramVals -is [string[]])
+                    {
+                        $paramVals = $paramVals -join ","
+                    }
+                    elseif ($paramVals -is [string])
+                    {
+                        $paramVals = $paramVals.trim()
+                    }
+                    if (-not [string]::IsNullOrEmpty($paramVals))
+                    {
+                        $taskCommand += " -$key $paramVals"
+                    }
+                }
+
+                $schedule = "0 0 * * *"
+
+                if (-not [string]::IsNullOrEmpty($task.frequency))
+                {
+                    $schedule = "*/$($task.frequency) * * * *"
+
+                    if ($task.frequency -ge 60)
+                    {
+                        $hourlyfreq = [Math]::Round($task.frequency / 60)
+                        $schedule = "0 */$hourlyfreq * * *"
+                    }
+                }
+
+                $isPartial = "`$" + ([bool]$task.is_partial).ToString()
+                $initializer = "`$ErrorActionPreference = 'Continue'; Import-Module $module"
+                $fullCommand = "$initializer; Invoke-InfralyticsTask -command '$taskCommand' -name $($task.task) -isPartial:$isPartial -pod (`$env:podname) -image {{workflow.parameters.image-tag}}"
+
+                if ($count % {{workflow.parameters.workload-count}} -eq 0 -and $count -ne 0)
+                {
+                    $output.Add($suboutput) | Out-Null
+                    $suboutput = New-Object System.Collections.Arraylist
+                }
+
+                $version = $task.tag ? $task.tag : '{{workflow.parameters.image-tag}}'
+
+                $suboutput.Add(
+                @{
+                    name=$task.task.Replace('_', '-')
+                    version=$version
+                    raw_name=$task.task
+                    payload=$fullCommand
+                    schedule=$schedule
+                    category=$task.category
+                    deadline=$task.category -eq "heavy" ? 10800 : 900
+                    module=$task.metadata.module
+                    site=$task.metadata.site
+                    type=$task.metadata.type
+                    run_type=$task.run_type
+                    is_partial=$null -eq $task.is_partial ? "" : $task.is_partial
+                    memory_limit=$task.memory_limit ?? "384Mi"
+                }) | Out-Null
+                $count++
+            }
+
+            if ($suboutput.count -ne 0)
+            {
+                $output.Add($suboutput) | Out-Null
+            }
+            [array]$output | ConvertTo-Json -depth 15 -AsArray | Out-File /tmp/tasks.json
+            $output.count | Out-File /tmp/count
+        command:
+          - pwsh
+          - -c
+        image: harbor.pandathedog.com/library/infralytics-collectors:{{workflow.parameters.image-tag}}
+        name: main
+        volumeMounts:
+          - mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+            name: trust-bundle
+            subPath: ca-bundle.pem
+          - mountPath: /infralytics/config/infralytics/
+            name: config
+      name: import-tasks
+      outputs:
+        artifacts:
+          - name: json
+            path: /tmp/tasks.json
+        parameters:
+          - name: count
+            valueFrom:
+              path: /tmp/count
+      retryStrategy:
+        backoff:
+          duration: 1m
+          factor: 2
+          maxDuration: 12h
+        limit: 2
+        retryPolicy: Always
+      volumes:
+        - configMap:
+            name: ca-bundle
+          name: trust-bundle
+        - name: config
+          secret:
+            secretName: infralytics-mongodb-config
+    - container:
+        args:
+          - |
+            Write-Output ((Get-Content /tmp/tasks.json | ConvertFrom-Json -NoEnumerate)[{{inputs.parameters.index}}] | ConvertTo-Json -AsArray)
+        command:
+          - pwsh
+          - -c
+        image: harbor.pandathedog.com/library/infralytics-collectors:{{workflow.parameters.image-tag}}
+        name: main
+      inputs:
+        artifacts:
+          - name: json
+            path: /tmp/tasks.json
+        parameters:
+          - name: index
+      name: get-task
+      retryStrategy:
+        backoff:
+          duration: 1m
+          factor: 2
+          maxDuration: 12h
+        limit: 2
+        retryPolicy: Always
+    - inputs:
+        parameters:
+          - name: task
+      name: create-cron
+      resource:
+        action: apply
+        manifest: |
+          apiVersion: argoproj.io/v1alpha1
+          kind: CronWorkflow
+          metadata:
+            annotations:
+              workflows.argoproj.io/description: '- *{{=jsonpath(inputs.parameters.task, "$.version")}}*'
+            labels:
+              app.kubernetes.io/name: '{{=jsonpath(inputs.parameters.task, "$.raw_name")}}'
+              app.kubernetes.io/version: '{{=jsonpath(inputs.parameters.task, "$.version")}}'
+              category: '{{=jsonpath(inputs.parameters.task, "$.category")}}'
+              is_partial: '{{=jsonpath(inputs.parameters.task, "$.is_partial")}}'
+              module: '{{=jsonpath(inputs.parameters.task, "$.module")}}'
+              run_type: '{{=jsonpath(inputs.parameters.task, "$.run_type")}}'
+              site: '{{=jsonpath(inputs.parameters.task, "$.site")}}'
+              type: '{{=jsonpath(inputs.parameters.task, "$.type")}}'
+            name: '{{=jsonpath(inputs.parameters.task, "$.name")}}'
+            namespace: infralytics-collectors
+          spec:
+            concurrencyPolicy: Replace
+            schedules:
+              - '{{=jsonpath(inputs.parameters.task, "$.schedule")}}'
+            workflowMetadata:
+              annotations:
+                workflows.argoproj.io/description: '- *{{=jsonpath(inputs.parameters.task, "$.version")}}*'
+              labels:
+                app.kubernetes.io/name: '{{=jsonpath(inputs.parameters.task, "$.raw_name")}}'
+                app.kubernetes.io/version: '{{=jsonpath(inputs.parameters.task, "$.version")}}'
+                category: '{{=jsonpath(inputs.parameters.task, "$.category")}}'
+                is_partial: '{{=jsonpath(inputs.parameters.task, "$.is_partial")}}'
+                module: '{{=jsonpath(inputs.parameters.task, "$.module")}}'
+                run_type: '{{=jsonpath(inputs.parameters.task, "$.run_type")}}'
+                site: '{{=jsonpath(inputs.parameters.task, "$.site")}}'
+                type: '{{=jsonpath(inputs.parameters.task, "$.type")}}'
+            workflowSpec:
+              activeDeadlineSeconds: {{=jsonpath(inputs.parameters.task, "$.deadline")}}
+              entrypoint: main
+              imagePullSecrets: []
+              podGC:
+                deleteDelayDuration: 5m
+                strategy: OnPodCompletion
+              podMetadata:
+                labels:
+                  module: '{{=jsonpath(inputs.parameters.task, "$.module")}}'
+                  site: '{{=jsonpath(inputs.parameters.task, "$.site")}}'
+                  type: '{{=jsonpath(inputs.parameters.task, "$.type")}}'
+              templates:
+                - container:
+                    args:
+                      - |
+                        {{=jsonpath(inputs.parameters.task, "$.payload")}}
+                    command:
+                      - pwsh
+                      - -c
+                    env:
+                      - name: podname
+                        valueFrom:
+                          fieldRef:
+                            fieldPath: metadata.name
+                    image: harbor.pandathedog.com/library/infralytics-collectors:{{=jsonpath(inputs.parameters.task, "$.version")}}
+                    name: main
+                    resources:
+                      limits:
+                        memory: '{{=jsonpath(inputs.parameters.task, "$.memory_limit")}}'
+                      requests:
+                        cpu: 250m
+                        memory: 100Mi
+                    volumeMounts:
+                      - mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+                        name: trust-bundle
+                        subPath: ca-bundle.pem
+                      - mountPath: /infralytics/config/infralytics/
+                        name: config
+                  name: main
+                  retryStrategy:
+                    backoff:
+                      duration: 1m
+                      factor: 2
+                      maxDuration: 12h
+                    limit: 2
+                    retryPolicy: Always
+                  volumes:
+                    - configMap:
+                        name: ca-bundle
+                      name: trust-bundle
+                    - name: config
+                      secret:
+                        secretName: infralytics-mongodb-config
+      retryStrategy:
+        backoff:
+          duration: 1m
+          factor: 2
+          maxDuration: 12h
+        limit: 2
+        retryPolicy: Always

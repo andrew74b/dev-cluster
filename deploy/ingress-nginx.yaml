@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: ingress-nginx
+spec:
+  destination:
+    name: in-cluster
+    namespace: ingress
+  project: default
+  source:
+    path: ingress-nginx
+    repoURL: https://github.com/andrew74b/dev-cluster
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: workflow-templates
+spec:
+  destination:
+    name: in-cluster
+    namespace: argo
+  project: default
+  source:
+    path: workflow-templates
+    repoURL: https://github.com/andrew74b/dev-cluster
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

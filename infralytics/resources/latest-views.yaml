@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: latest-views
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: latest-views
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: latest-views
+    spec:
+      containers:
+        - command:
+            - node
+            - dist/src/index.js
+          env:
+            - name: NODE_EXTRA_CA_CERTS
+              value: /certs/ca-bundle.pem
+          envFrom:
+            - secretRef:
+                name: latest-views-env
+          image: harbor.pandathedog.com/library/infralytics-api
+          name: latest-views
+          volumeMounts:
+            - mountPath: /certs/ca-bundle.pem
+              name: ca-bundle
+              subPath: ca-bundle.pem
+            - mountPath: /opt/www/data
+              name: data
+          workingDir: /infralytics/apps/latest-views
+      volumes:
+        - configMap:
+            name: ca-bundle
+          name: ca-bundle
+        - emptyDir: {}
+          name: data

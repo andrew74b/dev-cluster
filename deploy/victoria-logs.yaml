@@ -1,0 +1,177 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: victoria-logs
+spec:
+  destination:
+    name: in-cluster
+    namespace: victoria-logs
+  project: default
+  sources:
+    - chart: victoria-logs-single
+      helm:
+        parameters:
+          - name: dashboards.grafanaOperator.spec.instanceSelector.matchLabels
+            value: "null"
+        valuesObject:
+          dashboards:
+            enabled: true
+            grafanaOperator:
+              enabled: true
+              spec:
+                allowCrossNamespaceImport: true
+          extraObjects:
+            - apiVersion: grafana.integreatly.org/v1beta1
+              kind: GrafanaDatasource
+              metadata:
+                name: victoria-logs
+              spec:
+                allowCrossNamespaceImport: true
+                datasource:
+                  access: proxy
+                  jsonData:
+                    logLevelRules:
+                      - field: log.level
+                        level: debug
+                        operator: regex
+                        value: ^(debug|DEBUG|Debug)
+                      - field: log.level
+                        level: info
+                        operator: regex
+                        value: ^(info|INFO|Info)
+                      - field: log.level
+                        level: warning
+                        operator: regex
+                        value: ^(warn|WARN|Warn)
+                      - field: log.level
+                        level: error
+                        operator: regex
+                        value: ^(err|ERR|Err)
+                      - field: log.level
+                        level: trace
+                        operator: regex
+                        value: ^(trace|TRACE|Trace)
+                      - field: _msg
+                        level: warning
+                        operator: regex
+                        value: warn|WARN|Warn
+                      - field: _msg
+                        level: error
+                        operator: regex
+                        value: error|ERROR|Error
+                      - field: _msg
+                        level: debug
+                        operator: regex
+                        value: debug|DEBUG|Debug
+                      - field: _msg
+                        level: info
+                        operator: regex
+                        value: info|INFO|Info
+                    vmuiUrl: https://victoria-logs.pandathedog.com/select/vmui
+                  name: VictoriaLogs
+                  type: victoriametrics-logs-datasource
+                  url: http://victoria-logs-vls-server.victoria-logs.svc.cluster.local:9428
+                instanceSelector: {}
+                uid: victoria-logs
+          nameOverride: vls
+          server:
+            ingress:
+              annotations:
+                nginx.ingress.kubernetes.io/auth-tls-secret: default/client-ca
+                nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+                nginx.ingress.kubernetes.io/auth-tls-verify-depth: "2"
+              enabled: true
+              hosts:
+                - name: victoria-logs.pandathedog.com
+                  path:
+                    - /
+                  port: http
+              ingressClassName: nginx
+              pathType: Prefix
+              tls:
+                - hosts:
+                    - '*.pandathedog.com'
+            persistentVolume:
+              size: 10Gi
+            retentionPeriod: 7d
+            serviceMonitor:
+              enabled: true
+              extraLabels:
+                release: kube-prometheus-stack
+      repoURL: https://victoriametrics.github.io/helm-charts
+      targetRevision: 0.11.18
+    - chart: vector
+      helm:
+        valuesObject:
+          customConfig:
+            data_dir: /vector-data-dir
+            sinks:
+              prom_exporter:
+                address: "0.0.0.0:9598"
+                inputs:
+                  - internal_metrics
+                type: prometheus_exporter
+              vlogs_0:
+                compression: zstd
+                encoding:
+                  codec: json
+                framing:
+                  method: newline_delimited
+                healthcheck:
+                  enabled: false
+                inputs:
+                  - parse
+                request:
+                  headers:
+                    AccountID: "0"
+                    ProjectID: "0"
+                    VL-Ignore-Fields: kubernetes.node_labels.feature.*
+                    VL-Msg-Field: message,msg,_msg,log.msg,log.message,log
+                    VL-Stream-Fields: kubernetes.pod_name,kubernetes.container_name,kubernetes.pod_namespace
+                    VL-Time-Field: time,ts,timestamp
+                type: http
+                uri: http://victoria-logs-vls-server.victoria-logs.svc.cluster.local:9428/insert/jsonline
+            sources:
+              internal_metrics:
+                scrape_interval_secs: 10
+                type: internal_metrics
+              k8s:
+                pod_annotation_fields:
+                  pod_ips: ""
+                type: kubernetes_logs
+            transforms:
+              parse:
+                inputs:
+                  - k8s
+                source: |-
+                  msg = del(.message)
+                  .log =
+                    parse_json(msg) ??
+                    parse_klog(msg) ??
+                    parse_common_log(msg) ??
+                    parse_nginx_log(msg, format: "combined") ??
+                    parse_nginx_log(msg, format: "ingress_upstreaminfo") ??
+                    parse_key_value(msg, accept_standalone_key: false) ?? msg
+                type: remap
+          podMonitor:
+            additionalLabels:
+              release: kube-prometheus-stack
+            enabled: true
+          role: Agent
+          service:
+            enabled: false
+      repoURL: https://helm.vector.dev
+      targetRevision: 0.48.0
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+    syncOptions:
+      - CreateNamespace=true

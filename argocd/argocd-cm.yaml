@@ -1,0 +1,30 @@
+apiVersion: v1
+data:
+  oidc.config: |
+    clientID: $oidc-config:oidc.keycloak.clientID
+    clientSecret: $oidc-config:oidc.keycloak.clientSecret
+    issuer: https://auth.pandathedog.com/realms/internal
+    name: Keycloak
+    refreshTokenThreshold: 2m
+    requestedScopes:
+      - openid
+      - profile
+      - email
+      - groups
+  resource.customizations.health.argoproj.io_Application: |
+    hs = {}
+    hs.status = "Progressing"
+    hs.message = ""
+    if obj.status ~= nil then
+      if obj.status.health ~= nil then
+        hs.status = obj.status.health.status
+        if obj.status.health.message ~= nil then
+          hs.message = obj.status.health.message
+        end
+      end
+    end
+    return hs
+  url: https://argocd.pandathedog.com
+kind: ConfigMap
+metadata:
+  name: argocd-cm

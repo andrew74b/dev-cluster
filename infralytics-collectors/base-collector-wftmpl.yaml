@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |-
+      Base collector image used to launch PWSH commands with a configured environment
+  name: base-collector
+spec:
+  arguments:
+    parameters:
+      - name: image-tag
+        value: latest
+      - name: command
+  entrypoint: main
+  templates:
+    - container:
+        args:
+          - |
+            {{workflow.parameters.command}}
+        command:
+          - pwsh
+          - -c
+        image: harbor.pandathedog.com/library/infralytics-collectors:{{workflow.parameters.image-tag}}
+        name: main
+        volumeMounts:
+          - mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+            name: trust-bundle
+            subPath: ca-bundle.pem
+          - mountPath: /infralytics/config/infralytics/
+            name: config
+      name: main
+      retryStrategy:
+        backoff:
+          duration: 1m
+          factor: 2
+          maxDuration: 12h
+        limit: 2
+        retryPolicy: Always
+      volumes:
+        - configMap:
+            name: ca-bundle
+          name: trust-bundle
+        - name: config
+          secret:
+            secretName: infralytics-mongodb-config
+  workflowMetadata:
+    annotations:
+      workflows.argoproj.io/title: '{{workflow.name}}'

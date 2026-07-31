@@ -1,0 +1,121 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |
+      Create and push the static-content image.
+  name: static-content-ci
+spec:
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/DevalexLLC/infralytics-stack
+      - description: Specify the revision for non-interactive builds.
+        name: revision
+        value: development
+      - description: Override the image tag if specified.
+        name: image-tag
+        value: ""
+  artifactGC:
+    strategy: OnWorkflowCompletion
+  entrypoint: main
+  templates:
+    - dag:
+        tasks:
+          - arguments:
+              parameters:
+                - name: revision
+                  value: '{{workflow.parameters.revision}}'
+            name: build
+            template: build
+          - arguments:
+              artifacts:
+                - from: '{{tasks.build.outputs.artifacts.source}}'
+                  name: source
+              parameters:
+                - name: revision
+                  value: |-
+                    {{=
+                      workflow.parameters['image-tag'] != ''
+                        ? workflow.parameters['image-tag']
+                        : tasks.build.outputs.parameters.revision
+                    }}
+            depends: build
+            name: build-push-image
+            template: build-push-image
+      name: main
+    - container:
+        args:
+          - npm ci --no-audit --no-fund
+        command:
+          - sh
+          - -c
+        envFrom:
+          - configMapRef:
+              name: build-env
+        image: node:24.13.0-slim
+        name: main
+        workingDir: /workspace/lib/proxy/html
+      inputs:
+        artifacts:
+          - git:
+              passwordSecret:
+                key: GIT_TOKEN
+                name: git-env
+              repo: '{{workflow.parameters.repo}}'
+              revision: '{{workflow.parameters.revision}}'
+              usernameSecret:
+                key: GIT_USER
+                name: git-env
+            name: source
+            path: /workspace
+      name: build
+      outputs:
+        artifacts:
+          - name: source
+            path: /workspace/lib/proxy/html
+    - container:
+        args:
+          - --dockerfile=Dockerfile
+          - --context=.
+          - --destination=harbor.pandathedog.com/library/static-content:{{inputs.parameters.revision}}
+          - --destination=harbor.pandathedog.com/library/static-content:latest
+          - --cache=false
+          - --reproducible
+          - --skip-tls-verify
+        command:
+          - executor
+        image: gcr.io/kaniko-project/executor:v1.23.2
+        name: main
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        volumeMounts:
+          - mountPath: /kaniko/.docker
+            name: docker-config
+        workingDir: /workspace
+      initContainers:
+        - args:
+            - |
+              cat <<EOF >Dockerfile
+              FROM nginxinc/nginx-unprivileged:1.27-alpine
+              COPY --chown=nginx:nginx . /usr/share/nginx/html
+              EOF
+          command:
+            - sh
+            - -c
+          image: busybox:1.37.0
+          mirrorVolumeMounts: true
+          name: setup
+          workingDir: /workspace
+      inputs:
+        artifacts:
+          - name: source
+            path: /workspace
+        parameters:
+          - name: revision
+      name: build-push-image
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: docker-config

@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: infralytics-collectors
+spec:
+  destination:
+    name: in-cluster
+    namespace: infralytics-collectors
+  project: default
+  source:
+    path: infralytics-collectors
+    repoURL: https://github.com/andrew74b/dev-cluster
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        linkerd.io/inject: enabled
+        pod-security.kubernetes.io/enforce: baseline
+        workflows.argoproj.io/parallelism-limit: "2"
+    syncOptions:
+      - CreateNamespace=true

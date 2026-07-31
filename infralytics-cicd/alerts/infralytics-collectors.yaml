@@ -1,0 +1,366 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaAlertRuleGroup
+metadata:
+  name: infralytics-collectors
+spec:
+  allowCrossNamespaceImport: true
+  folderRef: infralytics-cicd
+  instanceSelector: {}
+  interval: 1m
+  rules:
+    - condition: C
+      data:
+        - datasourceUid: mongodb-infralytics
+          model:
+            collection: asp
+            datasource:
+              type: haohanyang-mongodb-datasource
+              uid: mongodb-infralytics
+            hide: false
+            instant: true
+            intervalMs: 1000
+            isStreaming: false
+            maxDataPoints: 43200
+            queryLanguage: json
+            queryText: "[\r\n  {\r\n    \"$match\": {\r\n      \"verified\": false\r\n    }\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"count\": {\r\n        \"$sum\": 1\r\n      },\r\n      \"asp\": \"$asp\",\r\n      \"ldap\": \"$ldap_asp\",\r\n      \"_id\": 0\r\n    }\r\n  }\r\n]"
+            queryType: table
+            refId: A
+          queryType: table
+          refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params: []
+                reducer:
+                  params: []
+                  type: avg
+                type: query
+            datasource:
+              name: Expression
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: reducer
+            type: reduce
+          queryType: expression
+          refId: reducer
+          relativeTimeRange:
+            from: 0
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: reducer
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+          refId: C
+          relativeTimeRange:
+            from: 0
+            to: 0
+      execErrState: Error
+      for: 1m
+      isPaused: false
+      labels:
+        source: infralytics-collectors
+      noDataState: NoData
+      title: Unverified ASPs
+      uid: asps
+    - condition: C
+      data:
+        - datasourceUid: mongodb-infralytics
+          model:
+            collection: infralytics_data_stats
+            datasource:
+              type: haohanyang-mongodb-datasource
+              uid: mongodb-infralytics
+            hide: false
+            instant: true
+            intervalMs: 1000
+            isStreaming: false
+            maxDataPoints: 43200
+            queryLanguage: json
+            queryText: "[\r\n  {\r\n    \"$match\": {\r\n      \"$expr\": {\r\n        \"$eq\": [\r\n          {\r\n            \"$size\": \"$indexes\"\r\n          },\r\n          1\r\n        ]\r\n      },\r\n      \"indexes\": {\r\n        \"$elemMatch\": {\r\n          \"name\": \"_id_\"\r\n        }\r\n      }\r\n    }\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"_id\": 0,\r\n      \"count\": {\r\n        \"$size\": \"$indexes\"\r\n      },\r\n      \"collection\": \"$collection\"\r\n    }\r\n  }\r\n]"
+            queryType: table
+            refId: A
+          queryType: table
+          refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params: []
+                reducer:
+                  params: []
+                  type: count
+                type: query
+            datasource:
+              name: Expression
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: count
+            refId: reducer
+            type: reduce
+          queryType: expression
+          refId: reducer
+          relativeTimeRange:
+            from: 0
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 1
+                  type: eq
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: reducer
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+          refId: C
+          relativeTimeRange:
+            from: 0
+            to: 0
+      execErrState: Error
+      for: 1m
+      isPaused: false
+      labels:
+        source: infralytics-collectors
+      noDataState: NoData
+      title: Missing Indexes
+      uid: missing-indexes
+    - condition: C
+      data:
+        - datasourceUid: mongodb-infralytics
+          model:
+            collection: task_definitions
+            datasource:
+              type: haohanyang-mongodb-datasource
+              uid: mongodb-infralytics
+            hide: false
+            instant: true
+            intervalMs: 1000
+            isStreaming: false
+            maxDataPoints: 43200
+            queryLanguage: json
+            queryText: "[\r\n  {\r\n    \"$lookup\": {\r\n      \"from\": \"input_source\",\r\n      \"localField\": \"task\",\r\n      \"foreignField\": \"task\",\r\n      \"as\": \"is\"\r\n    }\r\n  },\r\n  {\r\n    \"$unionWith\": {\r\n      \"coll\": \"input_source\",\r\n      \"pipeline\": [\r\n        {\r\n          \"$lookup\": {\r\n            \"from\": \"task_definitions\",\r\n            \"localField\": \"task\",\r\n            \"foreignField\": \"task\",\r\n            \"as\": \"td\"\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  {\r\n    \"$match\": {\r\n      \"$or\": [\r\n        {\r\n          \"is\": {\r\n            \"$size\": 0\r\n          }\r\n        },\r\n        {\r\n          \"td\": {\r\n            \"$size\": 0\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"task\": 1,\r\n      \"_id\": 1,\r\n      \"error\": {\"$literal\": 1},\r\n      \"status\": {\r\n        \"$cond\": {\r\n          \"if\": {\r\n            \"$ne\": [{ \"$type\": \"$td\" },\"missing\"]\r\n          },\r\n          \"then\": \"is_only\",\r\n          \"else\": \"td_only\"\r\n        }\r\n      }\r\n    }\r\n  }\r\n]"
+            queryType: table
+            refId: A
+          queryType: table
+          refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params: []
+                reducer:
+                  params: []
+                  type: avg
+                type: query
+            datasource:
+              name: Expression
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: last
+            refId: reducer
+            type: reduce
+          queryType: expression
+          refId: reducer
+          relativeTimeRange:
+            from: 0
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: reducer
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+          refId: C
+          relativeTimeRange:
+            from: 0
+            to: 0
+      execErrState: Error
+      for: 1m
+      isPaused: false
+      labels:
+        source: infralytics-collectors
+      noDataState: NoData
+      title: Mismatched Task Definitions and Input Sources
+      uid: mismatch-td-is
+    - condition: C
+      data:
+        - datasourceUid: mongodb-infralytics
+          model:
+            collection: input_source
+            datasource:
+              type: haohanyang-mongodb-datasource
+              uid: mongodb-infralytics
+            hide: false
+            instant: true
+            intervalMs: 1000
+            isStreaming: false
+            maxDataPoints: 43200
+            queryLanguage: json
+            queryText: "[\r\n  {\r\n    \"$project\": {\r\n      \"name\": 1,\r\n      \"task\": 1,\r\n      \"status\": {\r\n        \"$cond\": {\r\n          \"if\": {\r\n            \"$eq\": [\r\n              {\r\n                \"$ifNull\": [\r\n                  \"$start_time\",\r\n                  null,\r\n                  null\r\n                ]\r\n              },\r\n              null\r\n            ]\r\n          },\r\n          \"then\": \"null_start_time\",\r\n          \"else\": {\r\n            \"$cond\": {\r\n              \"if\": {\r\n                \"$and\": [\r\n                  {\r\n                    \"$ne\": [\r\n                      \"$retired\",\r\n                      null\r\n                    ]\r\n                  },\r\n                  {\r\n                    \"$ne\": [\r\n                      {\r\n                        \"$type\": \"$retired\"\r\n                      },\r\n                      \"missing\"\r\n                    ]\r\n                  },\r\n                  {\r\n                    \"$gte\": [\r\n                      \"$start_time\",\r\n                      \"$retired\"\r\n                    ]\r\n                  }\r\n                ]\r\n              },\r\n              \"then\": \"start_time \\u003e retired\",\r\n              \"else\": \"good\"\r\n            }\r\n          }\r\n        }\r\n      }\r\n    }\r\n  },\r\n  {\r\n    \"$match\": {\r\n      \"status\": {\r\n        \"$ne\": \"good\"\r\n      }\r\n    }\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"_id\": 0,\r\n      \"alert\": {\r\n        \"$concat\": [\r\n          \"$task\",\r\n          \" - \",\r\n          \"$status\"\r\n        ]\r\n      },\r\n\r\n                    \"value\": {\r\n        \"$literal\": 1\r\n      }\r\n    }\r\n  }\r\n]"
+            queryType: table
+            refId: A
+          queryType: table
+          refId: A
+          relativeTimeRange:
+            from: 600
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params: []
+                reducer:
+                  params: []
+                  type: count
+                type: query
+            datasource:
+              name: Expression
+              type: __expr__
+              uid: __expr__
+            expression: A
+            intervalMs: 1000
+            maxDataPoints: 43200
+            reducer: count
+            refId: reducer
+            type: reduce
+          queryType: expression
+          refId: reducer
+          relativeTimeRange:
+            from: 0
+            to: 0
+        - datasourceUid: __expr__
+          model:
+            conditions:
+              - evaluator:
+                  params:
+                    - 0
+                  type: gt
+                operator:
+                  type: and
+                query:
+                  params:
+                    - C
+                reducer:
+                  params: []
+                  type: last
+                type: query
+            datasource:
+              type: __expr__
+              uid: __expr__
+            expression: reducer
+            intervalMs: 1000
+            maxDataPoints: 43200
+            refId: C
+            type: threshold
+          refId: C
+          relativeTimeRange:
+            from: 0
+            to: 0
+      execErrState: Error
+      for: 1m
+      isPaused: false
+      labels:
+        source: infralytics-collectors
+      noDataState: NoData
+      title: Invalid Start Date or Retirement
+      uid: invalid-retirements

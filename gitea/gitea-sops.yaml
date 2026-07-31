@@ -1,0 +1,40 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: 3783a9e5642b326b1e72dabe0f24f16811ded66b
+  name: gitea
+spec:
+  secretTemplates:
+    - name: gitea-admin-creds
+      stringData:
+        password: ENC[AES256_GCM,data:RJ5Tsi4jyD4nvA==,iv:GDb6rPKpXyiHAebZ/OgM1CYfPqudSi4fg0ERv/5qcWw=,tag:xf7pfF0+Zv4k1Lrxf8WRzA==,type:str]
+        username: ENC[AES256_GCM,data:c136lVo=,iv:BGbl0wwpO2zG1odLy504GwG1cPXvzRXolXzhw3/efrQ=,tag:LjR7KmFG8yI86Yx8DrR/2Q==,type:str]
+    - name: gitea-oauth-client
+      stringData:
+        key: ENC[AES256_GCM,data:DmrUtj8=,iv:9qEi1wOTNoW7p06NpEh5P9ZefGctjrGb44xqOwmaNPo=,tag:zvdXp0wSqYgYS2EWVXOTxw==,type:str]
+        secret: ENC[AES256_GCM,data:QMs1eusX1ayurihMxB+2ldy+y+olyqsFtNao0399mqI=,iv:JzgIR2yDY5TfkFGcKMlYFfv6fL4iWD2fIWNZOHTFn3w=,tag:igr3D0+5Fv48+I5K4ge7uA==,type:str]
+    - name: gitea-smtp-creds
+      stringData:
+        password: ""
+        username: ""
+    - name: gitea-minio-creds
+      stringData:
+        accessKey: ENC[AES256_GCM,data:A6Q77D6RGvBVBrhTM3IbNA==,iv:wlLGrBqdlGc98vUywZ6t4Hwqah06RRS14jL6ul2XN2U=,tag:BidTRS05x7tel7XkcOb7xA==,type:str]
+        secretKey: ENC[AES256_GCM,data:kFXQtqVIp3B43RIiniYs15Dfx7FfN92q32Mi/5hobb5Yk/yyNHWzOQ==,iv:x+14rmdfYs/pwzfNJN+BhW2a0GXxaZc/CFuQ47ZVq3s=,tag:z/SYF4Ql3HWupLjoQLxftQ==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnUlNwY2k2a1pOUjRYaThW
+        aUhWRHJnMDRwZDMweXNTRkx6OERBV2hpajAwCm5EakViOUpOMk1GWlAreXpuZkJm
+        dUgrR2U0ZTVmTXQ4amJZZ1pUdDZDanMKLS0tIDJTRDdmcE90R2V1K0lGdnExeUFo
+        bkNHdjQxTFJwS09VaTREMndhSUZIWkEKri8dF4B/8aEAUf4+dkqvfDMaeA9lUV8M
+        9SZXtZ51CK6DSPBqD6k0YrB/1a8YnTlqYFvU7ToHvf7AjrVIs/lCbA==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:zkZwR5O+otehOxUQOCeVcygOQt6g2dcvj/RptsiM4PUFBsjcSOsvzM9ZB2WvwJDXDk76zZiAPA5VfmVoH1im7R2k1ACn6/QeVmaMF4LK5rSjqqwxilNFCvOUdfwsdJZR9eIVMN967WtXZfkZa14jhFDdGF4U/6Mu83mPAn82hGw=,iv:3TYr0wb5u9tqUgz0PgTbh6/d5Xr5CzmP1rUx+JFosfI=,tag:UYMBrepf2Le3ClulbV0N+A==,type:str]
+  version: 3.13.3

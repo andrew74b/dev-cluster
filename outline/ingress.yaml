@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+  name: outline-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: outline.pandathedog.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: outline-service
+                port:
+                  name: http-outline
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - '*.pandathedog.com'
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/permanent-redirect: https://outline.pandathedog.com
+  name: default-redirect-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: pandathedog.com
+    - host: '*.pandathedog.com'

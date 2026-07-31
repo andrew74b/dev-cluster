@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+configMapGenerator:
+  - literals:
+      - MONGODB_URI_LOCAL=mongodb://localhost/
+      - NEXT_TELEMETRY_DISABLED=1
+    name: build-env
+generatorOptions:
+  disableNameSuffixHash: true
+kind: Kustomization
+resources:
+  - alerts
+  - dashboards
+  - events
+  - workflows
+  - grafana.yaml
+  - infralytics-cicd-sops.yaml
+  - sensor-rbac.yaml
+  - workflow-rbac.yaml

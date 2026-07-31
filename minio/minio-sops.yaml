@@ -1,0 +1,47 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: 7b3803df02de788d1cdba831aebf170d7bcdf085
+  name: minio
+spec:
+  secretTemplates:
+    - name: minio-argo-user
+      stringData:
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:3VXQujOAdgNqTiuWmvGx,iv:XBqbgW8QPzGiDl3UiMoDPM7JWogx6WOfjBZiRLI8Nm4=,tag:vwMN6r6LiWnJGOlTC/PmVg==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:HvWMhUC/rfB0zLyP8HxDrDCDFp4a6KJswgxIyRyXHjTR96I2xIAVSA==,iv:69vclRG5trnyaoT4wz3NnyAFxjB1j9xssBIHepFIu9g=,tag:kEDUEcEGnzmqitO1hnAeOQ==,type:str]
+    - name: minio-gitea-user
+      stringData:
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:KpZIaIBmiwn0slGkfomgzw==,iv:6cXAKqa5Ke0EOJ097iciG8go84KGYGNZ5VuldcbSQcU=,tag:qJSnbeMBHmTIYRz0XbJpsQ==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:YIn6+1c9dxvjCWFfUqgTMsHU/m/Vn9jGiH5/8lJOUlXuC6g4lqY4Jw==,iv:OvzTkBgajXqw/QC2iPvwv+vuI5WikS0p1s6v/HlxE6w=,tag:KjhDPhWFuE/5PreP6pUDqA==,type:str]
+    - name: minio-harbor-user
+      stringData:
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:PltBkDlGU9w6XGGjPnPlqIw=,iv:DTgoUiohENpzj7GmGapbERb9DHRjBWd+VrgBqX9YY80=,tag:boGvvTwOkb/sVZZrtMFREA==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:ivygVN0M5r3Qq9S0x/Elu2CNQxSfk/kzyBxkkG3RdixQiGLzKMPmVA==,iv:To6vBwWc+LcWDnRXE/c4FKKhNTB2O0kHhMLvEgk9FQM=,tag:+mfqBXBXwvXyDob0M+QRkQ==,type:str]
+    - name: minio-infralytics-user
+      stringData:
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:tlvuryM0QLqr/ZO0nDStIWUqIJiRoQ==,iv:zGznBjBmufLYUVMm6g1mFlzJK/AUquCVqnNrUuE6GuU=,tag:1NoUNcfeQgyyMYrB1iBN5w==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:0OrfaNKgC6FSvoZcsWWrUcTJaRPKKfoVu/IqONNbGf11NAk6RplkAg==,iv:vqsO6w0FKvi3F+h48UUGGbDmsW4aHIasWn7O+vPZaL8=,tag:EprRQsNnsEUkry6TfqX1rg==,type:str]
+    - name: minio-outline-user
+      stringData:
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:Fo6ed4vFklZ6gjNQppOgxLiK,iv:4cajawokQF4xbhwfhqQC2BTZIYBf6wNBnL+pVYhlPYU=,tag:pEH8TzlhSDtA84DQtS5now==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:8L1WWryRQP4xAY6LL7umr0hT+yfRTE1amqJiypla07r0JE/wtQWFrQ==,iv:E+IWGzx2q+8iJ7XDBpGKjEHUHsXudUQsuHwRixC3p9I=,tag:H3d0PgF86EZuMH3i1IC+2Q==,type:str]
+    - name: minio-env-config
+      stringData:
+        config.env: ENC[AES256_GCM,data:FRDF4Wp+JQHKtOdPihez7E/bxic3U7cEgtl8rA8VqLfimD/+gFDSxDiXEJKTB7Sgo9/zMPGI5ii2IjUv3aanFT4tqL8uHI42aJoVfRdzeNV+d74B3vhgnHJcJRZok8d+T8VYJwcyOAh3tNUlnbXhzKULU8vKtwhWqu3crYcfXOsfGlfV6F4hrSFrkW18bko1rwVd8k050w6tc/3J63l0Dlh9vHNY1hhK0Crbb4I2d/dT3I+lQtVxC3PdbnFjR5tpHnuN1B7O2j9eiFTFgSZDQ4OWrZx0I4FxdIBhsZmo4TevLAaA06kQdcZ+YOFp2JePbSilV/ukI/Ir7lM+gknKX6UYprBFATsLuvWOQNH4RBzdK8oFiGgoGF1IHGj+cv41BUGeoL2EcrBHHaoYNHhFNt1+3gT5MT8D6CDIStqNhYS+PhMWSdaJA3N5MdONHRnjTE3qvdeTNzeByz620mKCeBxqSTvC60gA6HEY1zQR8Jd2GmEdAbP5+853pBACGzUn5sfLZZZO2m9fh9l3oGaP1ZEv6C4WCJLM3fEWE4k0zSkIMu6NxlhQgDfcAEZbAiMSHgdgNaDrjridmYWVF81msvRv7rd6Co/TcX6zjdWB6MRufGri+zx0HRddzUDlj7UNoE0DsMUNSH4AYBnRyA1DtuXFl98fsOnie/S725+jT5DaAZrMGZCV/ZHOLFNlsMMsSemik8pA3ebrdv9iGNiBNDKAx1jr1AqZJ0edBycfityG5LOskV2rdRofE8w6PnYhctNnvY8qN1+d8kZY4Hk3hI5P+ipWd810hK1cJrSP4uWTQ+0crd+NnjARkDrVlEiN5BtLlFYEqir1ohtyiZfpHc6MY9+fwhfVuk9pmzBCzZjpX12TzVUySAKbQWsR8uUCuCMc2FuqRDRE25QmL64i8RKyGc08SDTb4ZrtXyEB4JxP/BXttViVsmV0Hs3ZiG1gFsM6IMGen4tOPgyO/2fUDA==,iv:Y91/9lWxUjgzkmzFGF3YpbtjwXoKmA4e1rHfUGL0hjw=,tag:u0Nu+ZASHD+CLfHA86zR8g==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5Rkc3ZGt2REZTQnpPSWNI
+        VU5Pb2RzNm1UNFBRY3czamVHZkd0aEY5Q0JvClRmYmZXWlRPT0QwbUVaMWZKRDVp
+        TTFuY1RFWEdxTnVkR05LVUVIZjREamcKLS0tIFNXdzBHUlVLekdHeDhQWFJMcFEr
+        UWduaXhaWVRrUkpIVzNLT1BLWEFzNXcKzkLN8rwKhoR1CWdyZhvhYodCJ0qYVqri
+        LkN/E7pGETFOtUIFl/PjnD41S91AWKpk3oxGM9sV7XPfNIkNKWx5zg==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:+T9scTe86IehnYIR7+TLT+mRo06FwnBOpYF7I9VV+6bncet+Gu8QxZZbHqSGNmwFDGWvCGkV5p4zDutASaU9Fg8jbAHp76LkuSBRGPihborcnG/30LspxoEzaZ0526hy9zWQkr63WqcLrU5KOQzifOLnnkiuXeecSe84iX77M3U=,iv:eElKcEbCP2wXcK5qHHtjsz7dII2P8aZPmBzXbxjjxfQ=,tag:1XJuCURsleKt/OoB96nJjA==,type:str]
+  version: 3.13.3

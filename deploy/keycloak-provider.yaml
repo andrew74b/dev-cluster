@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: keycloak-provider
+spec:
+  destination:
+    name: in-cluster
+    namespace: keycloak
+  project: default
+  sources:
+    - path: keycloak-provider
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+    - path: workflow-config
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: EventSource
+metadata:
+  name: minio-ingest
+spec:
+  minio:
+    csv-creation:
+      accessKey:
+        key: accessKey
+        name: infralytics-minio-creds
+      bucket:
+        name: ingest
+      endpoint: s3.pandathedog.com
+      events:
+        - s3:ObjectCreated:*
+      filter:
+        suffix: .csv
+      insecure: false
+      region: us-east-1
+      secretKey:
+        key: secretKey
+        name: infralytics-minio-creds
+    zip-creation:
+      accessKey:
+        key: accessKey
+        name: infralytics-minio-creds
+      bucket:
+        name: ingest
+      endpoint: s3.pandathedog.com
+      events:
+        - s3:ObjectCreated:*
+      filter:
+        suffix: .zip
+      insecure: false
+      region: us-east-1
+      secretKey:
+        key: secretKey
+        name: infralytics-minio-creds
+  template:
+    container:
+      env:
+        - name: LOG_LEVEL
+          value: debug

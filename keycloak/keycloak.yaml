@@ -1,0 +1,142 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+spec:
+  additionalOptions:
+    - name: db-url-host
+      secret:
+        key: host
+        name: keycloakdb-app
+    - name: db-url-port
+      secret:
+        key: port
+        name: keycloakdb-app
+    - name: db-url-database
+      secret:
+        key: dbname
+        name: keycloakdb-app
+    - name: spi-sticky-session-encoder-infinispan-should-attach-route
+      value: "false"
+    - name: spi-x509cert-lookup--provider
+      value: nginx
+    - name: spi-x509cert-lookup--nginx--ssl-client-cert
+      value: ssl-client-cert
+    - name: log-level
+      secret:
+        key: log-level
+        name: keycloak-options
+    - name: log-console-level
+      secret:
+        key: log-console-level
+        name: keycloak-options
+    - name: log-console-output
+      secret:
+        key: log-console-output
+        name: keycloak-options
+    - name: spi-authenticator-irongate-tenant-tag
+      secret:
+        key: tenant-tag
+        name: keycloak-options
+    - name: spi-authenticator-irongate-base-url
+      secret:
+        key: base-url
+        name: keycloak-options
+    - name: spi-authenticator-irongate-oidc-url
+      secret:
+        key: oidc-url
+        name: keycloak-options
+    - name: spi-authenticator-irongate-client-id
+      secret:
+        key: client-id
+        name: keycloak-options
+    - name: spi-authenticator-irongate-client-secret
+      secret:
+        key: client-secret
+        name: keycloak-options
+  db:
+    passwordSecret:
+      key: password
+      name: keycloakdb-app
+    usernameSecret:
+      key: user
+      name: keycloakdb-app
+    vendor: postgres
+  features:
+    enabled:
+      - parameterized-scopes
+      - scripts
+      - update-email
+  hostname:
+    admin: https://keycloak.pandathedog.com
+    hostname: https://auth.pandathedog.com
+  http:
+    httpEnabled: true
+  ingress:
+    enabled: false
+  instances: 1
+  proxy:
+    headers: xforwarded
+  truststores:
+    client-ca:
+      secret:
+        name: client-bundle
+  unsupported:
+    podTemplate:
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - podAffinityTerm:
+                  labelSelector:
+                    matchLabels:
+                      app: keycloak
+                      app.kubernetes.io/managed-by: keycloak-operator
+                  topologyKey: kubernetes.io/hostname
+                weight: 1
+        containers:
+          - name: ""
+            volumeMounts:
+              - mountPath: /opt/keycloak/providers
+                name: providers
+        volumes:
+          - configMap:
+              name: keycloak-providers
+              optional: true
+            name: providers
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/auth-tls-pass-certificate-to-upstream: "true"
+    nginx.ingress.kubernetes.io/auth-tls-secret: default/client-ca
+    nginx.ingress.kubernetes.io/auth-tls-verify-client: optional
+    nginx.ingress.kubernetes.io/auth-tls-verify-depth: "2"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: 128k
+    nginx.ingress.kubernetes.io/session-cookie-path: /realms
+  name: keycloak-auth-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: auth.pandathedog.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: keycloak-service
+                port:
+                  number: 8080
+            path: /realms
+            pathType: Prefix
+          - backend:
+              service:
+                name: keycloak-service
+                port:
+                  number: 8080
+            path: /resources
+            pathType: Prefix
+  tls:
+    - hosts:
+        - '*.pandathedog.com'

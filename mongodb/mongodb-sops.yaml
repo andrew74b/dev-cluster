@@ -1,0 +1,39 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: 56076ea39a23553cc4c968ea60f93c1e90bcb434
+  name: mongodb
+spec:
+  secretTemplates:
+    - name: mongodb-infralytics-password
+      stringData:
+        password: ENC[AES256_GCM,data:DPe/uRJFNy3WOg==,iv:udm64grKmdF1Kr0HyQUPQOi3V6QsYYoZHrBMWtAWbg4=,tag:tke0Jn3kZz5z6YqNoasoBw==,type:str]
+    - name: mongodb-api-password
+      stringData:
+        password: ENC[AES256_GCM,data:G9O6rMMMFNoj+Q==,iv:3h1qYbReyCgKXznWWWCNJCSeJxOQPOzqfv3IJt2XQ/w=,tag:mPI0TykPY27IzJ4RmsdVbw==,type:str]
+    - name: mongodb-ingest-password
+      stringData:
+        password: ENC[AES256_GCM,data:KUm4973alrq+TA==,iv:4CUKzOIww8fW5XjWynlTmeHdjdlpqRhohM103avHiUA=,tag:V85nZkOPEHd2e26pwS0cPg==,type:str]
+    - name: mongodb-smart-password
+      stringData:
+        password: ENC[AES256_GCM,data:zBrIqGLq54Q1eA==,iv:+M9MdHIOPoserWVWFc0l6jGb3a09C8k7YLpOwUDoI/E=,tag:x+/fI5CFq8WuTGQWc1lD4A==,type:str]
+    - name: mongodb-collector-password
+      stringData:
+        password: ENC[AES256_GCM,data:IkVSkfA+/fjctg==,iv:iSkXttPhUNRqFUKlp4tGCb332D5dWUMtLeU5VejW9M8=,tag:M56PJRDG37Fbu+xnS1Hhlw==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvaStGQnJIQTdNSW9aVDZt
+        ckZYY0xpWFpaSmVOeEtSVWZJbE1ydnBRQ0VBCjdTRHpPa3YvVURpUVdBcXU3RjZ0
+        a0p0VW00KzRJUE14amVRQkhYNU4yaEEKLS0tIFNxSEVXbXB0akpKOEwxcDdLUmw1
+        TWVnRGFWa01jSW5sSnlEeUZVTGFzRE0KQJG2qFWRcAf2btdIJnOaBqZRYOcIsJ+f
+        15U/12v1C9F0ADxiMGR0GM/epwu7K5N8AoSJjcj98SKE5+e1C5YAwA==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:07AytOvgyPdhHFZVKzC2wnVZ0Bsx7iBWlIIQiGYoac6C/IHuAWiCKovhDr8Vri7CrSpnz2XebbmS2IQgXW1FpCwTLKqDaG+6hfKOcQub4TXezaElNDXVVa1s7RSB0yjHk2q5dZfJTyWrawv929JVajgCtBVYdz3LgoJBRlNNetA=,iv:UndjGDtsOr3Mhjp1hN6FHEM7+NJWsQYSca5eo4+askA=,tag:uEOUnzn4Cc310Am2lErUPQ==,type:str]
+  version: 3.13.3

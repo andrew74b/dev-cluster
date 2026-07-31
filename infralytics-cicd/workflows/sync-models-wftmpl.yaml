@@ -1,0 +1,66 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: sync-models
+spec:
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: get-content
+            template: get-content
+        - - arguments:
+              parameters:
+                - name: hash
+                  value: '{{steps.get-content.outputs.result}}'
+                - name: content
+                  value: '{{steps.get-content.outputs.parameters.content}}'
+            name: apply-configmap
+            template: apply-configmap
+    - inputs:
+        artifacts:
+          - name: models
+            path: /tmp/models.cs
+            s3:
+              key: artifacts/infralytics/models.cs
+      name: get-content
+      outputs:
+        parameters:
+          - name: content
+            valueFrom:
+              path: /tmp/encoded.txt
+      script:
+        command:
+          - sh
+          - -c
+        image: busybox:1.37.0
+        name: main
+        source: |
+          base64 -w 0 /tmp/models.cs > /tmp/encoded.txt
+          sha1sum /tmp/models.cs | awk '{ print $1 }'
+    - inputs:
+        parameters:
+          - name: hash
+          - name: content
+      name: apply-configmap
+      script:
+        command:
+          - sh
+          - -c
+        image: bitnami/kubectl
+        name: main
+        source: |
+          cat <<EOF > /tmp/configmap.yaml
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            labels:
+              sha1: "{{inputs.parameters.hash}}"
+            name: infralytics-models
+            namespace: infralytics-collectors
+          binaryData:
+            models.cs: "{{inputs.parameters.content}}"
+          EOF
+
+          # Force Server-Side Apply over client-side validation
+          kubectl apply --server-side --force-conflicts -f /tmp/configmap.yaml

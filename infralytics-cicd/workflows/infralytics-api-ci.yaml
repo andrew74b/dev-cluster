@@ -1,0 +1,252 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |
+      Create and push the infralytics-api image.
+  name: infralytics-api-ci
+spec:
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/DevalexLLC/infralytics-api
+      - description: Specify the revision for non-interactive builds.
+        name: revision
+        value: development
+      - description: Override the image tag if specified.
+        name: image-tag
+        value: ""
+      - name: interactive
+        value: "true"
+      - name: skip-scan
+        value: "false"
+      - name: skip-quality-gate
+        value: "false"
+  artifactGC:
+    strategy: OnWorkflowCompletion
+  entrypoint: main
+  templates:
+    - dag:
+        tasks:
+          - arguments:
+              parameters:
+                - name: repo
+                  value: '{{workflow.parameters.repo}}'
+            name: choose-revision
+            templateRef:
+              clusterScope: true
+              name: choose-revision
+              template: main
+            when: '{{workflow.parameters.interactive}} == true'
+          - arguments:
+              parameters:
+                - name: revision
+                  value: |-
+                    {{=
+                      workflow.parameters.interactive == 'true'
+                        ? tasks['choose-revision'].outputs.parameters.revision
+                        : workflow.parameters.revision
+                    }}
+            depends: choose-revision
+            name: build
+            template: build
+          - arguments:
+              artifacts:
+                - from: '{{tasks.build.outputs.artifacts.source}}'
+                  name: source
+            depends: build.Succeeded
+            name: scan
+            template: scan
+            when: '{{workflow.parameters.skip-scan}} != true'
+          - arguments:
+              artifacts:
+                - from: '{{tasks.scan.outputs.artifacts.report}}'
+                  name: report
+            depends: scan.Succeeded
+            name: quality-gate
+            template: quality-gate
+            when: '{{workflow.parameters.skip-quality-gate}} != true'
+          - arguments:
+              artifacts:
+                - from: '{{tasks.build.outputs.artifacts.source}}'
+                  name: source
+              parameters:
+                - name: revision
+                  value: |-
+                    {{=
+                      workflow.parameters['image-tag'] != ''
+                        ? workflow.parameters['image-tag']
+                        : tasks.build.outputs.parameters.revision
+                    }}
+            depends: scan && (quality-gate || quality-gate.Omitted)
+            name: build-push-image
+            template: build-push-image
+      name: main
+    - container:
+        args:
+          - |
+            npm ci --no-audit --no-fund \
+              && npx lerna run build \
+              && npm run infralytics:test -- -- --coverage --globalSetup= --globalTeardown= --testTimeout=60000 \
+              && npm run irongate:test -- -- --coverage --globalSetup= --globalTeardown= --testTimeout=60000 \
+              && npm prune --omit=dev --no-audit --no-fund
+        command:
+          - sh
+          - -c
+        envFrom:
+          - configMapRef:
+              name: build-env
+        image: node:24.13.0-slim
+        name: main
+        workingDir: /workspace
+      inputs:
+        artifacts:
+          - git:
+              passwordSecret:
+                key: GIT_TOKEN
+                name: git-env
+              repo: '{{workflow.parameters.repo}}'
+              revision: '{{inputs.parameters.revision}}'
+              usernameSecret:
+                key: GIT_USER
+                name: git-env
+            name: source
+            path: /workspace
+        parameters:
+          - name: revision
+      name: build
+      outputs:
+        artifacts:
+          - archive:
+              none: {}
+            artifactGC:
+              strategy: OnWorkflowDeletion
+            name: models
+            path: /workspace/packages/models/models.cs
+          - name: source
+            path: /workspace
+          - archive:
+              none: {}
+            artifactGC:
+              strategy: Never
+            name: static-models
+            path: /workspace/packages/models/models.cs
+            s3:
+              key: artifacts/infralytics/models.cs
+        parameters:
+          - name: revision
+            value: '{{inputs.parameters.revision}}'
+      sidecars:
+        - args:
+            - docker-entrypoint.sh mongod --quiet | jq --unbuffered -r ".msg"
+          command:
+            - bash
+            - -c
+          image: mongo:8.2.3
+          name: mongodb
+          readinessProbe:
+            tcpSocket:
+              port: 27017
+          securityContext:
+            runAsUser: 999
+    - container:
+        args:
+          - sonar-scanner
+        command:
+          - sh
+          - -c
+        envFrom:
+          - secretRef:
+              name: sonar-config
+        image: sonarsource/sonar-scanner-cli:11.1
+        name: main
+        workingDir: /workspace
+      inputs:
+        artifacts:
+          - name: source
+            path: /workspace
+      name: scan
+      outputs:
+        artifacts:
+          - name: report
+            path: /workspace/.scannerwork/report-task.txt
+    - container:
+        args:
+          - /usr/bin/check-quality-gate.sh
+        command:
+          - sh
+          - -c
+        env:
+          - name: REPORT_FILE
+            value: /workspace/report-task.txt
+        envFrom:
+          - secretRef:
+              name: sonar-config
+        image: sonarsource/sonarqube-quality-gate:1.2.0
+        name: main
+      inputs:
+        artifacts:
+          - name: report
+            path: /workspace/report-task.txt
+      name: quality-gate
+    - container:
+        args:
+          - --dockerfile=Dockerfile
+          - --context=.
+          - --destination=harbor.pandathedog.com/library/infralytics-api:{{inputs.parameters.revision}}
+          - --destination=harbor.pandathedog.com/library/infralytics-api:latest
+          - --cache=false
+          - --reproducible
+          - --skip-tls-verify
+        command:
+          - executor
+        image: gcr.io/kaniko-project/executor:v1.23.2
+        name: main
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        volumeMounts:
+          - mountPath: /kaniko/.docker
+            name: docker-config
+        workingDir: /workspace
+      initContainers:
+        - args:
+            - |
+              cat <<EOF >Dockerfile
+              FROM node:24.13.0-slim
+              USER node
+              WORKDIR /infralytics
+              COPY --chown=node:node . .
+              EOF
+
+              cat <<EOF >Dockerfile.dockerignore
+              **
+              !/apps/*/dist
+              !/apps/*/public
+              !/apps/*/src/**/*.gql
+              !/apps/*/views
+              !/apps/*/.env.example
+              !/apps/*/package.json
+              !/**/node_modules/**/*
+              !/packages
+              !/package.json
+              /node_modules/.cache
+              EOF
+          command:
+            - sh
+            - -c
+          image: busybox:1.37.0
+          mirrorVolumeMounts: true
+          name: setup
+          workingDir: /workspace
+      inputs:
+        artifacts:
+          - name: source
+            path: /workspace
+        parameters:
+          - name: revision
+      name: build-push-image
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: docker-config

@@ -1,0 +1,123 @@
+apiVersion: mongodbcommunity.mongodb.com/v1
+kind: MongoDBCommunity
+metadata:
+  name: mongodb
+spec:
+  arbiters: 1
+  members: 2
+  replicaSetHorizons:
+    - horizon: mongodb.pandathedog.com:27017
+    - horizon: mongodb.pandathedog.com:27018
+    - horizon: mongodb.pandathedog.com:27019
+  security:
+    authentication:
+      modes:
+        - SCRAM
+    tls:
+      caCertificateSecretRef:
+        name: mongodb-tls
+      certificateKeySecretRef:
+        name: mongodb-tls
+      enabled: true
+  statefulSet:
+    spec:
+      selector: {}
+      serviceName: mongo
+      template:
+        spec:
+          affinity:
+            podAntiAffinity:
+              preferredDuringSchedulingIgnoredDuringExecution:
+                - podAffinityTerm:
+                    labelSelector:
+                      matchExpressions:
+                        - key: app
+                          operator: In
+                          values:
+                            - mongo
+                    topologyKey: kubernetes.io/hostname
+                  weight: 100
+          containers:
+            - name: mongod
+              resources:
+                limits:
+                  cpu: "2"
+                  memory: 4Gi
+      volumeClaimTemplates:
+        - metadata:
+            name: logs-volume
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 5Gi
+            storageClassName: longhorn-local-xfs
+        - metadata:
+            name: data-volume
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 10Gi
+            storageClassName: longhorn-local-xfs
+  type: ReplicaSet
+  users:
+    - db: admin
+      name: infralytics
+      passwordSecretRef:
+        name: mongodb-infralytics-password
+      roles:
+        - db: admin
+          name: root
+      scramCredentialsSecretName: mongodb-infralytics
+    - db: admin
+      name: api
+      passwordSecretRef:
+        name: mongodb-api-password
+      roles:
+        - db: admin
+          name: readWriteAnyDatabase
+      scramCredentialsSecretName: mongodb-api
+    - db: admin
+      name: ingest
+      passwordSecretRef:
+        name: mongodb-ingest-password
+      roles:
+        - db: admin
+          name: clusterMonitor
+        - db: admin
+          name: dbAdminAnyDatabase
+        - db: infralytics
+          name: readWrite
+        - db: infralytics_data
+          name: readWrite
+        - db: irongate
+          name: read
+      scramCredentialsSecretName: mongodb-ingest
+    - db: admin
+      name: smart
+      passwordSecretRef:
+        name: mongodb-smart-password
+      roles:
+        - db: admin
+          name: clusterAdmin
+        - db: admin
+          name: dbAdminAnyDatabase
+        - db: admin
+          name: readWriteAnyDatabase
+      scramCredentialsSecretName: mongodb-smart
+    - db: admin
+      name: collector
+      passwordSecretRef:
+        name: mongodb-collector-password
+      roles:
+        - db: infralytics
+          name: readWrite
+        - db: infralytics_data
+          name: readWrite
+        - db: irongate
+          name: read
+      scramCredentialsSecretName: mongodb-collector
+  version: 8.2.3

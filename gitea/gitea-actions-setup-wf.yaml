@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+  name: gitea-actions-setup
+spec:
+  arguments:
+    parameters:
+      - name: secret-name
+        value: gitea-runner-token
+  entrypoint: main
+  imagePullSecrets: []
+  templates:
+    - name: main
+      steps:
+        - - name: initialize
+            template: initialize
+        - - arguments:
+              parameters:
+                - name: token
+                  value: '{{steps.initialize.outputs.result}}'
+            name: save-secret
+            template: save-secret
+    - name: initialize
+      script:
+        command:
+          - sh
+          - -c
+        image: bitnami/kubectl
+        name: main
+        source: |
+          kubectl exec -it -n gitea deploy/gitea -c gitea -- gitea actions generate-runner-token | grep -E '^.{40}$' | tr -d '\n'
+    - inputs:
+        parameters:
+          - name: token
+      name: save-secret
+      resource:
+        action: apply
+        manifest: |
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            annotations:
+              reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+              reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: gitea-actions
+              reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+              reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: gitea-actions
+            name: "{{workflow.parameters.secret-name}}"
+          stringData:
+            token: "{{inputs.parameters.token}}"
+  ttlStrategy: {}

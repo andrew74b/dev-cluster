@@ -1,0 +1,35 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: 6f81f60198e6368a3eab823827dc39820a8a7908
+  name: infralytics-cicd
+spec:
+  secretTemplates:
+    - name: infralytics-mongodb-config
+      stringData:
+        config.json: ENC[AES256_GCM,data:cSDAAroxrICTtzTeJxfFmdp0sEo7LHArL14xfyv2YO+Q8zfg/Ht9i6BaSv379RTmv6vzWvENWL2ZuYZS3I2AANwSdkHcdRwHsNxbgCwSiaBh/lQeMA9wvT7xL0pym1/ocS+wxnan6rD3kcWjckE7gbfwFmWCTA53yEYZwq2dffoaFq+iAXk6rfrWrlA8RNtBdr53ekYUiVWz1u3AofsSUDg8Gnwp1w9zx9eS9zcWjcELkq60LJqaVC6vN+via9Y0QwcKmRx6BHVMY4yEdncEyaNtVxO+QOXbjPoYGPja8mq9G+lC+THfXcun8fvobut59F2I4DAZ8X/hBp6Lol3vl0KmHP5a/pIrcRozJQvGgtJInJHofsGsQ5m3lkdxOafYnoHIYit1oQJD7aniDeYQlIkbP9RTy/WiI0HVJkRytEPXCigo6/RG1lkVlvtI2gKtCmsog0y1RlQoPQ==,iv:G2CPiQv0Wf1AD9VpFhy0Xu9/v64+dPFeB8ubtB7PjmE=,tag:bpbhdWxmhClVQtAnsSCy8Q==,type:str]
+    - name: infralytics-minio-creds
+      stringData:
+        accessKey: ENC[AES256_GCM,data:nXQOS4N8zyNqVA4jFnB576Nf40w67g==,iv:Noi4B/wYEc/xvTbwlulNGH6hN2i3aUlEXIgg7dDXjcE=,tag:h7r5imDYZom7Uez5fMBwHg==,type:str]
+        secretKey: ENC[AES256_GCM,data:KL0L2F0eq7KS4fHj3RdRwAnOZFVInbyGAlphOWKKeBJ0NCayU4p0CQ==,iv:WmuYLJNHreXGIYmb1SA61/YcnidiXU/AkFrC4s+SZlM=,tag:gYkIhSdw9vu2y+c0AxN11A==,type:str]
+    - name: infralytics-mongodb-creds
+      stringData:
+        password: ENC[AES256_GCM,data:jhZ5xev+Og4U2g==,iv:SDMUs3s3A1/wQE2q2g4uy1QD5iN5MSxupwZv6S6yfTI=,tag:dr1N9uJbwqDwDv+K2B2dBA==,type:str]
+        username: ENC[AES256_GCM,data:F3jmPTWfVbFn6fQ=,iv:FbBtoFs67QHELOlg54Vffcr93Q5bxT5dbh+rDz2f7kk=,tag:r3wsIFRsC6pYECCe+6tLnw==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWZUp1bHBrRWVIQzBaMUVW
+        eG5KZDhUUmI5TzQreE8zWlZSekRnVHNhZ25RCmdiT2hPdmhEdlpyWm5uRnNEOXdr
+        QlNORkRjemQwTjY2c1lDS3FBeU9uNTAKLS0tIGkrT1RPUTJHc1gyMjRsZy9iZTJN
+        U0gzWGpTUldCaFEzNHlaclFpdE5oV00KVpmod/RjyXNOm01ymqbguHb8ISe2WQXI
+        AoS57ftCrGUl3TXKZu77GUIgO74q2esG8MqXSnqRN0rakO0/gTMGbg==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:uxAcVi76k8yTWRNg3rxBnZxMOgBWPRQMkelEkoqr6U/UfcDvv62CN2QH02WsfqOfTc5UbvYsH0woAZzjjy7m/DTINCWPbEpoWwS8lZHmPZlWD5dm+2BY8hpWWi4dJ6/G1OSDBBy3xdx/NF3J+G5Zct38tWQKvkt9zjOFm4Fooso=,iv:4Ix5sYo+ZVbm58wJwyNi8mynoGin2NWmGsQf+XQMaNo=,tag:FsQ5eJXgHTyIMb0+0DbS7Q==,type:str]
+  version: 3.13.3

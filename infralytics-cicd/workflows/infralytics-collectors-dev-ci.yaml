@@ -1,0 +1,237 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |
+      Create and push the development infralytics-collectors image.
+  name: infralytics-collectors-dev-ci
+spec:
+  arguments:
+    parameters:
+      - name: repo-base-url
+        value: https://github.com/DevalexLLC
+      - description: Specify the infralytics-core revision for non-interactive builds.
+        name: core-revision
+        value: main
+      - description: Specify the infralytics-collector revision for non-interactive builds.
+        name: collector-revision
+        value: main
+      - description: Override the image tag if specified.
+        name: image-tag
+        value: latest
+      - name: vmware-powercli-url
+        value: https://s3.pandathedog.com/public/VMware.PowerCLI.13.3.0.zip
+      - name: netapp-ontap-url
+        value: https://s3.pandathedog.com/public/NetApp.ONTAP.9.16.1.2501.zip
+  artifactGC:
+    strategy: OnWorkflowCompletion
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - arguments:
+              parameters:
+                - name: repo
+                  value: '{{workflow.parameters.repo-base-url}}/infralytics-core'
+                - name: revision
+                  value: '{{workflow.parameters.core-revision}}'
+            name: clone-core
+            template: clone-repo
+          - arguments:
+              parameters:
+                - name: repo
+                  value: '{{workflow.parameters.repo-base-url}}/infralytics-collectors'
+                - name: revision
+                  value: '{{workflow.parameters.collector-revision}}'
+            name: clone-collectors
+            template: clone-repo
+        - - arguments:
+              artifacts:
+                - from: '{{steps.clone-core.outputs.artifacts.source}}'
+                  name: core-source
+                - from: '{{steps.clone-collectors.outputs.artifacts.source}}'
+                  name: collector-source
+            name: test
+            template: test
+        - - arguments:
+              artifacts:
+                - from: '{{steps.test.outputs.artifacts.source}}'
+                  name: source
+              parameters:
+                - name: revision
+                  value: '{{workflow.parameters.image-tag}}'
+            name: build-push-image
+            template: build-push-image
+    - container:
+        args:
+          - echo "Git Revision - $(git rev-parse --short HEAD)" && rm -rf .git
+        command:
+          - sh
+          - -c
+        image: alpine/git:v2.47.1
+        name: main
+      inputs:
+        artifacts:
+          - git:
+              passwordSecret:
+                key: GIT_TOKEN
+                name: git-env
+              repo: '{{inputs.parameters.repo}}'
+              revision: '{{inputs.parameters.revision}}'
+              usernameSecret:
+                key: GIT_USER
+                name: git-env
+            name: source
+            path: /git
+        parameters:
+          - name: repo
+          - name: revision
+      name: clone-repo
+      outputs:
+        artifacts:
+          - name: source
+            path: /git
+    - container:
+        args:
+          - |
+            cp $env:PS_INSTALL_FOLDER/Newtonsoft.Json.dll $env:PS_INSTALL_FOLDER/ref/Newtonsoft.Json.dll
+
+            $modPath = "/tmp/apps/powershellmodules"
+            $env:PSModulePath += ":$modPath/infralytics-collectors"
+            $env:PSModulePath += ":$modPath"
+
+            $ErrorActionPreference = "Stop"
+            Import-Module tester
+
+            $config = Get-Content /tmp/config/infralytics/config.json | ConvertFrom-Json -AsHashtable
+            $db = Get-Database ($config | ConvertTo-PSObject).envs.dev -core
+
+            $is = [Infralytics.MongoDB.Collection]::new("input_source", $db)
+            $is.rawinsert('{"collection_name":"test","name":"un"}')
+
+            $archivePath = "/tmp/archive.zip"
+            $uris = @("{{workflow.parameters.vmware-powercli-url}}", "{{workflow.parameters.netapp-ontap-url}}")
+            foreach ($uri in $uris)
+            {
+                Invoke-RestMethod -Uri $uri -OutFile $archivePath
+                Expand-Archive $archivePath $modPath
+                Remove-Item $archivePath -Force
+            }
+
+            Import-testerfile
+        command:
+          - pwsh
+          - -c
+        image: mcr.microsoft.com/azure-powershell:14.4.0-ubi-8
+        name: main
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        volumeMounts:
+          - mountPath: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+            name: trust-bundle
+            subPath: ca-bundle.pem
+        workingDir: /tmp
+      inputs:
+        artifacts:
+          - name: core-source
+            path: /tmp/apps/powershellmodules/infralytics-core
+          - name: collector-source
+            path: /tmp/apps/powershellmodules/infralytics-collectors
+          - name: models
+            path: /tmp/apps/support/models.cs
+            s3:
+              key: artifacts/infralytics/models.cs
+          - name: config
+            path: /tmp/config/infralytics/config.json
+            raw:
+              data: '{"default":"dev","envs":{"dev":{"connectionString":"localhost/admin","database":"infralytics_data","label":"dev","password":"","port":"27017","protocol":"","useSrv":false,"user":""}}}'
+      name: test
+      outputs:
+        artifacts:
+          - name: source
+            path: /tmp
+      sidecars:
+        - args:
+            - docker-entrypoint.sh mongod --quiet | jq --unbuffered -r ".msg"
+          command:
+            - bash
+            - -c
+          image: mongo:8.2.3
+          name: mongodb
+          readinessProbe:
+            tcpSocket:
+              port: 27017
+          securityContext:
+            runAsUser: 999
+      volumes:
+        - configMap:
+            name: ca-bundle
+          name: trust-bundle
+    - container:
+        args:
+          - --dockerfile=Dockerfile
+          - --context=.
+          - --destination=harbor.pandathedog.com/library/infralytics-collectors:{{inputs.parameters.revision}}-dev
+          - --cache=false
+          - --reproducible
+          - --skip-tls-verify
+        command:
+          - executor
+        image: gcr.io/kaniko-project/executor:v1.23.2
+        name: main
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        volumeMounts:
+          - mountPath: /kaniko/.docker
+            name: docker-config
+        workingDir: /workspace
+      initContainers:
+        - args:
+            - |
+              PSHOME=/infralytics
+              PSUSER=powershell
+
+              cat <<EOF >Microsoft.PowerShell_profile.ps1
+              \$env:PSModulePath += ":$PSHOME/apps/powershellmodules/infralytics-collectors"
+              \$env:PSModulePath += ":$PSHOME/apps/powershellmodules/infralytics-collectors/vmware/submodules"
+              \$env:PSModulePath += ":$PSHOME/apps/powershellmodules"
+              \$env:COMPUTERNAME = \$env:HOSTNAME
+              \$env:IsContainer = \$true
+              EOF
+
+              cat <<EOF >PowerCLI_Settings.xml
+              <Settings><Setting Name="InvalidCertificateAction" Value="Ignore" /><Setting Name="ParticipateInCEIP" Value="False" /></Settings>
+              EOF
+
+              cat <<EOF >Dockerfile
+              FROM mcr.microsoft.com/azure-powershell:14.4.0-ubi-8
+              RUN groupadd -g 1000 $PSUSER \
+                  && useradd -u 1000 -g 1000 --home-dir $PSHOME --create-home --system $PSUSER \
+                  && cp \$PS_INSTALL_FOLDER/Newtonsoft.Json.dll \$PS_INSTALL_FOLDER/ref/Newtonsoft.Json.dll
+              WORKDIR $PSHOME
+              COPY --chown=$PSUSER:$PSUSER ./apps ./apps
+              COPY --chown=$PSUSER:$PSUSER ./config ./config
+              COPY Microsoft.PowerShell_profile.ps1 \$PS_INSTALL_FOLDER/
+              COPY PowerCLI_Settings.xml /var/opt/VMware/PowerCLI/
+              USER $PSUSER
+              EOF
+          command:
+            - sh
+            - -c
+          image: busybox:1.37.0
+          mirrorVolumeMounts: true
+          name: setup
+          workingDir: /workspace
+      inputs:
+        artifacts:
+          - name: source
+            path: /workspace
+        parameters:
+          - name: revision
+      name: build-push-image
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: docker-config

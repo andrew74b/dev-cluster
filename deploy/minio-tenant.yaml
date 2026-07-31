@@ -1,0 +1,239 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: minio-tenant
+spec:
+  destination:
+    name: in-cluster
+    namespace: minio
+  project: default
+  sources:
+    - chart: tenant
+      helm:
+        valuesObject:
+          extraResources:
+            - |
+              apiVersion: batch/v1
+              kind: Job
+              metadata:
+                annotations:
+                  argocd.argoproj.io/hook: PostSync
+                generateName: minio-setup-
+              spec:
+                backoffLimit: 0
+                template:
+                  spec:
+                    containers:
+                      - args:
+                          - |
+                            source /tmp/config.env
+                            mc alias set myminio "$MINIO_HOST_URL" "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+                            mc anonymous set download myminio/public
+
+                            file=policy.json
+                            create_policy() {
+                              local bucket=$1
+                              local action=$2
+                              cat <<EOF >$file
+                            {
+                              "Version": "2012-10-17",
+                              "Statement": [
+                                {
+                                  "Effect": "Allow",
+                                  "Action": ["s3:ListBucket"],
+                                  "Resource": ["arn:aws:s3:::${bucket}"]
+                                },
+                                {
+                                  "Effect": "Allow",
+                                  "Action": [${action}],
+                                  "Resource": ["arn:aws:s3:::${bucket}/*"]
+                                }
+                              ]
+                            }
+                            EOF
+                            }
+
+                            declare -a buckets=(data gitea ingest outline public registry workflows)
+                            declare -A policies=(
+                              [readonly]='"s3:GetBucketLocation", "s3:GetObject"'
+                              [readwrite]='"s3:*"'
+                              [writeonly]='"s3:PutObject"'
+                            )
+
+                            for bucket in ${buckets[@]}; do
+                              for policy in ${!policies[@]}; do
+                                create_policy ${bucket} "${policies[${policy}]}"
+                                mc admin policy create myminio ${bucket}-${policy} $file
+                              done
+                            done
+
+                            declare -A users=(
+                              [argo]=minio-argo-user
+                              [gitea]=minio-gitea-user
+                              [harbor]=minio-harbor-user
+                              [infralytics]=minio-infralytics-user
+                              [outline]=minio-outline-user
+                            )
+
+                            declare -A userPolicies=(
+                              [argo]='workflows-readwrite'
+                              [gitea]='gitea-readwrite'
+                              [harbor]='registry-readwrite'
+                              [infralytics]='ingest-readwrite public-readwrite'
+                              [outline]='outline-readwrite'
+                            )
+
+                            for key in ${!userPolicies[@]}; do
+                              mc admin policy attach myminio ${userPolicies[$key]} --user ${users[$key]}
+                              mc admin policy detach myminio consoleAdmin --user ${users[$key]}
+                            done
+                        command:
+                          - bash
+                          - -c
+                        env:
+                          - name: MINIO_HOST_URL
+                            value: https://s3.pandathedog.com
+                        image: quay.io/minio/mc:RELEASE.2025-07-21T05-28-08Z
+                        name: main
+                        volumeMounts:
+                          - mountPath: /tmp/config.env
+                            name: env-config
+                            subPath: config.env
+                    restartPolicy: Never
+                    volumes:
+                      - name: env-config
+                        secret:
+                          secretName: minio-env-config
+          ingress:
+            api:
+              annotations:
+                nginx.ingress.kubernetes.io/proxy-body-size: 250m
+                nginx.ingress.kubernetes.io/proxy-buffering: "off"
+                nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+                nginx.ingress.kubernetes.io/ssl-redirect: "false"
+              enabled: true
+              host: s3.pandathedog.com
+              ingressClassName: nginx
+              path: /
+              pathType: Prefix
+              tls:
+                - hosts:
+                    - '*.pandathedog.com'
+            console:
+              annotations:
+                nginx.ingress.kubernetes.io/proxy-body-size: 250m
+                nginx.ingress.kubernetes.io/proxy-buffering: "off"
+                nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+                nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+                nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+                nginx.ingress.kubernetes.io/ssl-redirect: "false"
+              enabled: true
+              host: minio.pandathedog.com
+              ingressClassName: nginx
+              path: /
+              pathType: Prefix
+              tls:
+                - hosts:
+                    - '*.pandathedog.com'
+          secrets: ""
+          tenant:
+            buckets:
+              - name: data
+                objectLock: false
+                region: us-east-1
+              - name: gitea
+                objectLock: false
+                region: us-east-1
+              - name: ingest
+                objectLock: false
+                region: us-east-1
+              - name: outline
+                objectLock: false
+                region: us-east-1
+              - name: public
+                objectLock: false
+                region: us-east-1
+              - name: registry
+                objectLock: false
+                region: us-east-1
+              - name: workflows
+                objectLock: false
+                region: us-east-1
+            certificate:
+              requestAutoCert: false
+            configSecret:
+              existingSecret: minio-env-config
+              name: minio-env-config
+            features:
+              domains:
+                console: https://minio.pandathedog.com
+                minio:
+                  - https://s3.pandathedog.com
+            initContainers:
+              - args:
+                  - |-
+                    URL="https://auth.pandathedog.com/realms/internal/.well-known/openid-configuration"
+                    echo "Checking IdP reachability (${URL})"
+                    until $(wget -q -O "/dev/null" ${URL}) ; do
+                      echo "IdP (${URL}) not reachable. Waiting to be reachable..."
+                      sleep 5
+                    done
+                    echo "IdP (${URL}) reachable. Starting MinIO..."
+                command:
+                  - sh
+                  - -c
+                image: busybox:1.37.0
+                name: wait-for-idp
+            logging:
+              json: true
+            name: minio-tenant
+            pools:
+              - affinity:
+                  podAntiAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                      - labelSelector:
+                          matchExpressions:
+                            - key: v1.min.io/pool
+                              operator: In
+                              values:
+                                - pool-0
+                        topologyKey: kubernetes.io/hostname
+                containerSecurityContext:
+                  allowPrivilegeEscalation: false
+                  capabilities:
+                    drop:
+                      - ALL
+                  runAsGroup: 1000
+                  runAsNonRoot: true
+                  runAsUser: 1000
+                  seccompProfile:
+                    type: RuntimeDefault
+                name: pool-0
+                servers: 1
+                size: 25Gi
+                storageClassName: longhorn-local-xfs
+                volumesPerServer: 4
+            users:
+              - name: minio-argo-user
+              - name: minio-gitea-user
+              - name: minio-harbor-user
+              - name: minio-infralytics-user
+              - name: minio-outline-user
+      repoURL: https://operator.min.io
+      targetRevision: 7.1.1
+    - path: minio
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

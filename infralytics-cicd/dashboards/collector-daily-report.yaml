@@ -1,0 +1,1483 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDashboard
+metadata:
+  name: collector-daily-report
+spec:
+  allowCrossNamespaceImport: true
+  datasources:
+    - datasourceName: mongodb-infralytics
+      inputName: DS_MONGODB-INFRALYTICS
+    - datasourceName: VictoriaLogs
+      inputName: DS_VICTORIALOGS
+  folderRef: infralytics-cicd
+  instanceSelector: {}
+  json: |
+    {
+      "__inputs": [
+        {
+          "name": "DS_MONGODB-INFRALYTICS",
+          "label": "mongodb-infralytics",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "haohanyang-mongodb-datasource",
+          "pluginName": "MongoDB"
+        },
+        {
+          "name": "DS_VICTORIALOGS",
+          "label": "VictoriaLogs",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "victoriametrics-logs-datasource",
+          "pluginName": "VictoriaLogs"
+        }
+      ],
+      "__elements": {},
+      "__requires": [
+        {
+          "type": "panel",
+          "id": "alertlist",
+          "name": "Alert list",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "bargauge",
+          "name": "Bar gauge",
+          "version": ""
+        },
+        {
+          "type": "grafana",
+          "id": "grafana",
+          "name": "Grafana",
+          "version": "12.3.1"
+        },
+        {
+          "type": "datasource",
+          "id": "haohanyang-mongodb-datasource",
+          "name": "MongoDB",
+          "version": "0.4.1"
+        },
+        {
+          "type": "panel",
+          "id": "logs",
+          "name": "Logs",
+          "version": ""
+        },
+        {
+          "type": "panel",
+          "id": "table",
+          "name": "Table",
+          "version": ""
+        },
+        {
+          "type": "datasource",
+          "id": "victoriametrics-logs-datasource",
+          "name": "VictoriaLogs",
+          "version": "0.26.3"
+        }
+      ],
+      "annotations": {
+        "list": [
+          {
+            "builtIn": 1,
+            "datasource": {
+              "type": "grafana",
+              "uid": "-- Grafana --"
+            },
+            "enable": true,
+            "hide": true,
+            "iconColor": "rgba(0, 211, 255, 1)",
+            "name": "Annotations & Alerts",
+            "type": "dashboard"
+          }
+        ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "links": [
+        {
+          "asDropdown": false,
+          "icon": "external link",
+          "includeVars": false,
+          "keepTime": false,
+          "tags": [],
+          "targetBlank": false,
+          "title": "reset variables",
+          "tooltip": "",
+          "type": "link",
+          "url": "d/${__dashboard.uid}/daily-report?orgId=1&from=now-1d&to=now&timezone=browser&var-module=All&var-site=All&var-podName=All&var-type=All"
+        }
+      ],
+      "panels": [
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+          },
+          "id": 22,
+          "panels": [],
+          "title": "Alerts",
+          "type": "row"
+        },
+        {
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 1
+          },
+          "id": 21,
+          "options": {
+            "alertInstanceLabelFilter": "",
+            "alertName": "",
+            "dashboardAlerts": false,
+            "folder": {
+              "title": "infralytics-cicd",
+              "uid": "infralytics-cicd"
+            },
+            "groupBy": [],
+            "groupMode": "default",
+            "maxItems": 20,
+            "showInactiveAlerts": false,
+            "sortOrder": 1,
+            "stateFilter": {
+              "error": true,
+              "firing": true,
+              "noData": false,
+              "normal": false,
+              "pending": true,
+              "recovering": true
+            },
+            "viewMode": "list"
+          },
+          "pluginVersion": "12.3.1",
+          "title": "Collector Alerts",
+          "type": "alertlist"
+        },
+        {
+          "collapsed": false,
+          "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 8
+          },
+          "id": 23,
+          "panels": [],
+          "title": "Daily report",
+          "type": "row"
+        },
+        {
+          "datasource": {
+            "type": "haohanyang-mongodb-datasource",
+            "uid": "${DS_MONGODB-INFRALYTICS}"
+          },
+          "description": "Provides collector status from a module as the primary key.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "module"
+                },
+                "properties": [
+                  {
+                    "id": "links",
+                    "value": [
+                      {
+                        "title": "type link",
+                        "url": "d/${__dashboard.uid}/daily-report?orgId=1&from=now-2d&to=now&timezone=browser&var-module=${__value}&var-podName=All"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 81
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "error rate * 100"
+                },
+                "properties": [
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "mode": "lcd",
+                      "type": "gauge",
+                      "valueDisplayMode": "color"
+                    }
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": 0
+                        },
+                        {
+                          "color": "green",
+                          "value": 0
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 20
+                        },
+                        {
+                          "color": "orange",
+                          "value": 30
+                        },
+                        {
+                          "color": "red",
+                          "value": 50
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "fieldMinMax",
+                    "value": false
+                  },
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "max",
+                    "value": 100
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "runTime_ms (mean)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 167
+                  },
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "errors ∑"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 71
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "run time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 107
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "# tasks ran"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 99
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 20,
+            "w": 8,
+            "x": 0,
+            "y": 9
+          },
+          "id": 14,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "collection": "task_definitions",
+              "datasource": {
+                "type": "haohanyang-mongodb-datasource",
+                "uid": "${DS_MONGODB-INFRALYTICS}"
+              },
+              "hide": false,
+              "queryLanguage": "json",
+              "queryText": "[\r\n  {\r\n    \"$match\": {\r\n      \"run_type\": \"daily\",\r\n      \"metadata.site\": {\r\n        \"$regex\": \"$site\"\r\n      },\r\n      \"metadata.module\": {\r\n        \"$regex\": \"$module\"\r\n      },\r\n      \"metadata.type\": {\r\n        \"$regex\": \"$type\"\r\n      }\r\n    }\r\n  },\r\n  {\r\n    \"$lookup\": {\r\n      \"from\": \"task\",\r\n      \"localField\": \"task\",\r\n      \"foreignField\": \"name\",\r\n      \"as\": \"task_col\",\r\n      \"pipeline\": [\r\n        {\r\n          \"$match\": {\r\n            \"date\": {\r\n              \"$gte\": {\r\n                \"$date\": {\r\n                  \"$numberLong\": \"$__from\"\r\n                }\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$sort\": {\r\n            \"finish_time\": -1\r\n          }\r\n        },\r\n        {\r\n          \"$addFields\": {\r\n            \"runTime_ms\": {\r\n              \"$dateDiff\": {\r\n                \"startDate\": \"$start_time\",\r\n                \"endDate\": \"$finish_time\",\r\n                \"unit\": \"millisecond\"\r\n              }\r\n            },\r\n            \"errorSize\": {\r\n              \"$cond\": {\r\n                \"if\": {\r\n                  \"$gt\": [\r\n                    {\r\n                      \"$size\": \"$script_errors\"\r\n                    },\r\n                    0\r\n                  ]\r\n                },\r\n                \"then\": 1,\r\n                \"else\": 0\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$group\": {\r\n            \"_id\": \"$name\",\r\n            \"name\": {\r\n              \"$first\": \"$name\"\r\n            },\r\n            \"runTime_ms\": {\r\n              \"$first\": \"$runTime_ms\"\r\n            },\r\n            \"errorSize\": {\r\n              \"$first\": \"$errorSize\"\r\n            }\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  {\r\n    \"$replaceRoot\": {\r\n      \"newRoot\": {\r\n        \"$mergeObjects\": [\r\n          {\r\n            \"$arrayElemAt\": [\r\n              \"$task_col\",\r\n              0\r\n            ]\r\n          },\r\n          \"$$ROOT\"\r\n        ]\r\n      }\r\n    }\r\n  },\r\n  {\r\n    \"$addFields\": {\r\n      \"docCount\": 1,\r\n      \"module\": \"$metadata.module\",\r\n      \"site1\": \"$metadata.site\"\r\n    }\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"_id\": 0,\r\n      \"runTime_ms\": 1,\r\n      \"site\": \"$site1\",\r\n      \"module\": 1,\r\n      \"docCount\": {\r\n        \"$ifNull\": [\r\n          \"$docCount\",\r\n          1\r\n        ]\r\n      },\r\n      \"error_count\": {\r\n        \"$ifNull\": [\r\n          \"$errorSize\",\r\n          1\r\n        ]\r\n      }\r\n    }\r\n  }\r\n]",
+              "queryType": "table",
+              "refId": "A"
+            }
+          ],
+          "title": "Modules status",
+          "transformations": [
+            {
+              "id": "groupBy",
+              "options": {
+                "fields": {
+                  "docCount": {
+                    "aggregations": [
+                      "sum"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "error_count": {
+                    "aggregations": [
+                      "sum"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "hasError": {
+                    "aggregations": [
+                      "uniqueValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "has_error": {
+                    "aggregations": [
+                      "sum",
+                      "count"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "module": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  },
+                  "name": {
+                    "aggregations": [
+                      "count"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "runTime_ms": {
+                    "aggregations": [
+                      "mean"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "script_errors": {
+                    "aggregations": []
+                  },
+                  "task": {
+                    "aggregations": [
+                      "uniqueValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "type": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  }
+                }
+              }
+            },
+            {
+              "id": "calculateField",
+              "options": {
+                "alias": "error rate",
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "error_count (sum)"
+                    }
+                  },
+                  "operator": "/",
+                  "right": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "docCount (sum)"
+                    }
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                }
+              }
+            },
+            {
+              "id": "calculateField",
+              "options": {
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "error rate"
+                    }
+                  },
+                  "operator": "*",
+                  "right": {
+                    "fixed": "100"
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                }
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "category": true,
+                  "collection_name": true,
+                  "docCount (sum)": false,
+                  "error rate": true,
+                  "error_count (count)": true,
+                  "error_count (sum)": false,
+                  "finish_time": true,
+                  "runTime_ms": true,
+                  "start_time": true,
+                  "status": true,
+                  "task (uniqueValues)": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "docCount (sum)": 3,
+                  "error rate": 5,
+                  "error_count (sum)": 2,
+                  "module": 0,
+                  "runTime_ms (mean)": 1,
+                  "task (uniqueValues)": 4
+                },
+                "renameByName": {
+                  "docCount (sum)": "# tasks ran",
+                  "error rate * 100": "error rate",
+                  "error_count (sum)": "errors ∑",
+                  "name (count)": "total tasks",
+                  "runTime_ms (mean)": "run time (ms)"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "error rate"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "haohanyang-mongodb-datasource",
+            "uid": "${DS_MONGODB-INFRALYTICS}"
+          },
+          "description": "Provides collector status from a module's type as the primary key.",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "type"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 81
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "error rate * 100"
+                },
+                "properties": [
+                  {
+                    "id": "custom.cellOptions",
+                    "value": {
+                      "mode": "lcd",
+                      "type": "gauge",
+                      "valueDisplayMode": "color"
+                    }
+                  },
+                  {
+                    "id": "thresholds",
+                    "value": {
+                      "mode": "absolute",
+                      "steps": [
+                        {
+                          "color": "green",
+                          "value": 0
+                        },
+                        {
+                          "color": "green",
+                          "value": 0
+                        },
+                        {
+                          "color": "yellow",
+                          "value": 20
+                        },
+                        {
+                          "color": "orange",
+                          "value": 30
+                        },
+                        {
+                          "color": "red",
+                          "value": 50
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "id": "fieldMinMax",
+                    "value": false
+                  },
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "max",
+                    "value": 100
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "runTime_ms (mean)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 167
+                  },
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "errors ∑"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 71
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "run time (ms)"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 107
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "# tasks ran"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 99
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 9,
+            "x": 8,
+            "y": 9
+          },
+          "id": 20,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "collection": "task_definitions",
+              "datasource": {
+                "type": "haohanyang-mongodb-datasource",
+                "uid": "${DS_MONGODB-INFRALYTICS}"
+              },
+              "hide": false,
+              "queryLanguage": "json",
+              "queryText": "[\r\n  {\r\n    \"$match\": {\r\n      \"run_type\": \"daily\",      \"metadata.site\": {\r\n        \"$regex\": \"$site\"\r\n      },\r\n      \"metadata.module\": {\r\n        \"$regex\": \"$module\"\r\n      },\r\n      \"metadata.type\": {\r\n        \"$regex\": \"$type\"\r\n      }\r\n    }\r\n  },\r\n  \r\n  {\r\n    \"$lookup\": {\r\n      \"from\": \"task\",\r\n      \"localField\": \"task\",\r\n      \"foreignField\": \"name\",\r\n      \"as\": \"task_col\",\r\n      \"pipeline\": [\r\n        {\r\n          \"$match\": {\r\n            \"date\": {\r\n              \"$gte\": {\r\n                \"$date\": {\r\n                  \"$numberLong\": \"$__from\"\r\n                }\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$sort\": {\r\n            \"finish_time\": -1\r\n          }\r\n        },\r\n        {\r\n          \"$addFields\": {\r\n            \"runTime_ms\": {\r\n              \"$dateDiff\": {\r\n                \"startDate\": \"$start_time\",\r\n                \"endDate\": \"$finish_time\",\r\n                \"unit\": \"millisecond\"\r\n              }\r\n            },\r\n            \"errorSize\": {\r\n              \"$cond\": {\r\n                \"if\": {\r\n                  \"$gt\": [\r\n                    {\r\n                      \"$size\": \"$script_errors\"\r\n                    },\r\n                    0\r\n                  ]\r\n                },\r\n                \"then\": 1,\r\n                \"else\": 0\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$group\": {\r\n            \"_id\": \"$name\",\r\n            \"name\": {\r\n              \"$first\": \"$name\"\r\n            },\r\n            \"runTime_ms\": {\r\n              \"$first\": \"$runTime_ms\"\r\n            },\r\n            \"errorSize\": {\r\n              \"$first\": \"$errorSize\"\r\n            }\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  \r\n  {\r\n    \"$replaceRoot\": {\r\n      \"newRoot\": {\r\n        \"$mergeObjects\": [\r\n          {\r\n            \"$arrayElemAt\": [\r\n              \"$task_col\",\r\n              0\r\n            ]\r\n          },\r\n          \"$$ROOT\"\r\n        ]\r\n      }\r\n    }\r\n  },\r\n  {\r\n    \"$addFields\": {\r\n\t\t\"docCount\": 1,\r\n      \"module\": \"$metadata.module\",\r\n\t  \"type\": \"$metadata.type\",\r\n      \"site1\": \"$metadata.site\"\r\n    }\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"_id\": 0,\r\n      \"runTime_ms\": 1,\r\n\t  \"type\":1,\r\n      \"site\": \"$site1\",\r\n      \"module\": 1,\r\n      \"docCount\": {\r\n        \"$ifNull\": [\r\n          \"$docCount\",\r\n          1\r\n        ]\r\n      },\r\n      \"error_count\": {\r\n        \"$ifNull\": [\r\n          \"$errorSize\",\r\n          1\r\n        ]\r\n      }\r\n    }\r\n  }\r\n]",
+              "queryType": "table",
+              "refId": "A"
+            }
+          ],
+          "title": "Type status",
+          "transformations": [
+            {
+              "id": "groupBy",
+              "options": {
+                "fields": {
+                  "docCount": {
+                    "aggregations": [
+                      "sum"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "error_count": {
+                    "aggregations": [
+                      "sum"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "hasError": {
+                    "aggregations": [
+                      "uniqueValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "has_error": {
+                    "aggregations": [
+                      "sum",
+                      "count"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "module": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  },
+                  "name": {
+                    "aggregations": [
+                      "count"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "runTime_ms": {
+                    "aggregations": [
+                      "mean"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "script_errors": {
+                    "aggregations": []
+                  },
+                  "task": {
+                    "aggregations": [
+                      "uniqueValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "type": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  }
+                }
+              }
+            },
+            {
+              "id": "calculateField",
+              "options": {
+                "alias": "error rate",
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "error_count (sum)"
+                    }
+                  },
+                  "operator": "/",
+                  "right": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "docCount (sum)"
+                    }
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                }
+              }
+            },
+            {
+              "id": "calculateField",
+              "options": {
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "error rate"
+                    }
+                  },
+                  "operator": "*",
+                  "right": {
+                    "fixed": "100"
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                }
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "category": true,
+                  "collection_name": true,
+                  "docCount (sum)": false,
+                  "error rate": true,
+                  "error_count (count)": true,
+                  "error_count (sum)": false,
+                  "finish_time": true,
+                  "module": false,
+                  "runTime_ms": true,
+                  "start_time": true,
+                  "status": true,
+                  "task (uniqueValues)": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "docCount (sum)": 4,
+                  "error rate": 5,
+                  "error rate * 100": 6,
+                  "error_count (sum)": 3,
+                  "module": 1,
+                  "runTime_ms (mean)": 2,
+                  "type": 0
+                },
+                "renameByName": {
+                  "docCount (sum)": "# tasks ran",
+                  "error rate * 100": "error rate",
+                  "error_count (sum)": "errors ∑",
+                  "name (count)": "total tasks",
+                  "runTime_ms (mean)": "run time (ms)"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": true,
+                    "field": "error rate"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "haohanyang-mongodb-datasource",
+            "uid": "${DS_MONGODB-INFRALYTICS}"
+          },
+          "description": "Displays error rate per site",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "links": [
+                {
+                  "title": "sd",
+                  "url": "d/${__dashboard.uid}/daily-report?orgId=1&from=now-2d&to=now&timezone=browser&var-site=${__field.name}&var-podName=All"
+                }
+              ],
+              "mappings": [],
+              "max": 1,
+              "min": 0,
+              "thresholds": {
+                "mode": "percentage",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "yellow",
+                    "value": 10
+                  },
+                  {
+                    "color": "orange",
+                    "value": 20
+                  },
+                  {
+                    "color": "red",
+                    "value": 30
+                  }
+                ]
+              },
+              "unit": "percentunit"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 7,
+            "x": 17,
+            "y": 9
+          },
+          "id": 19,
+          "options": {
+            "displayMode": "gradient",
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": false
+            },
+            "maxVizHeight": 300,
+            "minVizHeight": 16,
+            "minVizWidth": 8,
+            "namePlacement": "left",
+            "orientation": "horizontal",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "showUnfilled": true,
+            "sizing": "auto",
+            "text": {},
+            "valueMode": "color"
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "collection": "task_definitions",
+              "datasource": {
+                "type": "haohanyang-mongodb-datasource",
+                "uid": "${DS_MONGODB-INFRALYTICS}"
+              },
+              "hide": false,
+              "queryLanguage": "json",
+              "queryText": "[\r\n  {\r\n    \"$match\": {\r\n      \"run_type\": \"daily\",      \"metadata.site\": {\r\n        \"$regex\": \"$site\"\r\n      },\r\n      \"metadata.module\": {\r\n        \"$regex\": \"$module\"\r\n      },\r\n      \"metadata.type\": {\r\n        \"$regex\": \"$type\"\r\n      }\r\n    }\r\n  },\r\n  \r\n  {\r\n    \"$lookup\": {\r\n      \"from\": \"task\",\r\n      \"localField\": \"task\",\r\n      \"foreignField\": \"name\",\r\n      \"as\": \"task_col\",\r\n      \"pipeline\": [\r\n        {\r\n          \"$match\": {\r\n            \"date\": {\r\n              \"$gte\": {\r\n                \"$date\": {\r\n                  \"$numberLong\": \"$__from\"\r\n                }\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$sort\": {\r\n            \"finish_time\": -1\r\n          }\r\n        },\r\n        {\r\n          \"$addFields\": {\r\n            \"errorSize\": {\r\n              \"$cond\": {\r\n                \"if\": {\r\n                  \"$gt\": [\r\n                    {\r\n                      \"$size\": \"$script_errors\"\r\n                    },\r\n                    0\r\n                  ]\r\n                },\r\n                \"then\": 1,\r\n                \"else\": 0\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$group\": {\r\n            \"_id\": \"$name\",\r\n            \"name\": {\r\n              \"$first\": \"$name\"\r\n            },\r\n            \"errorSize\": {\r\n              \"$first\": \"$errorSize\"\r\n            }\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  \r\n  {\r\n    \"$replaceRoot\": {\r\n      \"newRoot\": {\r\n        \"$mergeObjects\": [\r\n          {\r\n            \"$arrayElemAt\": [\r\n              \"$task_col\",\r\n              0\r\n            ]\r\n          },\r\n          \"$$ROOT\"\r\n        ]\r\n      }\r\n    }\r\n  },\r\n  {\r\n    \"$addFields\": {\r\n\t\t\"docCount\": 1,\r\n      \"module\": \"$metadata.module\",\r\n      \"site1\": \"$metadata.site\",\r\n      \"name\": \"$task\"\r\n    }\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"_id\": 0,\r\n      \"task\": \"$name\",\r\n      \"site\": \"$site1\",\r\n      \"module\": 1,\r\n      \"docCount\": {\r\n        \"$ifNull\": [\r\n          \"$docCount\",\r\n          1\r\n        ]\r\n      },\r\n      \"error_count\": {\r\n        \"$ifNull\": [\r\n          \"$errorSize\",\r\n          1\r\n        ]\r\n      }\r\n    }\r\n  }\r\n]",
+              "queryType": "table",
+              "refId": "A"
+            }
+          ],
+          "title": "Site Error Rate",
+          "transformations": [
+            {
+              "id": "groupBy",
+              "options": {
+                "fields": {
+                  "docCount": {
+                    "aggregations": [
+                      "sum"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "error_count": {
+                    "aggregations": [
+                      "sum"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "hasError": {
+                    "aggregations": [
+                      "uniqueValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "has_error": {
+                    "aggregations": [
+                      "sum",
+                      "count"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "module": {
+                    "aggregations": []
+                  },
+                  "name": {
+                    "aggregations": [
+                      "count"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "runTime_ms": {
+                    "aggregations": [
+                      "mean"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "script_errors": {
+                    "aggregations": []
+                  },
+                  "site": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  },
+                  "task": {
+                    "aggregations": [
+                      "uniqueValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "type": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  }
+                }
+              }
+            },
+            {
+              "id": "calculateField",
+              "options": {
+                "alias": "error rate",
+                "binary": {
+                  "left": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "error_count (sum)"
+                    }
+                  },
+                  "operator": "/",
+                  "right": {
+                    "matcher": {
+                      "id": "byName",
+                      "options": "docCount (sum)"
+                    }
+                  }
+                },
+                "mode": "binary",
+                "reduce": {
+                  "reducer": "sum"
+                }
+              }
+            },
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "field": "site"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "rowsToFields",
+              "options": {
+                "mappings": [
+                  {
+                    "fieldName": "site",
+                    "handlerKey": "field.name"
+                  },
+                  {
+                    "fieldName": "error rate",
+                    "handlerKey": "field.value"
+                  },
+                  {
+                    "fieldName": "task (uniqueValues)",
+                    "handlerKey": "__ignore"
+                  },
+                  {
+                    "fieldName": "error_count (sum)",
+                    "handlerKey": "__ignore"
+                  },
+                  {
+                    "fieldName": "docCount (sum)",
+                    "handlerKey": "__ignore"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "renameByRegex",
+              "options": {
+                "regex": "(.*) \\{.*",
+                "renamePattern": "$1"
+              }
+            }
+          ],
+          "type": "bargauge"
+        },
+        {
+          "datasource": {
+            "type": "haohanyang-mongodb-datasource",
+            "uid": "${DS_MONGODB-INFRALYTICS}"
+          },
+          "description": "displays the last status of the task within the time range",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "cellOptions": {
+                  "type": "auto"
+                },
+                "footer": {
+                  "reducers": []
+                },
+                "inspect": false
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "name"
+                },
+                "properties": [
+                  {
+                    "id": "links",
+                    "value": [
+                      {
+                        "title": "pod",
+                        "url": "d/${__dashboard.uid}/daily-report?orgId=1&from=now-2d&to=now&timezone=browser&var-podName=${__data.fields.pod}"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "pattern": "/_/g",
+                          "result": {
+                            "index": 0,
+                            "text": "-"
+                          }
+                        },
+                        "type": "regex"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "cron"
+                },
+                "properties": [
+                  {
+                    "id": "links",
+                    "value": [
+                      {
+                        "targetBlank": true,
+                        "title": "cron",
+                        "url": "https://argo-workflows.pandathedog.com/cron-workflows/infralytics-collectors/${__data.fields.name}"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "mappings",
+                    "value": [
+                      {
+                        "options": {
+                          "1": {
+                            "index": 0,
+                            "text": "⌚"
+                          }
+                        },
+                        "type": "value"
+                      }
+                    ]
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 35
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "runTime_ms"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "ms"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byType",
+                  "options": "time"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "dateTimeAsIso"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 16,
+            "x": 8,
+            "y": 19
+          },
+          "id": 4,
+          "options": {
+            "cellHeight": "sm",
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": false,
+                "displayName": "name"
+              }
+            ]
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "collection": "task_definitions",
+              "datasource": {
+                "type": "haohanyang-mongodb-datasource",
+                "uid": "${DS_MONGODB-INFRALYTICS}"
+              },
+              "isStreaming": false,
+              "queryLanguage": "json",
+              "queryText": "[\r\n  {\r\n    \"$match\": {\r\n      \"run_type\": \"daily\",\r\n      \"metadata.site\": {\r\n        \"$regex\": \"$site\"\r\n      },\r\n      \"metadata.module\": {\r\n        \"$regex\": \"$module\"\r\n      },\r\n      \"metadata.type\": {\r\n        \"$regex\": \"$type\"\r\n      }\r\n    }\r\n  },\r\n  \r\n  {\r\n    \"$lookup\": {\r\n      \"from\": \"task\",\r\n      \"localField\": \"task\",\r\n      \"foreignField\": \"name\",\r\n      \"as\": \"task_col\",\r\n      \"pipeline\": [\r\n      {\r\n          \"$match\": {\r\n            \"date\": {\r\n                \"$gte\": {\r\n                \"$date\":\r\n                {\r\n                    \"$numberLong\":\"$__from\"\r\n                }\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$sort\": {\r\n            \"finish_time\": -1\r\n          }\r\n        },\r\n        {\r\n          \"$addFields\": {\r\n            \"runTime_ms\": {\r\n              \"$dateDiff\": {\r\n                \"startDate\": \"$start_time\",\r\n                \"endDate\": \"$finish_time\",\r\n                \"unit\": \"millisecond\"\r\n              }\r\n            }\r\n\t\t\t}\r\n\t\t\t},\r\n        {\r\n          \"$group\": {\r\n            \"_id\": \"$name\",\r\n            \"name\": {\r\n              \"$first\": \"$name\"\r\n            },\r\n            \"runTime_ms\": {\r\n              \"$first\": \"$runTime_ms\"\r\n            },\r\n            \"start_time\": {\r\n              \"$first\": \"$start_time\"\r\n            },\r\n            \"finish_time\": {\r\n              \"$first\": \"$finish_time\"\r\n            },\r\n            \"script_errors\": {\r\n              \"$first\": \"$script_errors\"\r\n            },\r\n            \"pod\": {\r\n              \"$first\": \"$pod\"\r\n            },\r\n            \"image\": {\r\n              \"$first\": \"$image\"\r\n            },\t\t\t\r\n            \"last_good\": {\r\n              \"$push\": {\r\n                  \"$cond\":[\r\n                    { \"$eq\": [{ \"$size\": \"$script_errors\" }, 0] },\r\n                    \"$finish_time\" ,\r\n                    \"$$REMOVE\"\r\n                ]\r\n              }\r\n            }\r\n          }\r\n        },\r\n        {\r\n          \"$project\": {\r\n            \"_id\": 0,\r\n            \"name\": 1,\r\n            \"start_time\": 1,\r\n            \"pod\":1,\r\n            \"finish_time\": 1,\r\n            \"last_good\": {\"$first\":\"$last_good\"},\r\n            \"script_errors\": 1,\r\n            \"runTime_ms\": 1,\r\n\t\t\t\"image\": 1\r\n          }\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  \r\n  {\r\n    \"$replaceRoot\": {\r\n      \"newRoot\": {\r\n        \"$mergeObjects\": [\r\n          {\r\n            \"$arrayElemAt\": [\r\n              \"$task_col\",\r\n              0\r\n            ]\r\n          },\r\n          \"$$ROOT\"\r\n        ]\r\n      }\r\n    }\r\n  },\r\n {\r\n    \"$addFields\": {\r\n      \"module\": \"$metadata.module\",\r\n      \"type\": \"$metadata.type\",\r\n      \"site\": \"$metadata.site\",\r\n      \"name\": \"$task\",\r\n      \"script_errors\": {\r\n        \"$cond\":{\r\n           \"if\": { \"$eq\": [ \"$script_errors\", \"$null\" ] }, \"then\": [\"task was not run\"], \"else\": \"$script_errors\"\r\n        }\r\n      }\r\n    }\r\n  },\r\n {\r\n    \"$addFields\": {\r\n      \"cron\": 1\r\n    }\r\n  },\r\n  {\r\n    \"$match\": {\"script_errors\": {\"$not\":{\"$size\":0}}}\r\n  },\r\n  {\r\n    \"$project\": {\r\n      \"_id\": 0,\r\n      \"run_parameters\":0,\r\n      \"task_col\":0,\r\n      \"metadata\":0,\r\n      \"task\":0,\r\n      \"run_type\":0,\r\n\t  \"category\":0\r\n    }\r\n  }\r\n]",
+              "queryType": "table",
+              "refId": "A"
+            }
+          ],
+          "title": "Last task errors",
+          "transformations": [
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "category": true,
+                  "collection_name": true,
+                  "error_count": true,
+                  "site": true,
+                  "status": true,
+                  "type": true
+                },
+                "includeByName": {},
+                "indexByName": {
+                  "cron": 0,
+                  "finish_time": 9,
+                  "image": 10,
+                  "last_good": 8,
+                  "module": 2,
+                  "name": 1,
+                  "pod": 11,
+                  "runTime_ms": 7,
+                  "script_errors": 5,
+                  "site": 4,
+                  "start_time": 6,
+                  "type": 3
+                },
+                "renameByName": {
+                  "runTime_ms": "run time"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
+          "datasource": {
+            "type": "victoriametrics-logs-datasource",
+            "uid": "${DS_VICTORIALOGS}"
+          },
+          "fieldConfig": {
+            "defaults": {},
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "timeStamp"
+                },
+                "properties": []
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "level"
+                },
+                "properties": []
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "message"
+                },
+                "properties": []
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 24,
+            "x": 0,
+            "y": 29
+          },
+          "id": 15,
+          "options": {
+            "dedupStrategy": "exact",
+            "enableInfiniteScrolling": true,
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showControls": false,
+            "showLabels": false,
+            "showTime": true,
+            "sortOrder": "Ascending",
+            "wrapLogMessage": false
+          },
+          "pluginVersion": "12.3.1",
+          "targets": [
+            {
+              "datasource": {
+                "type": "victoriametrics-logs-datasource",
+                "uid": "${DS_VICTORIALOGS}"
+              },
+              "direction": "asc",
+              "editorMode": "code",
+              "expr": "{kubernetes.pod_namespace=\"infralytics-collectors\",kubernetes.pod_name=~\"$podName\"}",
+              "queryType": "instant",
+              "refId": "A"
+            }
+          ],
+          "title": "PodLog: ${podName}",
+          "transformations": [
+            {
+              "id": "sortBy",
+              "options": {
+                "fields": {},
+                "sort": [
+                  {
+                    "desc": false,
+                    "field": "Time"
+                  }
+                ]
+              }
+            }
+          ],
+          "type": "logs"
+        }
+      ],
+      "preload": false,
+      "schemaVersion": 42,
+      "tags": [],
+      "templating": {
+        "list": [
+          {
+            "allValue": "[a-zA-Z]*",
+            "current": {},
+            "datasource": {
+              "type": "haohanyang-mongodb-datasource",
+              "uid": "${DS_MONGODB-INFRALYTICS}"
+            },
+            "definition": "",
+            "includeAll": true,
+            "name": "module",
+            "options": [],
+            "query": {
+              "collection": "task_definitions",
+              "queryText": "[\r\n  {\"$group\":{\"_id\":\"$metadata.module\"}},\r\n  {\r\n    \"$project\":{\r\n      \"value\":\"$_id\"\r\n    }\r\n  }\r\n]",
+              "queryType": "table",
+              "refId": "MongoDBVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "type": "query"
+          },
+          {
+            "allValue": "(.*)",
+            "current": {},
+            "datasource": {
+              "type": "haohanyang-mongodb-datasource",
+              "uid": "${DS_MONGODB-INFRALYTICS}"
+            },
+            "definition": "",
+            "includeAll": true,
+            "name": "site",
+            "options": [],
+            "query": {
+              "collection": "task_definitions",
+              "queryText": "[\r\n  {\"$group\":{\"_id\":\"$metadata.site\"}},\r\n  {\r\n    \"$project\":{\r\n      \"value\":\"$_id\"\r\n    }\r\n  }\r\n]",
+              "queryType": "table",
+              "refId": "MongoDBVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "type": "query"
+          },
+          {
+            "allValue": "noLoad",
+            "current": {},
+            "datasource": {
+              "type": "victoriametrics-logs-datasource",
+              "uid": "${DS_VICTORIALOGS}"
+            },
+            "definition": "{kubernetes.pod_namespace=\"infralytics-collectors\"} kubernetes.pod_labels.app.kubernetes.io/name:~\"^infralytics-collectors[./]$module.+$site$\"",
+            "includeAll": true,
+            "name": "podName",
+            "options": [],
+            "query": {
+              "field": "kubernetes.pod_name",
+              "limit": 0,
+              "query": "{kubernetes.pod_namespace=\"infralytics-collectors\"} kubernetes.pod_labels.app.kubernetes.io/name:~\"^infralytics-collectors[./]$module.+$site$\"",
+              "refId": "VictoriaLogsVariableQueryEditor-VariableQuery",
+              "type": "fieldValue"
+            },
+            "refresh": 1,
+            "regex": "",
+            "type": "query"
+          },
+          {
+            "allValue": ".*",
+            "current": {},
+            "datasource": {
+              "type": "haohanyang-mongodb-datasource",
+              "uid": "${DS_MONGODB-INFRALYTICS}"
+            },
+            "definition": "",
+            "includeAll": true,
+            "name": "type",
+            "options": [],
+            "query": {
+              "collection": "task_definitions",
+              "queryText": "[\r\n  {\r\n    \"$group\":\r\n    {\r\n      \"_id\": \"$metadata.type\"\r\n    }\r\n  },\r\n    {\r\n      \"$project\":{\r\n        \"value\": \"$_id\"\r\n      }\r\n    }\r\n]",
+              "queryType": "table",
+              "refId": "MongoDBVariableQueryEditor-VariableQuery"
+            },
+            "refresh": 1,
+            "regex": "",
+            "sort": 1,
+            "type": "query"
+          }
+        ]
+      },
+      "time": {
+        "from": "now-2d",
+        "to": "now"
+      },
+      "timepicker": {},
+      "timezone": "browser",
+      "title": "collector-daily-report",
+      "uid": "anv2ms6",
+      "version": 2,
+      "weekStart": "",
+      "id": null
+    }

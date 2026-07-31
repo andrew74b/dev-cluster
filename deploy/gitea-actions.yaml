@@ -1,0 +1,67 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: gitea-actions
+spec:
+  destination:
+    name: in-cluster
+    namespace: gitea-actions
+  project: default
+  sources:
+    - chart: actions
+      helm:
+        valuesObject:
+          enabled: true
+          existingSecret: gitea-runner-token
+          existingSecretKey: token
+          giteaRootURL: https://git.pandathedog.com
+          statefulset:
+            dind:
+              extraVolumeMounts:
+                - mountPath: /etc/docker
+                  name: docker-config
+              registry: docker.io
+              repository: docker
+              tag: 29.5.2-dind
+            extraVolumes:
+              - configMap:
+                  name: docker-config
+                name: docker-config
+            persistence:
+              size: 1Gi
+            replicas: 1
+            runner:
+              config: |
+                cache:
+                  enabled: false
+                container:
+                  docker_host: ""
+                  docker_timeout: 300s
+                  privileged: true
+                  require_docker: true
+                log:
+                  level: debug
+              extraVolumeMounts:
+                - mountPath: /etc/docker
+                  name: docker-config
+              registry: docker.io
+              repository: gitea/runner
+              tag: 2.0.1
+      repoURL: https://dl.gitea.com/charts
+      targetRevision: 0.1.2
+    - path: gitea/actions
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+    syncOptions:
+      - CreateNamespace=true

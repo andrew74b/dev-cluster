@@ -1,0 +1,167 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |
+      Build and create a Keycloak provider as a Kubernetes resource.
+  name: irongate-provider-ci
+spec:
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/DevalexLLC/keycloak-k8s
+      - name: revision
+        value: development
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: checkout-provider
+            template: checkout-provider
+        - - arguments:
+              artifacts:
+                - from: '{{steps.checkout-provider.outputs.artifacts.source}}'
+                  name: source
+            name: build-provider
+            template: build-provider
+        - - arguments:
+              artifacts:
+                - from: '{{steps.build-provider.outputs.artifacts.provider}}'
+                  name: provider
+            name: encode-provider
+            template: encode-provider
+        - - arguments:
+              parameters:
+                - name: hash
+                  value: '{{steps.encode-provider.outputs.result}}'
+                - name: provider
+                  value: '{{steps.encode-provider.outputs.parameters.provider}}'
+                - name: revision
+                  value: '{{steps.checkout-provider.outputs.result}}'
+            name: apply-configmap
+            template: apply-configmap
+        - - name: restart-keycloak
+            template: restart-keycloak
+    - inputs:
+        artifacts:
+          - git:
+              passwordSecret:
+                key: GIT_TOKEN
+                name: git-env
+              repo: '{{workflow.parameters.repo}}'
+              revision: '{{workflow.parameters.revision}}'
+              usernameSecret:
+                key: GIT_USER
+                name: git-env
+            name: source
+            path: /workspace
+      name: checkout-provider
+      outputs:
+        artifacts:
+          - name: source
+            path: /workspace/src
+      script:
+        command:
+          - sh
+          - -c
+        image: alpine/git:v2.47.1
+        name: main
+        source: |
+          git rev-parse --short HEAD
+        workingDir: /workspace
+    - container:
+        args:
+          - zip -r provider.zip META-INF theme *.js
+        command:
+          - sh
+          - -c
+        image: harbor.pandathedog.com/library/zip
+        name: main
+        workingDir: /workspace
+      inputs:
+        artifacts:
+          - name: source
+            path: /workspace
+      name: build-provider
+      outputs:
+        artifacts:
+          - name: provider
+            path: /workspace/provider.zip
+    - inputs:
+        artifacts:
+          - name: provider
+            path: /workspace/provider.zip
+      name: encode-provider
+      outputs:
+        parameters:
+          - name: provider
+            valueFrom:
+              path: /tmp/encoded.txt
+      script:
+        command:
+          - sh
+          - -c
+        image: busybox:1.37.0
+        name: main
+        source: |
+          base64 -w 0 provider.zip > /tmp/encoded.txt
+          sha1sum provider.zip | awk '{ print $1 }'
+        workingDir: /workspace
+    - inputs:
+        parameters:
+          - name: hash
+          - name: provider
+          - name: revision
+      name: apply-configmap
+      resource:
+        action: apply
+        manifest: |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            labels:
+              revision: "{{inputs.parameters.revision}}"
+              sha1: "{{inputs.parameters.hash}}"
+            name: keycloak-providers
+          binaryData:
+            irongate-provider.jar: "{{inputs.parameters.provider}}"
+    - name: restart-keycloak
+      resource:
+        action: delete
+        manifest: |-
+          apiVersion: apps/v1
+          kind: StatefulSet
+          metadata:
+            labels:
+              app: keycloak
+            name: keycloak
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+  name: irongate-provider-ci
+spec:
+  arguments:
+    parameters:
+      - name: repo
+        value: https://github.com/DevalexLLC/keycloak-k8s
+      - name: revision
+        value: development
+  artifactGC:
+    strategy: OnWorkflowCompletion
+  entrypoint: main
+  templates:
+    - name: main
+      steps:
+        - - name: build-zip-image
+            templateRef:
+              clusterScope: true
+              name: zip-ci
+              template: main
+        - - name: irongate-provider-ci
+            templateRef:
+              clusterScope: false
+              name: irongate-provider-ci
+              template: main

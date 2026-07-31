@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: keycloak-operator
+spec:
+  destination:
+    name: in-cluster
+    namespace: keycloak
+  project: default
+  source:
+    path: kubernetes
+    repoURL: https://github.com/keycloak/keycloak-k8s-resources
+    targetRevision: 26.7.0
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        linkerd.io/inject: enabled
+        pod-security.kubernetes.io/enforce: baseline
+    syncOptions:
+      - CreateNamespace=true

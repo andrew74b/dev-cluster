@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mongodb-cert
+spec:
+  commonName: mongo.mongodb.svc.cluster.local
+  dnsNames:
+    - mongo.mongodb.svc.cluster.local
+    - '*.mongo.mongodb.svc.cluster.local'
+    - mongo.pandathedog.com
+    - mongodb.pandathedog.com
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cluster-issuer
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS1
+    size: 384
+  secretName: mongodb-tls

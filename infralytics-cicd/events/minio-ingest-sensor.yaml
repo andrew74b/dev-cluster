@@ -1,0 +1,73 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: ingest-csv
+spec:
+  dependencies:
+    - eventName: csv-creation
+      eventSourceName: minio-ingest
+      name: minio-dep
+  template:
+    serviceAccountName: operate-workflow-sa
+  triggers:
+    - retryStrategy:
+        steps: 3
+      template:
+        k8s:
+          operation: create
+          parameters:
+            - dest: spec.arguments.parameters.0.value
+              src:
+                dataKey: notification.0.s3.object.key
+                dependencyName: minio-dep
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: ingest-csv-
+              spec:
+                arguments:
+                  parameters:
+                    - name: key
+                entrypoint: main
+                workflowTemplateRef:
+                  name: ingest-csv-ci
+        name: create-workflow
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Sensor
+metadata:
+  name: ingest-mongodb
+spec:
+  dependencies:
+    - eventName: zip-creation
+      eventSourceName: minio-ingest
+      name: minio-dep
+  template:
+    serviceAccountName: operate-workflow-sa
+  triggers:
+    - retryStrategy:
+        steps: 3
+      template:
+        k8s:
+          operation: create
+          parameters:
+            - dest: spec.arguments.parameters.0.value
+              src:
+                dataKey: notification.0.s3.object.key
+                dependencyName: minio-dep
+          source:
+            resource:
+              apiVersion: argoproj.io/v1alpha1
+              kind: Workflow
+              metadata:
+                generateName: ingest-mongodb-
+              spec:
+                arguments:
+                  parameters:
+                    - name: key
+                entrypoint: main
+                workflowTemplateRef:
+                  name: ingest-mongodb-ci
+        name: create-workflow

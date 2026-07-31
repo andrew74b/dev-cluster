@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterWorkflowTemplate
+metadata:
+  annotations:
+    workflows.argoproj.io/description: |
+      Create a zip image based on UBI.
+  name: zip-ci
+spec:
+  entrypoint: main
+  templates:
+    - container:
+        args:
+          - --dockerfile=Dockerfile
+          - --context=.
+          - --destination=harbor.pandathedog.com/library/zip:1.0
+          - --destination=harbor.pandathedog.com/library/zip:latest
+          - --cache=false
+          - --reproducible
+          - --skip-tls-verify
+        command:
+          - executor
+        image: gcr.io/kaniko-project/executor:v1.23.2
+        name: main
+        securityContext:
+          runAsNonRoot: false
+          runAsUser: 0
+        volumeMounts:
+          - mountPath: /kaniko/.docker
+            name: docker-config
+          - mountPath: /workspace
+            name: workspace
+        workingDir: /workspace
+      initContainers:
+        - args:
+            - |
+              cat <<EOF >Dockerfile
+              FROM redhat/ubi8:8.10 AS build
+              RUN mkdir -p /mnt/rootfs
+              RUN dnf install --installroot /mnt/rootfs zip --releasever 8 --setopt install_weak_deps=false --nodocs -y && \
+                  dnf --installroot /mnt/rootfs clean all && \
+                  rpm --root /mnt/rootfs -e --nodeps setup
+              # Remove problematic directories which prevent `kaniko` from copying `rootfs`
+              RUN rm -rf /mnt/rootfs/sys /mnt/rootfs/var
+
+              FROM scratch
+              COPY --from=build /mnt/rootfs /
+              ENTRYPOINT ["/bin/zip"]
+              EOF
+          command:
+            - sh
+            - -c
+          image: busybox:1.37.0
+          mirrorVolumeMounts: true
+          name: setup
+          workingDir: /workspace
+      name: main
+      volumes:
+        - name: docker-config
+          secret:
+            secretName: docker-config
+        - emptyDir: {}
+          name: workspace

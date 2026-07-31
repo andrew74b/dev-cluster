@@ -1,0 +1,164 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  name: kube-prometheus-stack
+spec:
+  destination:
+    name: in-cluster
+    namespace: monitoring
+  project: default
+  sources:
+    - chart: kube-prometheus-stack
+      helm:
+        valuesObject:
+          alertmanager:
+            enabled: true
+            ingress:
+              annotations:
+                nginx.ingress.kubernetes.io/auth-tls-secret: default/client-ca
+                nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+                nginx.ingress.kubernetes.io/auth-tls-verify-depth: "2"
+              enabled: true
+              hosts:
+                - alertmanager.pandathedog.com
+              ingressClassName: nginx
+              pathType: Prefix
+              paths:
+                - /
+              tls:
+                - hosts:
+                    - '*.pandathedog.com'
+          crds:
+            upgradeJob:
+              enabled: true
+              forceConflicts: true
+          grafana:
+            admin:
+              existingSecret: grafana-admin-secret
+            enabled: true
+            env:
+              GF_PLUGINS_PREINSTALL: haohanyang-mongodb-datasource@@https://github.com/haohanyang/mongodb-datasource/releases/download/v0.4.1/haohanyang-mongodb-datasource-0.4.1.zip,victoriametrics-logs-datasource@@https://grafana.com/api/plugins/victoriametrics-logs-datasource/versions/0.26.3/download
+            extraObjects:
+              - |-
+                apiVersion: grafana.integreatly.org/v1beta1
+                kind: Grafana
+                metadata:
+                  name: {{ include "grafana.fullname" . }}
+                  namespace: {{ include "grafana.namespace" . }}
+                  labels:
+                    {{- include "grafana.labels" . | nindent 4 }}
+                spec:
+                  external:
+                    url: "http://{{ include "grafana.fullname" . }}.{{ include "grafana.namespace" . }}.svc.cluster.local:{{ .Values.service.port }}/"
+                    adminUser:
+                      name: {{ (tpl .Values.admin.existingSecret .) | default (include "grafana.fullname" .) }}
+                      key: {{ .Values.admin.userKey | default "admin-user" }}
+                    adminPassword:
+                      name: {{ (tpl .Values.admin.existingSecret .) | default (include "grafana.fullname" .) }}
+                      key: {{ .Values.admin.passwordKey | default "admin-password" }}
+            extraSecretMounts:
+              - defaultMode: 288
+                mountPath: /etc/secrets/grafana-cfg
+                name: grafana-cfg-secret-mount
+                readOnly: true
+                secretName: grafana-cfg-secret
+            grafana.ini:
+              analytics:
+                check_for_plugin_updates: false
+                check_for_updates: false
+                reporting_enabled: false
+              auth.generic_oauth:
+                allow_assign_grafana_admin: true
+                allow_sign_up: true
+                api_url: https://auth.pandathedog.com/realms/internal/protocol/openid-connect/userinfo
+                auth_url: https://auth.pandathedog.com/realms/internal/protocol/openid-connect/auth
+                client_id: $__file{/etc/secrets/grafana-cfg/client_id}
+                client_secret: $__file{/etc/secrets/grafana-cfg/client_secret}
+                email_attribute_path: email
+                enabled: true
+                login_attribute_path: preferred_username
+                name: Keycloak
+                name_attribute_path: given_name
+                role_attribute_path: contains(roles[*], 'grafanaadmin') && 'GrafanaAdmin' || contains(roles[*], 'admin') && 'Admin' || contains(roles[*], 'editor') && 'Editor' || 'Viewer'
+                scopes: openid email profile offline_access roles
+                token_url: https://auth.pandathedog.com/realms/internal/protocol/openid-connect/token
+                use_refresh_token: true
+              plugins:
+                allow_loading_unsigned_plugins: haohanyang-mongodb-datasource
+              server:
+                root_url: https://grafana.pandathedog.com
+            ingress:
+              annotations: {}
+              enabled: true
+              hosts:
+                - grafana.pandathedog.com
+              ingressClassName: nginx
+              pathType: Prefix
+              paths:
+                - /
+              tls:
+                - hosts:
+                    - '*.pandathedog.com'
+            serviceMonitor:
+              labels:
+                release: kube-prometheus-stack
+            sidecar:
+              skipTlsVerify: true
+          prometheus:
+            enabled: true
+            ingress:
+              annotations:
+                nginx.ingress.kubernetes.io/auth-tls-secret: default/client-ca
+                nginx.ingress.kubernetes.io/auth-tls-verify-client: "on"
+                nginx.ingress.kubernetes.io/auth-tls-verify-depth: "2"
+              enabled: true
+              hosts:
+                - prometheus.pandathedog.com
+              ingressClassName: nginx
+              pathType: Prefix
+              paths:
+                - /
+              tls:
+                - hosts:
+                    - '*.pandathedog.com'
+            prometheusSpec:
+              scrapeClasses:
+                - default: true
+                  name: cluster-relabeling
+                  relabelings:
+                    - action: replace
+                      regex: (.*)
+                      replacement: argocd-cluster
+                      sourceLabels:
+                        - __name__
+                      targetLabel: cluster
+          prometheusOperator:
+            admissionWebhooks:
+              annotations:
+                argocd.argoproj.io/hook: PostSync
+                argocd.argoproj.io/hook-delete-policy: HookSucceeded
+              certManager:
+                enabled: true
+              patch:
+                annotations:
+                  argocd.argoproj.io/hook: PostSync
+                  argocd.argoproj.io/hook-delete-policy: HookSucceeded
+      repoURL: https://prometheus-community.github.io/helm-charts
+      targetRevision: 87.19.1
+    - path: prometheus
+      repoURL: https://github.com/andrew74b/dev-cluster
+      targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        pod-security.kubernetes.io/enforce: privileged
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

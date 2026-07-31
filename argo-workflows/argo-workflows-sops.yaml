@@ -1,0 +1,28 @@
+apiVersion: isindir.github.com/v1alpha3
+kind: SopsSecret
+metadata:
+  labels:
+    decrypted-sha1: 8e30ec0bea0fac37c7160c2d275a2ac211ddb676
+  name: argo-workflows
+spec:
+  secretTemplates:
+    - name: argo-server-sso
+      stringData:
+        client-id: ENC[AES256_GCM,data:BIDT2R1grdAw0vkxIw4=,iv:Hzdtknb2BfMdRU8z+xq+OJqcvaAyIOByp9+d2qL1MiU=,tag:lA8Or76UF0y6xHpLtSs3GA==,type:str]
+        client-secret: ENC[AES256_GCM,data:2j9NWZ7Q+sw1PwtIwLIM//YuPW2fPQZ8qlF1m+b1+wc=,iv:6cpC91UO0FYQPiQp+d5/UHW8uZpLHWbT//TlSF7VpG8=,tag:fqxYbdgK433EM1cOukH9DQ==,type:str]
+  suspend: false
+sops:
+  age:
+    - enc: |
+        -----BEGIN AGE ENCRYPTED FILE-----
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBZdDVEOVpzWWs1WXFTai9m
+        YlhxTXNQS3l5RzZZUDNUTTJFUGtYb0JVSEIwCmtxTW9hdFVXNy9UU3Q2MVBJdUhp
+        dzZlcit0SGVuNWxZc2l4RGE2ZENtbGMKLS0tIDZ1VVcyTWg2aG1xY2JJcmFtV1lM
+        UFJ3VlAzaFdqeFc1NEZyemErcFIxOHMK09eVLksHU3M3Sk+1PoqWO17pdHEopjg2
+        Q4k1muhEm8zIMauOWgZomFh/WTt/8RojimlmtKck3gdo5u6SeylxkQ==
+        -----END AGE ENCRYPTED FILE-----
+      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+  encrypted_regex: ^(data|stringData)$
+  lastmodified: "2026-07-31T12:41:38Z"
+  mac: ENC[AES256_GCM,data:kVdpzgtA5/jpmrsuJGUD6gHe81jo0HmAxv9zHc4M3QsohaKW5pIRJOtd3t9I/l5HuJ+Rwr1js0aISXU1pdMqR/OEXF3JTxPBPSzBghYqCZrNbzzswBAqhgU82yHewh/y13biz5hYTWx7bXNT8BiHSyj18SU9CsDEicDhUJOfrCw=,iv:QBgN9Ce7EvKj5gO8yU8arUK6DfVftmPf8xoxGf3ihS8=,tag:+ZVobx99epiFPAA9ron9+Q==,type:str]
+  version: 3.13.3

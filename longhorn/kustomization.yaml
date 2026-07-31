@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+generatorOptions:
+  disableNameSuffixHash: true
+kind: Kustomization
+resources:
+  - frontend-ingress.yaml
+  - local-storageclass.yaml
+  - local-xfs-storageclass.yaml

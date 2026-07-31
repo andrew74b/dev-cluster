@@ -1,0 +1,83 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: mongodb-infralytics
+spec:
+  allowCrossNamespaceImport: true
+  datasource:
+    access: proxy
+    jsonData:
+      authType: auth-username-password
+      connectionParameters: authSource=admin&replicaSet=mongodb&tlsInsecure=true
+      connectionStringScheme: dns_seed_list
+      database: infralytics
+      host: mongo.mongodb.svc.cluster.local
+      username: infralytics
+    name: mongodb-infralytics
+    secureJsonData:
+      password: ${password}
+    type: haohanyang-mongodb-datasource
+  instanceSelector: {}
+  uid: mongodb-infralytics
+  valuesFrom:
+    - targetPath: secureJsonData.password
+      valueFrom:
+        secretKeyRef:
+          key: password
+          name: infralytics-mongodb-creds
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: mongodb-infralytics-data
+spec:
+  allowCrossNamespaceImport: true
+  datasource:
+    access: proxy
+    jsonData:
+      authType: auth-username-password
+      connectionParameters: authSource=admin&replicaSet=mongodb&tlsInsecure=true
+      connectionStringScheme: dns_seed_list
+      database: infralytics_data
+      host: mongo.mongodb.svc.cluster.local
+      username: infralytics
+    name: mongodb-infralytics_data
+    secureJsonData:
+      password: ${password}
+    type: haohanyang-mongodb-datasource
+  instanceSelector: {}
+  uid: mongodb-infralytics-data
+  valuesFrom:
+    - targetPath: secureJsonData.password
+      valueFrom:
+        secretKeyRef:
+          key: password
+          name: infralytics-mongodb-creds
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: mongodb-irongate
+spec:
+  allowCrossNamespaceImport: true
+  datasource:
+    access: proxy
+    jsonData:
+      authType: auth-username-password
+      connectionParameters: authSource=admin&replicaSet=mongodb&tlsInsecure=true
+      connectionStringScheme: dns_seed_list
+      database: irongate
+      host: mongo.mongodb.svc.cluster.local
+      username: infralytics
+    name: mongodb-irongate
+    secureJsonData:
+      password: ${password}
+    type: haohanyang-mongodb-datasource
+  instanceSelector: {}
+  uid: mongodb-irongate
+  valuesFrom:
+    - targetPath: secureJsonData.password
+      valueFrom:
+        secretKeyRef:
+          key: password
+          name: infralytics-mongodb-creds

@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+configMapGenerator:
+  - behavior: merge
+    literals:
+      - server.insecure="true"
+    name: argocd-cmd-params-cm
+  - behavior: merge
+    files:
+      - policy.csv
+    literals:
+      - policy.default=role:readonly
+    name: argocd-rbac-cm
+kind: Kustomization
+namespace: argocd
+patches:
+  - path: argocd-cm.yaml
+  - patch: |
+      - op: add
+        path: /spec/type
+        value: LoadBalancer
+      - op: add
+        path: /spec/loadBalancerIP
+        value: 192.168.1.241
+    target:
+      kind: Service
+      name: argocd-server
+resources:
+  - https://raw.githubusercontent.com/argoproj/argo-cd/v3.4.4/manifests/install.yaml
+  - argocd-ingress.yaml
+  - argocd-sops.yaml
+  - namespace.yaml

@@ -1,0 +1,18 @@
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: client-bundle
+spec:
+  sources:
+    - useDefaultCAs: false
+    - secret:
+        key: ca.crt
+        name: client-ca
+  target:
+    configMap:
+      key: client-bundle.pem
+    namespaceSelector:
+      matchLabels:
+        linkerd.io/inject: enabled
+    secret:
+      key: client-bundle.pem
