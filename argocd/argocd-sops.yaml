@@ -2,7 +2,7 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: c7245669db665aa495422c5482573e59e00d96c2
+    decrypted-sha1: f89eead4cee1521a6c8628ffb09191a4f01a1af8
   name: argocd
 spec:
   secretTemplates:
@@ -10,21 +10,35 @@ spec:
         app.kubernetes.io/part-of: argocd
       name: oidc-config
       stringData:
-        oidc.keycloak.clientID: ENC[AES256_GCM,data:41n4h/U9,iv:qByVUApI86wU00rMqqHzaPCiHHzkRJB/5KbGadCMRjQ=,tag:IiTAZ+2+BBENnffeH4TpgA==,type:str]
-        oidc.keycloak.clientSecret: ENC[AES256_GCM,data:q68RvRsgZ+CZbaDKSz/G3YDU4A8ox1nEeQBDIJPZN44=,iv:yFSGpenDd1yMP3xUr4IUJhkN6WQwcYLt0nRtFuY8fG8=,tag:gMQ0nXtmI0ViUD/yf18QmA==,type:str]
+        oidc.keycloak.clientID: ENC[AES256_GCM,data:QPOLYOSk,iv:ZAJjrKDC6ajMVUKH0dTjoZ5cSfPoZVxyrGl+gTKjY9Q=,tag:4iz57hiulu8Aw0wlf2FiUg==,type:str]
+        oidc.keycloak.clientSecret: ENC[AES256_GCM,data:SzXXhVdhEktzFwQ0NvVnav2B0gELsrubv4OVVV++9VA=,iv:fJZGu6sawmk2Qx1EYYl6BCbx2L3Inyy4PiEPoax7ayw=,tag:zdTICR/lCdIJK7D6EBUmgQ==,type:str]
+    - labels:
+        argocd.argoproj.io/secret-type: repository
+      name: deployment-repo
+      stringData:
+        type: ENC[AES256_GCM,data:3yp9,iv:zlepCcfmOFB33xJ0X5X8HbTV27YB5DFYAf1YS9W7BKw=,tag:iavR+ykagaGwkCjIyNTn+w==,type:str]
+        url: ENC[AES256_GCM,data:C9T0QHxZOYuYe8A49+8DHVUHQoKVvbovha7NGjcRTgySMA4ZSDFihA==,iv:nuCQ+YZnINbbLwzB9FolrGocRaVJwy6NHkqBWgfusI8=,tag:2wb+FOcID4kmeTJDsz4Tpw==,type:str]
+    - labels:
+        argocd.argoproj.io/secret-type: repo-creds
+      name: andrew74b-repo-creds
+      stringData:
+        password: ENC[AES256_GCM,data:JGQGCfPcqZxWxGFKsERRqjK/iSpERe5vWuM5aQnUjYsk6riRdVpnJw==,iv:415Co+rnQcakJKob2pmIa4QkwyDemPXNVA7sQnQbuQc=,tag:uSJgB0tGhTtwDW7HdQG7EQ==,type:str]
+        type: ENC[AES256_GCM,data:pFUo,iv:Ys/5MQKUeq2AHrSctvqnY07O2lFGqofxth2hbzruLoM=,tag:HqrcNhmevFZ+gb0UZu/Z0g==,type:str]
+        url: ENC[AES256_GCM,data:eKjHKiOvlXNvQOzYdY9Nhj103lZMcPnnl19uBQ==,iv:aCuxRKaiHmFCDK88iGnvfBwQ0n1EywdPs07/ix/NuJA=,tag:0MKPFornf87z9cx1rXGA6w==,type:str]
+        username: ENC[AES256_GCM,data:XaWpCyXnMHYa,iv:nLYHUwvUfa5qLrTfgkWKr2y6MZqjI1nxa4TRc/iy7P4=,tag:qHjlTvLwDVduVVn/CcNbqA==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4d0U4OXdjRnhVQmlkOHl6
-        YU0xeUQwNUhkL1I4dmx4TCtoWGpPTS9TeEhRCmJWWjRBb2x6aWorUHpwaFpBR2Ja
-        ZEpwZXBteXV6REJCV1F2d2ZKNk1lT2MKLS0tIFhFR0dieStQL25qdnhDMnFlTlJH
-        aHVvQ20vM21nT2puYnRmZVMveHRhLzgKBINBtDL3cTKiUyS+cUoqpG4Bn30HMuWm
-        loLYpQKOLJTygn3T7f7tPUC+oCSM46lnJ2Coc2AqyX3NvGAKBpLVvg==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHeTlKa2dzS3YwSDAwOXRW
+        aGI5Ukw2bE5IQW1yR0RJS3d2RHdpWGZMRzBBClpONi95ZzlXZXJMdHJ2UmNEdVVn
+        bllES2lJZGFpK0p4RC9DVU5UWFA5eTAKLS0tIFlPc20zRUNXRllWeEUzM3did3Fl
+        ZnJvZzhXM1FsbDNUMyttdmZremtpRVUK+A88OhQSrYima5rdWCVu2kjBYkUfMmiu
+        Mu0HhELBboikotCJCHFfK7dRbbgl/cPJ3ereQu7KSh5kLxIj0JGXvg==
         -----END AGE ENCRYPTED FILE-----
       recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-07-31T12:41:38Z"
-  mac: ENC[AES256_GCM,data:YGtq5YGCpAkehmE5FQWzbIQTFIlu4sOeV/nmHb2NPHX95nHVV74R7L5O6nTkXzTkPwlamcWEUhuMTSYz31fRou6eWSPsBmYb7PRkvxhAniH+OYNcedZWl6DrDGE5Ruz4OaQYC/i1yq274u8eCGKkc0k1AvRGJztngX0y5D07kVY=,iv:voRPBUC6zv6LseEBrXVgYd6WaufTiGRHyQI5UHU9Xyw=,tag:5TZnCqZegrixNDsbfUPXnw==,type:str]
+  lastmodified: "2026-07-31T13:45:06Z"
+  mac: ENC[AES256_GCM,data:3nQoZvkUYPJIFAgSQo73jSjlum4e3Tnk3owBoHrlAu3R9kri8AWK3McH9P/Wj+9Kiyfx2FfrsQj07/k6yEKYpINphZNbPE5N5OVIEJ1PoIT/GXh8eEEfsbOQxHtc0WDMJOeGj0fzpW/kdkhmwl+QnRjyaLf+LM12dWLYCxwMd+o=,iv:Qj+OUQ4XvS5lzjhZ+L3bnq5Om0RQlKtd6N3UP1MouOU=,tag:H2KUtg14D0/JaX51CYvxSA==,type:str]
   version: 3.13.3

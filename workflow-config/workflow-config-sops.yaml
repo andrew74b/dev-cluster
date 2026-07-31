@@ -2,41 +2,41 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: c3f0f57d454b69b4b9998a80caa939d5dbb676e2
+    decrypted-sha1: 7f30ae4f6c8cd7e2b2a366eadf1309af5eac2168
   name: workflow-config
 spec:
   secretTemplates:
     - name: git-env
       stringData:
-        GIT_TOKEN: ""
-        GIT_USER: ""
+        GIT_TOKEN: ENC[AES256_GCM,data:sYqJw1oqCwHBu1Yq7FioUhbfQM70OB92eqCwXbYZ7X7qvCc3OzpPrQ==,iv:R5BJ9eBvVxLeInjisq3+Hp+9939uxRw96JnbrqWDcEc=,tag:GOmLy53HXaFoU7i+E4pvFQ==,type:str]
+        GIT_USER: ENC[AES256_GCM,data:P3vqI5iOL/Ed,iv:nW7JNW7nmmW1bq3MGustN5EJ7Yl2S73+TPCg2WDymM8=,tag:h+x3eyhFocN72YodcFmMeA==,type:str]
     - name: minio-creds
       stringData:
-        accessKey: ENC[AES256_GCM,data:HfloFw8pjNQK6X1+wifV,iv:G0imMko28lQXArBoNJOLTLBIGWD8dKYaIapKKGRNZfI=,tag:Ld5Btzb+IOISu2yA2FyHBw==,type:str]
-        secretKey: ENC[AES256_GCM,data:glKyDfjeq0rPzlTVTkqBUvhAkbNGILl3ZPRWJE4myCGpDTXOJ60aGA==,iv:OCTnmhf41ESr4XCF3Q/v6ly+8hSGHgMdwwXjiTLLgNM=,tag:Oho1KrmuWxWn3WWJNMNslA==,type:str]
+        accessKey: ENC[AES256_GCM,data:X45GwfwEpJ2GveMqmPns,iv:2fGK+ub7itmqBkamZhLs0Zbe9tcuVezThkD1OVqsEA8=,tag:V/qrqoA1Lk5hugxqjv8ilQ==,type:str]
+        secretKey: ENC[AES256_GCM,data:KoaAwlf/k9qmBsC382KjicQaJGzeN9cP325W983QKQ9dKSLR5tzybw==,iv:fIqD2+AyWRJvzR3ELZmUwKPbr5xD/J7K4Nof4F7YprQ=,tag:5XOPSQ97cKtFf23PhqvpxA==,type:str]
     - name: sonar-config
       stringData:
-        SONAR_HOST_URL: ENC[AES256_GCM,data:Qp9yoWUqhcIzi5noY6iyMpgeYTqTwc5pZQht4NHlWn39,iv:35oQPkBXQXF8e2cCDOasi3SMN/+FKxvq42Ns4hPe78E=,tag:J48M00NX4WuuCxO0sZWr5g==,type:str]
+        SONAR_HOST_URL: ENC[AES256_GCM,data:lwS9dvU7ziCB9a9u/SKdXb263IfmskJ1j+FIlCSj1z2D,iv:8LXq1bZCj+gavjHY4gjoDlTiz98ZhvTtCrdn8N8DQO0=,tag:R7e8KjAfuNVQwToH5FIOjw==,type:str]
         SONAR_TOKEN: ""
     - name: docker-config
       stringData:
-        config.json: ENC[AES256_GCM,data:en5yioNAwEHrb1nTm/7Zfy9+/GuobmXLpY4o4XVZM+Wroyp6TIC4hw3bdv4x6oDipmvYDVV2bg1MsFov+y1veBX62TJEZOFkjxK6/XajJa1Y7ldrA/GcTS/jc5zJYcJCCxe4,iv:2kioSIdgkd6fknSh7bdKzXXsAkvx3swtR+9i86JIyUA=,tag:gMZWZC7EDqEiTOddVYFftw==,type:str]
+        config.json: ENC[AES256_GCM,data:BzQHIccgG+kdcsr+SXaLec9oYQniJGNYLSSPNZdoBpAa2VAhDZzB5CsRxNaYDp2GNDqJRw4TjOqKqSO5dic0Qe62/VeaapU+H7d7hYYueubzWFZS+WDb9qsExhAYgFPzZXVz,iv:QxSQ3+BXAJHJZrOWwra10EBDK+ODX9rDxTv14wkwvBE=,tag:5fmA9N+VtWBWzT3NGB20qg==,type:str]
     - name: harbor-registry
       stringData:
-        .dockerconfigjson: ENC[AES256_GCM,data:Z4SVM7qmKACsDPkZqLLN+O/Ia8mhdSMD3J6yVVopaEhZV2UGeuVrTPfsu6b7/gsSbf7+k8eJqH8bEPITh13ZPw5Xta6feV+UhowA7cbO4MMRIcy6A2BGXFmViw35Hpemv0DG,iv:hbwNMl3EZzmELa0JkRO7DZRemhqF9As5sJbh1nEUu6M=,tag:mitbljs1gr2f9XwSSUgApg==,type:str]
+        .dockerconfigjson: ENC[AES256_GCM,data:s1C2Dv+qM8SCa8N9z/LIux7rTOqmJz4TNnMRT8JZqUeyYsuVGeotkmjByl/cmPxQeLL6jJeIHxmMgU78f3aGmU2asqawGeFMhgRnLPa1aSjArNdSdfE1FBJ7U2087v5s3pQ1,iv:Eqz8Kk9WBE2mxdGPKgnw8mlNAP7yOIVtrguQI/Ps+g4=,tag:yqlu0/XAVjQBPQTFEbfUNQ==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBQSzFkQUVaNTJ3cWoyV1N4
-        eDdKMGZ6N0tkWjhMVUZhaldvdnB2QnpyTFhjCm80U3BWK3A0S1dvbHpod0w3WnU5
-        dGNZRG9OMnl0Ujh3OUxncjJrVnRyd2MKLS0tIGtEdHpMd3UwQy9uV3drRW4vRkNS
-        dmo4THlza0h3cDM3UmVEbUQ3N3FhMFEKJw6c3j+DRr8F0BdVDYlVPDCyOMjBSFe1
-        h1eiXDcmRADgqHv5La7r7Ba0fEMlj23OaQtrayBAuo9/N4BSgMRXHg==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB2TWZBZWptWVpicG5XZ1Z5
+        Q3pmQnNJMGRRMi81WHZrS3VMQnRaeHF2Q3pzCmpDRnZDeE9oMEdhQjVDZTNpNkkz
+        WEJaa3cwQ01MVE9XQk02bmRUN2JONW8KLS0tIDRzeUxjcXpXdm9LQUpsUHhsbEl2
+        S20vWjczQkdVRFhBYjJxMGtrT1dPK1UKi8lIwprmUlwIeIja2H3RWyDN1fspNtw6
+        9oX6zVa4e+BkIf3TPAtkKgxuHb7yaRhy7UQThhyLPNTTCgifmK6aug==
         -----END AGE ENCRYPTED FILE-----
       recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-07-31T12:41:38Z"
-  mac: ENC[AES256_GCM,data:tspnPveQbGZ6te0RxK8dmI6ef4w128AZRW69Yfmy3UW4eoWdUPAhhM/GIvIOg3+9if+7G58sTqzGTb2Qb6gNuUnPhyD0VX2NU/MVo3jidBUpq4879mHuo80FUImITRsgIPXFNITZBkXyXG+EIuoVmL9iuecvKcNkH2Aqx1erx98=,iv:4I+mdJSrcxkIxctmUNy9pRyzNfxhLTdM9iFFd5QrGCc=,tag:TNgLaw1MtCEE9mjwQDU3aQ==,type:str]
+  lastmodified: "2026-07-31T13:45:05Z"
+  mac: ENC[AES256_GCM,data:eccC15ES4yaYLCjlHSb94qpKFxUes7bjYR6Um3lyHhZtXVSKt14SqbqsXN84Hl5ZzEJgr+R3L3NkFLYcF0XXfVaj0UijjEKCATEId4SfE/cyjk22FfnfkLWthuyc7q7AKY/GPRvTrfnRPhycAHCwAQamqNXSMmW2I/L16swn/zA=,iv:5xbJ8ERsppyYRnn67hY5KB/0Md+iyYxp32ZTksia7u4=,tag:Ea4f70cDt/hNJk4tR6zn4w==,type:str]
   version: 3.13.3
