@@ -2,38 +2,38 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: 56076ea39a23553cc4c968ea60f93c1e90bcb434
+    decrypted-sha1: 94b93eb98746933b40dcf70c2d837a230e197c0a
   name: mongodb
 spec:
   secretTemplates:
     - name: mongodb-infralytics-password
       stringData:
-        password: ENC[AES256_GCM,data:FyA9PBXur7NZYA==,iv:Bu4k/KG0oq3pb0ns9NJLi4llbQqkdUx7LoEOD4HRQ7g=,tag:OKa3Z/VYRKSLVW0Y+x6g9g==,type:str]
+        password: ENC[AES256_GCM,data:s5Ip8RqlyGE=,iv:HEu8e1q/hjnbroR2svpWGN8UVHVo1ne3dbqNcIlFoUU=,tag:BtSTwVAuHJRu/ijorjQ7wA==,type:str]
     - name: mongodb-api-password
       stringData:
-        password: ENC[AES256_GCM,data:ArpMBszcPwkPfg==,iv:ByqIJ6UVhL/3PkybTb2jOUlWjGJ9ddgkCTEiWC1WlQY=,tag:pz8bEDK/FdG2rOzhPQmy2w==,type:str]
+        password: ENC[AES256_GCM,data:HyRwyUSkysU=,iv:SOqgx0zef2ANm5JjfJUzbQh0qTVQZWellJIIe91NqRw=,tag:aZN99cABNUV2Ge1GRvp3Gw==,type:str]
     - name: mongodb-ingest-password
       stringData:
-        password: ENC[AES256_GCM,data:8LivlmBhXvtA8g==,iv:pThFmHjoAxBoKO1ixMHIWbU+XzAXIsIQwDrrDJeizns=,tag:4EN6aOI9gD0I0vRG3Uj6hw==,type:str]
+        password: ENC[AES256_GCM,data:LmM1BVpewPo=,iv:Vk31bLZsL3HCsxgVVoHC4VB8G6mrW/d2VSP7mukLnzQ=,tag:0mOH6yeRdy+nEr3k1ijdng==,type:str]
     - name: mongodb-smart-password
       stringData:
-        password: ENC[AES256_GCM,data:rvlUWRsVjBIqvg==,iv:AQW7qFwvOY+280qF/uSrAQ/XjFuYEdLbOF3kZl/Jf20=,tag:lGU88cuxincJA3UZB64XtA==,type:str]
+        password: ENC[AES256_GCM,data:8ot7MpMBJ2o=,iv:d4ZbZsPxyXyU+ygXq7yGd1lmlWBfTcVkrNs7NVXtsUs=,tag:1UMAe5qX+zuFpuFL3PjUvA==,type:str]
     - name: mongodb-collector-password
       stringData:
-        password: ENC[AES256_GCM,data:6ZLpUHBeJER8Bw==,iv:PW9aA7jLMbdx7eRfV8bxYOrUpzunjBWb6dpQoR4VdXU=,tag:9o25oty7R88nS8R6P8U9Qw==,type:str]
+        password: ENC[AES256_GCM,data:mXIOHRLYIDI=,iv:uCAv3V5LgtXXjFKOTIDFmVfpZ6nyYhPIz1THcceHa/I=,tag:j/OQ0Bgj/D3xoXZWpK52jA==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHdTU2WDg3ZFIzZjdodzZu
-        bGRLMjloTW5TVDVvMUE3Q1F1SXFEU2V2alFZCnN4aG5NMTVUV2ZkUmk3aEVnUFVl
-        VWwyclFrZElWNDhWT3VxQ2lQQUYxSXcKLS0tIEtWWUxlbGZ0TU9Dcy9kU2ozUlIy
-        WVI5ZjdnREJUa055V3JVZHR6OVdUOVkKw4KInC+itHJCFUzbUg1PfgF9WvPdnmBS
-        /IWXQN77aNaGa0D+b0QU2TNlV4Dpa8eMynCMWFld4Z8Mcn4OumjQRA==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBNZkRDZklpZnNXTnorTEdN
+        dnkzc3R3bFlCRGZGWXdGT1NCOExobDhQK3lvCk4rQzNVUmJTODR3bTFiOFJ3UlZa
+        UXRJbEl0L2d2UHMwcWp5aFdCTU9NSVUKLS0tIHM1TG1LMzlxUlNGRENyQytMS05s
+        S2htN0pHOUFna1Q0Mmc4WXhpWHFqWE0Kbekl10en7tHncfHQ77I0kKtwWqweN9FA
+        PHpH51ryRMHvsMK1sgct7CO31v9uM/CaNHVsSt8uKpb/INKvBlwsow==
         -----END AGE ENCRYPTED FILE-----
       recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-08-11T17:27:15Z"
-  mac: ENC[AES256_GCM,data:WdxBTIajlxp7YWjhSycER0+XaGwezuphYVNrf9tWAsM3hJgZNGQ4LzOR1bXNj2nIMN1G5Ma1sYTUh3f1QV75fooietqIMe/JfW64s40DaC6Ce0tz9INUeX8hQgezcgRrv2tukWapYoyY6NPPCeM3pcYJ3Nis0tH0YPtNkQallWU=,iv:tlue7MiIeMZfvQXFy1643uMcgnC9Gsiyu/aigwOSu/w=,tag:8unAs8//TGjnLfg/v+ekcQ==,type:str]
+  lastmodified: "2026-08-11T17:58:15Z"
+  mac: ENC[AES256_GCM,data:zZp+zSTl8oDyi0EyPfggF25GoM4LsFg1GRX2/Fzz4fkdPwNLYRnOoCdl2/0IPiC1TcdGTDxYcYdGigDB0WKH1JY7I1Lbi5eICzx5iqc0GgPt5Lvp9ZOsJva8ILFeVNjrriRx/XfYOf9pZ+B3xzxlFWQOhXztz5X+3TDcnMAMTpk=,iv:CmTGYzfW59k5a3gdmSGehYcWQynoEeLtrGIffVuAs4Y=,tag:vVX+FPvnfSsJ4s6bo6850g==,type:str]
   version: 3.13.3

@@ -2,34 +2,34 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: 6f81f60198e6368a3eab823827dc39820a8a7908
+    decrypted-sha1: a855aea72584ca1344edcd7e03a74afa81394adb
   name: infralytics-cicd
 spec:
   secretTemplates:
     - name: infralytics-mongodb-config
       stringData:
-        config.json: ENC[AES256_GCM,data:fjm2FaKo0IzQ73dqs+Bv7kuOSCtdTD2ivSv15UvidFDKLFMdz5fUNqjWElZZf8K8ZT+F55SUMyoQid34MpUd72ylXsYGHM5rdDJknlswcaOnYfX218ysfqpe/75qJO4EGEvswsnNi4dA7PUahPDsoZfnfHL9/8ROy1NhYetQwmrkqFJi/Xi0YgxJ0tZJyo7oP9eTizkDKra7Xt6OZ7ygNikNL3z0u8JqNGAIQZWvtufkin1RXjWpUuCmwJ/UMA3gO0MpZCD+XVoElLj1TJCY2rHcTr/AsQqWsfs4ZMZjkMEV5ytbTYf//2LPX0AwQVL/+RBdCgikXfF9Y0Jc/FtITzFCLkMczqfX04pr/7xcWDE6BuJzG9LS5jytl/90J7V4IBAsV4YUgyVrClEh+0gocWV78rOSpbCe7RoMv48TDO3MEx1O0FFL5TWSXlLYEo/pU6fpzhclK29j2w==,iv:AGEO/uXacANama67wNS5L/1vq5OdB+C9S3HUntHk2KM=,tag:KofVA3Cf05q774Lyq9uO2A==,type:str]
+        config.json: ENC[AES256_GCM,data:eMnpPl7No1HdTw1VbS1WOqEJNIxsSX6ND2kOcUqiG0NaxkNUdoD61ePh50DZkTomYvuEP62Mx7gY1aTkiPr6JaXzalp5RSPaEfoedSla0EiyW9foj5sHp5F4Lxa/H4sXSTBeTcKBQK45HY0GlVv2YckrRIOGaDZQpzZ3yg17i2CThJtm+GTGR84WPUXF+32KlBzSfXoNMu7UOcQJTOPUNV9bM+zSuTvFAl94+zfdY5WaRdNp+X1Ic7/mOlkuWnwHlzjubcJaueCH6f/zhEN5Q281rZIGV1AsjKH7gArnMMyYd+fTkRvmWUnLdNbCVTZ+fhAzW0rC8VCuwQAgerS3U5DU4ryIGgsr+LNMJ5fnypYMl3OB5qwPpWGP5TXFni5SrL9Y7AIJFptjxe1NrHk2lRpKdCFb2n5zaq64w+zPAgYo+Zvg7fAll85qZfFIeuvoT+7BPPQoO5E=,iv:ptbZf0BUbA+miaMA4fACMBaoMefnZJ+8tUJB4VYR0zI=,tag:i5OF5ftQhUkwNN+QGU56cw==,type:str]
     - name: infralytics-minio-creds
       stringData:
-        accessKey: ENC[AES256_GCM,data:gTDXw0vh7tVW/sItGkjuI9dSXHEiww==,iv:cWW5oAgpLEI5hBINPjjG5yeigbz96DOG5nytPrRBwZA=,tag:UUzLL8O1LNr+47CD3qdrcg==,type:str]
-        secretKey: ENC[AES256_GCM,data:gy21jxGzbeP7q+n5UapcTKuwmK5/Wd0qlNxDr7chWAzDuR6NElK4mA==,iv:U9jldeXh85XO0WyPHP/oDmXekhdVLJkDsFUhRK0l3m0=,tag:8fl0NsHqLQI/p9e/ic43zw==,type:str]
+        accessKey: ENC[AES256_GCM,data:QrMBeTEiHcOJ+n+fTbwGpstPyzk6Kg==,iv:7Z79vvU58p3H5lAAgk/lOll631B1Gh6LbwUY3y68LBI=,tag:fU53wDT1ri7ZXr+/uxV/tg==,type:str]
+        secretKey: ENC[AES256_GCM,data:IRk+L0pxtXqwtn6Q2zJJAkxdVL19B8+M2AJninhcdmhd+/UtX92F/A==,iv:b3EfVeVuLQpOppLB2nohOqWwNbkcaUss6jAsDoEhfFQ=,tag:PO1G2V293rk6sBCTngA9xA==,type:str]
     - name: infralytics-mongodb-creds
       stringData:
-        password: ENC[AES256_GCM,data:21HdBkd24B3Xnw==,iv:eEAyp68UQjaQe9Klx5zIXgsjyvbsDLAJ9Y+AKKk2RsA=,tag:/J9Mpyy8LcVphBjD5bRVJA==,type:str]
-        username: ENC[AES256_GCM,data:/mfrzjsOlwLV5QI=,iv:7cLWPZ9+Tdzo72KSns5zTRPOn03/6p0JktDUEUbbUCk=,tag:4BJqCOUK9dDGZAlk0HgEIQ==,type:str]
+        password: ENC[AES256_GCM,data:ON7Aoq8+Sms=,iv:TVEDVyMLn2DKowhQc1qmG/5Dt3qczOVVWyC9Gnvoyio=,tag:4onYWC+mw14mwEXqB2f9Rw==,type:str]
+        username: ENC[AES256_GCM,data:bSn/uZbanSRWChc=,iv:gMVuNuD/hbacKWJgqHguk497JgwAvOvmtmfEwPmDM/c=,tag:VujhltrWvnu8uOcvhjXpPg==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsYWdKWXlaS01aeUhUWDc5
-        K0NxWGZKYkxickM3SXlrSHVKU3NqVmRSLzJZCkJFR2k2SElta0NweGJOYkxka0xx
-        MXFwQUNYcm4rWVZrSmNMMFROMHBkQmcKLS0tIDhDazBWRFNPREVrK1R3TEN0Yk9z
-        andaa2orOFh2bFk3VUg2WnJITko0NzQKd1H2UMC5/H5wwL9n4raOqOF6J937bheQ
-        8FvZhVo3JOFcTPCdeMM9z6B5Dh8I0w/XDykT+g7f1pldHYS7MBYZKA==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAvVFZzVWMzNDlraUhNQTNm
+        bUIzRWlML0hxSnlqSTV4L21zYm5RVS92UjA0Cm8ydGJSckhiZk1XajhQT3JOaFdw
+        UlZPa0l3MG9hMTFWUXB6bE5PRkdoWTgKLS0tIFAxV09PKzJhVEFleGpMVjRwbEdO
+        bUVXUUZMZ2xSdU5MYUlwZ2xQZFJFbk0K0eTZIp/+KC/RUvC/UhICxFpGULyfbKmR
+        Owb/hI41MqfLoy1L9ULCN11l6+rkeE/ektv9hMP1WFIsKEyw5coHNg==
         -----END AGE ENCRYPTED FILE-----
       recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-08-11T17:27:15Z"
-  mac: ENC[AES256_GCM,data:c2M2ExjoSRuGsKJ9AfT0tI0pgTO4agDW8qYApqfs+n0gzhZdFH73hqvnnrGeAVsAsQjHZ6dx/DD3x28E5Dv4bjPxHj4/oK+w0jHqTYvHVQviN/YrpcyhbZx3hCWSvULDcBhR3bAe3jPQk1g7V1Ozbe2y0y0Z1GqJx/7TlKUH3Ls=,iv:mj9eH+sWfW99M+6xITif3M42lrkMqiiGC2sIpJLIfDc=,tag:l60jtFA/lo3FcVMjfC9E7A==,type:str]
+  lastmodified: "2026-08-11T17:58:15Z"
+  mac: ENC[AES256_GCM,data:Atw+rkBWrTYVizGvGqZnDha1I29wgQMeJbRSlKkIEwYfhnRACTSNAxoVcxEddSMJfgYlpE+h6A8/vKehg0CHAJKirSHrPI3eug8IkoRnhDLq5/ZSWxUOUPEJrWOZBTMcXb69OkeDPHEJt5VmakMjWnK8pzazkCg33kZcyiEDKHM=,iv:1MvzjXAdLQ8BuMpZ8ONiyyenJGkoR08fy0piZmT54Eg=,tag:wIrxbczbbO1JuMMsYMOR6w==,type:str]
   version: 3.13.3

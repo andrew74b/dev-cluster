@@ -2,39 +2,39 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: 3783a9e5642b326b1e72dabe0f24f16811ded66b
+    decrypted-sha1: 539f6c8df7525bfcced744a530cc3d63769732be
   name: gitea
 spec:
   secretTemplates:
     - name: gitea-admin-creds
       stringData:
-        password: ENC[AES256_GCM,data:dcK6mo5Wk0a0cw==,iv:ZcFZDZ1BkOqD9BMOI4JM1KIFaWDfJ+NNRqEIyR4cJdA=,tag:pypNnWo+zAjxYXik/oU/eA==,type:str]
-        username: ENC[AES256_GCM,data:nHMmTDo=,iv:/WAs3iuFJOKNiyNdbsSHxtrw/OSDZWc/XWCZC6tsNJ0=,tag:4Duvj0GFXlTHbQMWcEG7aA==,type:str]
+        password: ENC[AES256_GCM,data:/dnh0Ra8Tak=,iv:e1EElfu7Wl5Et518bY1txhfuAf3r6ZEboeNeZ1EWy8A=,tag:EfWnTm6Cfxp63tDQgMDtgg==,type:str]
+        username: ENC[AES256_GCM,data:APOjwTg=,iv:x5RsWy2e9EErc5j2pTVlJ3Ln4b8oIiRAb8lubWKQ85k=,tag:zM7ArxsIE6yXQea8zKXTzw==,type:str]
     - name: gitea-oauth-client
       stringData:
-        key: ENC[AES256_GCM,data:u4A0Nt0=,iv:bo3LkLd33b5XwCK0S/toHTWZnaRzmYy/sJgYn9eULSc=,tag:MIdb8BMA5qQGxX/XmdIDsw==,type:str]
-        secret: ENC[AES256_GCM,data:vps7MGQLM6djHwItoXTW+bR4BZ55UMxaQeJUwZY83NE=,iv:aQWp+ihP8MO7pRuWof3Z6spcMN3TG7R6rvXELlLAxGQ=,tag:aBnE3hXQkWZr9Wq46Ct6cA==,type:str]
+        key: ENC[AES256_GCM,data:rjH08tU=,iv:1RS+RzzjqkidBSkhatk0pBx4p4CjGBWEDniQyhAn418=,tag:VZQWuoR3VSKNkPEW2MDvlg==,type:str]
+        secret: ENC[AES256_GCM,data:ISx/Qqn9s/qcTHFmBk0O3R5/cqdfXBN6BmWuDMszuKo=,iv:4zrBVB02iQdH9DVPTI4KALx5TVNDDX4Q6PP69uMMBJQ=,tag:x0WQAnF1w81wh+8aPuBXqQ==,type:str]
     - name: gitea-smtp-creds
       stringData:
         password: ""
         username: ""
     - name: gitea-minio-creds
       stringData:
-        accessKey: ENC[AES256_GCM,data:Pe48TV56jbE1sy+FVImfIQ==,iv:EPv+gLZU1kl3gSsGFVulph0CWW8wHEOh10pePvS3rio=,tag:sTnxGrGLVVOdoH7efUGNOg==,type:str]
-        secretKey: ENC[AES256_GCM,data:3LZwAJvmvyfoHULZWsD5qXVwoMpFLjcgKnoSwVWTsHm2f5q9Xl/BbA==,iv:4gvtnj8TB+0D3eI2KM/qInvy79YugQ0qEfixYsujolE=,tag:HnaLAVhspm9ugIKbv8zcag==,type:str]
+        accessKey: ENC[AES256_GCM,data:ToCHKsClaeR+/pip8sKAgg==,iv:njEb21IdRKLBufpGFvr/Jcb7jQhqAJ/DON0tAEG15og=,tag:nAik+93kKghzMpkGrVmYhw==,type:str]
+        secretKey: ENC[AES256_GCM,data:eUV0c7XU8dsHZGPnPG4GRAPhcrM+Y8Oq8UJ9nJkRLCSwNPEpRvUYNQ==,iv:zOPWmD/IUBiivuxi8WqitkVYi9g6i6qJvlMHhbLAULU=,tag:vj9lUoDXQ7hxctRLk3pGFw==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnbmZJNElsanNDUnVyOEVl
-        a1JKKzFrc2VScGtjQnAycWlnOHA3UmI3U1ZrCm1XbnFUZi9hQW1XVGtwL3ZNbGpM
-        SXlxM3c0ampaTXhERDI2b1I3OEFPOXcKLS0tIEkydFZBcjZJSHlzTnJ4Q2JtNXRk
-        UHV5eTRLMkk4aE9LV0g0OCs4QXV5RXMKU2vIuWOfVlRTXeGGGJbrJEyuCXSeHH6f
-        ViuHdOOOBhhiQNlDyqFREoY678KkdqlkCrLR4qOYJT1CNaHmVC240Q==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWVVd4VXY3TlpaRUtzZHQ3
+        OXYweWNzSVBVNEMyb0ltMFNwRkZhamNKaGdZClVXTVhWdlNRWTJIK2QxR2FyVWg1
+        d3Y2aUVxK1VwNEE4REpZMnIxdHRMMHcKLS0tIGppZkdVNm02cWc1K3JYdStJcmJC
+        V0ViY1lVSW5WRDNMRkJQUTg3QmRvak0KvUhYmdgTSWYwbj7oXGTWGlQrhqlIm3g4
+        dQZRNvgrIRJV6lPvqvTMuAV5QUquc2f/ubntP0WOpHqy5sZCZwUfIA==
         -----END AGE ENCRYPTED FILE-----
       recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-08-11T17:27:15Z"
-  mac: ENC[AES256_GCM,data:ljDxYIp9T3dOiksp/QyL59dgQA77A+GxdCyHqKx5q0o6y0sCtkTpHWtCGjd1TlILZYgD6D1tw3xXzFb7EMlfJu+aZZ6juDfYDPJJYFNlzohNi9m/bjTtpt6sMso0rju5XX26NfLTiG2lzYa1ScEhC+/+33YKMmdiQ9JuePXjkxM=,iv:X5nCmsemXkHZ/kCe4krNCHhwrXYbJ1dWLEenXwkeBJk=,tag:OQCidiBWLijEmKSqb9tkZA==,type:str]
+  lastmodified: "2026-08-11T17:58:15Z"
+  mac: ENC[AES256_GCM,data:TuyAuuhceiVW2isWTEpIBT0qbrpp/vQdGYp3jVVjxb/9qqQnq8NPkCLiDGD3FYVzQ76xATZH9iJpXIWv4RckxXSnxSMIwGf1EjaZP2DP6lVU+Ly/54sZWPZP3dEyhfktA7n/L2Ko5qTcsbNIAuw5CAjrjYFxNNTstqcOxeQsRTw=,iv:rkuDV9tpIolz6bbAjPRgALwe0BDO4gwpqPf4OaUbJTc=,tag:bVB8xq1U1l3KAAd8c45Nxg==,type:str]
   version: 3.13.3

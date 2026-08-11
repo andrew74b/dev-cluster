@@ -2,33 +2,33 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: 35c233666a4e74298c3f57a43971965baa25683e
+    decrypted-sha1: 0dfa222312524420cea4e675c30c678f3f909737
   name: kube-prometheus-stack
 spec:
   secretTemplates:
     - name: grafana-cfg-secret
       stringData:
-        client_id: ENC[AES256_GCM,data:Lkdb1eqQ7Q==,iv:SjbkUR3WmZ9IhoHAeHhly/eoth7ViGrXW1J7ZbMPdQc=,tag:n+6JjSng0iIF6Um599nYHA==,type:str]
-        client_secret: ENC[AES256_GCM,data:J3wRfHOjiqJQbNBQHLHfLhtvperYBJj/0HN9Rz6kSgU=,iv:4oGsaJipi58vPpBgN5mHZrdx7lMQIXN44WXhlY5ecbM=,tag:fPSTDB/RJ0XdS6nWbsIPtg==,type:str]
+        client_id: ENC[AES256_GCM,data:1HDCmnKUrw==,iv:pYmv1axb8aBDaF+6Cf9YJl3aIxw+Dpc8cYg53HqOg0M=,tag:ITdVQoIuzkldiBqeDzr/rg==,type:str]
+        client_secret: ENC[AES256_GCM,data:HqjtmyGGoJX67mwP1tUvPpUJ30L4eKzmt4ZhGAiJh08=,iv:TlMVvVCvSRsRg6mIxgFHVCXCxjgn69czLoo5oP0jmVM=,tag:UcL2WVEyIchg4yYfPxigWA==,type:str]
         smtp_password: ""
         smtp_username: ""
     - name: grafana-admin-secret
       stringData:
-        admin-password: ENC[AES256_GCM,data:zYHbgQ8hH7FinA==,iv:+/zy32k7t03XhKBGSFDWo2tyghuIhbJrT9AVGEfXTs0=,tag:x5jFI1GgBV+9+rSZynULQQ==,type:str]
-        admin-user: ENC[AES256_GCM,data:sXdmYys=,iv:YPlnElZwxO+ErRSdGeX64PEGb+IzwGLXl7GMWwrLFSk=,tag:k456ySP3Vs0sU94NvZ9bZw==,type:str]
+        admin-password: ENC[AES256_GCM,data:lqrwVsdywI0=,iv:FD1yyI884SvAc6i0tE36kI9UMo3O80IScCNjNOOR/X4=,tag:JZ422vfhI6yZJtLSXtLF+A==,type:str]
+        admin-user: ENC[AES256_GCM,data:QxHMZBA=,iv:Ih6zao8WO+SNbb/XU0lihrXpfnBWanw7CXc45Zu+TWU=,tag:YhjCeJz22rUDOZIOHmshyw==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBMQlI4N2lQZTRvQXdjUlFv
-        UUxwWEgzdmdLM21tQnhMQkZSSVFVQzM0bFRNCll5RTNmWEYxMDRpY2tKUjVaTkxq
-        Z2tORC85bUF1YUdHMVBNR3k2VEZIbWMKLS0tIFpwbFBvUy9vQ1YwT0NtdFBBekF3
-        Wk8vYUVvcVVKaks3YlRyLzFvNGtqU1UKr2A3652Y2OoOI9or8fMkxNC0dUdBX9eW
-        JgTxj0UNFqRR2UbVH90PqMv/ktwA5u1Kl4OerC6044JBqi9NfUJtCQ==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBBYnE2QUZUdkcwenpEZko0
+        OUQ0cXN4cEhkZnJhRW43RzJzcFkzcTlSUXpFCld5Tm9wWVRzWmtwV094d1FLT3hJ
+        b3pka2RORW5mWjk4Wm1hWUM5RWZGWlUKLS0tIGcvT00yVVJGQnlONWoxREZ3RitM
+        MC9URVdzNFFzM3NFbG5WV3dFSWpVc2MK55i1GAf3jvWVtvB68DgyckrAcKxC9Agr
+        18g7eVesaO92yEvq4g3szv21nFLn/XZpEQVlKYpjLI/z0rChTT08kg==
         -----END AGE ENCRYPTED FILE-----
       recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-08-11T17:27:15Z"
-  mac: ENC[AES256_GCM,data:aBLsI7xntGoI0yEtVB3qS2h0YYgLjsPbRvB4VLkTh9tfZrZqV2ZwgacPmqnW+RY+cWsfmpFdSQSqHPstvhFassiHbERLHnIAxQ1mJOkgVvQkNYbaXUXj851M1lBdUFJWd8hP/IumEBHsQfUmenSPfVA0M/KGyIDDKQ8Un3/JDwg=,iv:HhMLMYm7vUQQmXr3tZl8TihnE+n+NixNaXv85oX8HOE=,tag:NRsVSpbDFrvWo9TtJ4l7iw==,type:str]
+  lastmodified: "2026-08-11T17:58:15Z"
+  mac: ENC[AES256_GCM,data:GrQBr4YSAoPmgfu7hMCeX4RbFq0F2KWPwj3bSSGFzWyqTS79G25ZaNhByU0dPz0kTlXNS4Wzh7EKD11FnlxzXleb2nrDfqX+Cwd2ldx19DrA9OSXb0BQg2v6RcbD8WjP01xI1kZ/USxCBAPJ72srax3zaBn8qoPkH2uNjZViviE=,iv:/+PGn+X1UE/qVeqiispp86MD0rfBK5zXDZ8EsXKJr1c=,tag:kxZm8adMJzXKn0sr/0sEtA==,type:str]
   version: 3.13.3
