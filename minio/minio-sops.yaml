@@ -8,40 +8,40 @@ spec:
   secretTemplates:
     - name: minio-argo-user
       stringData:
-        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:3VXQujOAdgNqTiuWmvGx,iv:XBqbgW8QPzGiDl3UiMoDPM7JWogx6WOfjBZiRLI8Nm4=,tag:vwMN6r6LiWnJGOlTC/PmVg==,type:str]
-        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:HvWMhUC/rfB0zLyP8HxDrDCDFp4a6KJswgxIyRyXHjTR96I2xIAVSA==,iv:69vclRG5trnyaoT4wz3NnyAFxjB1j9xssBIHepFIu9g=,tag:kEDUEcEGnzmqitO1hnAeOQ==,type:str]
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:ehGFBuVephz7k+TjrjmQ,iv:/9XjDE5ZP3qPI0HH/V+gLQwtGZ6RnDg6z3WCCqId9Zo=,tag:x3AUZjwLoXB0y/X+Tx2LJA==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:dRNz0kie7niB9P+F+n9FRqkteDvePLqfD9BtCMOjYxbQNZAy1RJ4uw==,iv:BkDGj2nPt7GUhQ7I/DVaGEjS3t7M3lXWKJJmlVVZfX0=,tag:/iVCllyG67vt4fPfYLqHzQ==,type:str]
     - name: minio-gitea-user
       stringData:
-        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:KpZIaIBmiwn0slGkfomgzw==,iv:6cXAKqa5Ke0EOJ097iciG8go84KGYGNZ5VuldcbSQcU=,tag:qJSnbeMBHmTIYRz0XbJpsQ==,type:str]
-        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:YIn6+1c9dxvjCWFfUqgTMsHU/m/Vn9jGiH5/8lJOUlXuC6g4lqY4Jw==,iv:OvzTkBgajXqw/QC2iPvwv+vuI5WikS0p1s6v/HlxE6w=,tag:KjhDPhWFuE/5PreP6pUDqA==,type:str]
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:xoHhqZNqaJqe6n3W4sPqtA==,iv:qQS0FBwNow5oLhJlBwhLxjIoDkoJZ2ZsNIJUi6kH7ZQ=,tag:mDC7TTDt3BnIVVNnK3evBQ==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:J0QabxdiyMcsvdxgWSweGB23FqqcneN0PFQJ7AHqmRUXPz12XXgqEg==,iv:4wf8vYOT78pkpzK47Vq9aizY4EZiXH06lbF2sZV3EKs=,tag:FTAI4yMC6yCCNjJKKsaFWA==,type:str]
     - name: minio-harbor-user
       stringData:
-        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:PltBkDlGU9w6XGGjPnPlqIw=,iv:DTgoUiohENpzj7GmGapbERb9DHRjBWd+VrgBqX9YY80=,tag:boGvvTwOkb/sVZZrtMFREA==,type:str]
-        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:ivygVN0M5r3Qq9S0x/Elu2CNQxSfk/kzyBxkkG3RdixQiGLzKMPmVA==,iv:To6vBwWc+LcWDnRXE/c4FKKhNTB2O0kHhMLvEgk9FQM=,tag:+mfqBXBXwvXyDob0M+QRkQ==,type:str]
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:xRjGwHbY+j6hn9yr80bUS+M=,iv:AciPQAyDHns5qPoWFxM+tq0F/4UCX0wwsMzUMgYUOrE=,tag:Jev6zDwfPST3crRmuFpzIw==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:u8DzBdMCDSozVLxVLHQICLEIDbpshIS2W45T8BFVEMaOR/KsuMo5fQ==,iv:XGItyDv+3R2YkhC4h9FglQICk6rjCohAS7hCxsxQbsM=,tag:/xw7n91yAegFfkxvc56gJw==,type:str]
     - name: minio-infralytics-user
       stringData:
-        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:tlvuryM0QLqr/ZO0nDStIWUqIJiRoQ==,iv:zGznBjBmufLYUVMm6g1mFlzJK/AUquCVqnNrUuE6GuU=,tag:1NoUNcfeQgyyMYrB1iBN5w==,type:str]
-        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:0OrfaNKgC6FSvoZcsWWrUcTJaRPKKfoVu/IqONNbGf11NAk6RplkAg==,iv:vqsO6w0FKvi3F+h48UUGGbDmsW4aHIasWn7O+vPZaL8=,tag:EprRQsNnsEUkry6TfqX1rg==,type:str]
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:6i038boLk2QH2EUXj8JB/L+WSvsSGA==,iv:paLLQzlN/0ov3QQYLA2PokLSwWf6dXNoaKHa/2dkVw0=,tag:7TH1xu+SXw1q5H6UiEzNGg==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:VkBcbnZWdyG8gUP01wvYHtY49jwc+X8dPXlC7BocBbzLcY/zNo3beQ==,iv:/F53OjDDnrHLINkNc+hrQTSnp6TNHprXZmYqzQ7kXNo=,tag:Cn08UFbJicvrFqmTc0ZONg==,type:str]
     - name: minio-outline-user
       stringData:
-        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:Fo6ed4vFklZ6gjNQppOgxLiK,iv:4cajawokQF4xbhwfhqQC2BTZIYBf6wNBnL+pVYhlPYU=,tag:pEH8TzlhSDtA84DQtS5now==,type:str]
-        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:8L1WWryRQP4xAY6LL7umr0hT+yfRTE1amqJiypla07r0JE/wtQWFrQ==,iv:E+IWGzx2q+8iJ7XDBpGKjEHUHsXudUQsuHwRixC3p9I=,tag:H3d0PgF86EZuMH3i1IC+2Q==,type:str]
+        CONSOLE_ACCESS_KEY: ENC[AES256_GCM,data:0ledPqQrosZsnIqWrdCt/xtW,iv:oMYcgI/moGG1CRYNp/HJioEm2IPx6Mjnpc+ECstVbXs=,tag:JVqmyYG6LfZ5LsSd2wfIfw==,type:str]
+        CONSOLE_SECRET_KEY: ENC[AES256_GCM,data:1qqup/O+/WANfAqKzt0tCxc8yCx4M1TuiNgMmefguucgl3d+0WoWZQ==,iv:uMduYyBpftNUwK/0WbOMAQKQm88IVwR4wBE6N97fmGI=,tag:8f6xxINbUsw7dUyFyP3seg==,type:str]
     - name: minio-env-config
       stringData:
-        config.env: ENC[AES256_GCM,data:FRDF4Wp+JQHKtOdPihez7E/bxic3U7cEgtl8rA8VqLfimD/+gFDSxDiXEJKTB7Sgo9/zMPGI5ii2IjUv3aanFT4tqL8uHI42aJoVfRdzeNV+d74B3vhgnHJcJRZok8d+T8VYJwcyOAh3tNUlnbXhzKULU8vKtwhWqu3crYcfXOsfGlfV6F4hrSFrkW18bko1rwVd8k050w6tc/3J63l0Dlh9vHNY1hhK0Crbb4I2d/dT3I+lQtVxC3PdbnFjR5tpHnuN1B7O2j9eiFTFgSZDQ4OWrZx0I4FxdIBhsZmo4TevLAaA06kQdcZ+YOFp2JePbSilV/ukI/Ir7lM+gknKX6UYprBFATsLuvWOQNH4RBzdK8oFiGgoGF1IHGj+cv41BUGeoL2EcrBHHaoYNHhFNt1+3gT5MT8D6CDIStqNhYS+PhMWSdaJA3N5MdONHRnjTE3qvdeTNzeByz620mKCeBxqSTvC60gA6HEY1zQR8Jd2GmEdAbP5+853pBACGzUn5sfLZZZO2m9fh9l3oGaP1ZEv6C4WCJLM3fEWE4k0zSkIMu6NxlhQgDfcAEZbAiMSHgdgNaDrjridmYWVF81msvRv7rd6Co/TcX6zjdWB6MRufGri+zx0HRddzUDlj7UNoE0DsMUNSH4AYBnRyA1DtuXFl98fsOnie/S725+jT5DaAZrMGZCV/ZHOLFNlsMMsSemik8pA3ebrdv9iGNiBNDKAx1jr1AqZJ0edBycfityG5LOskV2rdRofE8w6PnYhctNnvY8qN1+d8kZY4Hk3hI5P+ipWd810hK1cJrSP4uWTQ+0crd+NnjARkDrVlEiN5BtLlFYEqir1ohtyiZfpHc6MY9+fwhfVuk9pmzBCzZjpX12TzVUySAKbQWsR8uUCuCMc2FuqRDRE25QmL64i8RKyGc08SDTb4ZrtXyEB4JxP/BXttViVsmV0Hs3ZiG1gFsM6IMGen4tOPgyO/2fUDA==,iv:Y91/9lWxUjgzkmzFGF3YpbtjwXoKmA4e1rHfUGL0hjw=,tag:u0Nu+ZASHD+CLfHA86zR8g==,type:str]
+        config.env: ENC[AES256_GCM,data:TVuK843sQlueIFA5nFfFzL462QLcAHLyjoqTLw9WBthhTwNO89pRlDl2iqfBgsaSJprpbaPT/wLVXidNqDemHMnqumwuf7r60C4hnUxKyo+9935tyDqxjiMvv1EL/p6syDghZKIgxV+7OoNZ2Ou8QfDRoE1GwSHH9hQD2KdNHtAs8Wswyc/ZA7EVE1NWlaCHWaZyaBsQyRwWBJ1mpKn3fcTAURfWF93oMFVrdtYCx12HPIOnoD2fSZo0LvrYrQ10KvRy6loL331ehwvJ6FVAk5Q+QCL53jj3IkrjfA6q7FFRR/UKTp4YHnHClMP9KENAwuXLIK6dDp9l1MDwCzZMU5YvZYMlYHi8QVR/60OKeD5C8KgGl/1bxT2wA0f2YBDF0+L8EBM0NV86pmMO0Jv7ibNuzwg7A8OtjQv90P2+22pjH8Ex05x58VixQ7NBr5vjB+4y3SOkNicUv55AK38BO0KbqeAU/nWZ4uSqGfMmjCt0GY1YzMiQ1cBrRajeRN3co9tbmSx6mYoqofhiMe+60QeF4HoGHvbn70tj28lVHR97Vj0ghE8k9xF04nKq7dEYCDPRC7ghwGpcLysqwJAkc0BOFR4KMGP9SERvJ9//5Q3gbsJYCkuNa7uQdfiiMjI13OWYEFt3ipsyoZI7CW6CHDg0I+d+9mWghQG8ohnWC3d0eUMb6FlcqgdErqPR3kojFjI2DTtdO+excyndNoNMSg2tbNPAtpk4ba+8FbINzZ8ROlURGlfegAoSYK9vfSQnVr1Z0NA4oMtUNPh1g4RI8Zes34PF5y4ll0dLNbMeKI011oJsnKtOpqhEtfT8e7Y0/MbMY8Sp2Dr6SN+qfeZzlPIJYXJkmv1/hIHnZw5SsAqbk8PcS60bshwm+/TQT0BtkRx50qXGQfSaZIgSEOMVWdhFNPa7s2FqPTAjNm+YbVumDwU1ecS4dwBVqVjCamsrIGIsqAeFBxfFFC08r5brRg==,iv:KXfX9v1/NO8T2jXoy8FAtSh/ZL7024G6VA6q6OB7po0=,tag:9kgI9fZhp4s2quFE6YR0hw==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5Rkc3ZGt2REZTQnpPSWNI
-        VU5Pb2RzNm1UNFBRY3czamVHZkd0aEY5Q0JvClRmYmZXWlRPT0QwbUVaMWZKRDVp
-        TTFuY1RFWEdxTnVkR05LVUVIZjREamcKLS0tIFNXdzBHUlVLekdHeDhQWFJMcFEr
-        UWduaXhaWVRrUkpIVzNLT1BLWEFzNXcKzkLN8rwKhoR1CWdyZhvhYodCJ0qYVqri
-        LkN/E7pGETFOtUIFl/PjnD41S91AWKpk3oxGM9sV7XPfNIkNKWx5zg==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGcjNXMlMwNEs0MWdUN1FF
+        akRRbkVrd2R5SVRZUFJEa0NlejlBNGw5VlQwCnFJNmtoVDVTUDB4MURJOTgxZFpm
+        dzB2M3l1NTdWS0hDaG1DRGVuYXpNMHMKLS0tIDE0enFYTlRtcEN4VzJEeTFweXB3
+        eHdlMkZwOTNleHJqdHVnMUl6Q1N3OFEKFVEp8hrEIUagp5jMj3tr1GEZJr/XwSIf
+        dWVc62EznoKEmHaglu47e7rAKoefVKHqaaZkXvJWptUGOBTFIDZRvQ==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-07-31T12:41:38Z"
-  mac: ENC[AES256_GCM,data:+T9scTe86IehnYIR7+TLT+mRo06FwnBOpYF7I9VV+6bncet+Gu8QxZZbHqSGNmwFDGWvCGkV5p4zDutASaU9Fg8jbAHp76LkuSBRGPihborcnG/30LspxoEzaZ0526hy9zWQkr63WqcLrU5KOQzifOLnnkiuXeecSe84iX77M3U=,iv:eElKcEbCP2wXcK5qHHtjsz7dII2P8aZPmBzXbxjjxfQ=,tag:1XJuCURsleKt/OoB96nJjA==,type:str]
+  lastmodified: "2026-08-11T17:27:15Z"
+  mac: ENC[AES256_GCM,data:HBr/YKtLxMm47CqDdrn5f25YQmfGrNCifL9wlQ+XAR8Hc0XpciP+ERlQfSGPdkvDZJa+E1i5vWpowVRfxLpX09+oWMclpyJFZdxnQkOZluKt7Al0LyJ9Co+tHlJLppjhgNwGJhGsJdYtPkqbwsKLllWz9+sdpd4tqjiJ+zC+LCo=,iv:p7L4XVifcc0CXfBQXzu6Xo5X0XvxjrqAx2+qoR/Jgo4=,tag:3QEr8ln2Hmm7z0q50jHdTQ==,type:str]
   version: 3.13.3

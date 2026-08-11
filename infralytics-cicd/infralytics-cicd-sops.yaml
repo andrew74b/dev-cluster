@@ -8,28 +8,28 @@ spec:
   secretTemplates:
     - name: infralytics-mongodb-config
       stringData:
-        config.json: ENC[AES256_GCM,data:cSDAAroxrICTtzTeJxfFmdp0sEo7LHArL14xfyv2YO+Q8zfg/Ht9i6BaSv379RTmv6vzWvENWL2ZuYZS3I2AANwSdkHcdRwHsNxbgCwSiaBh/lQeMA9wvT7xL0pym1/ocS+wxnan6rD3kcWjckE7gbfwFmWCTA53yEYZwq2dffoaFq+iAXk6rfrWrlA8RNtBdr53ekYUiVWz1u3AofsSUDg8Gnwp1w9zx9eS9zcWjcELkq60LJqaVC6vN+via9Y0QwcKmRx6BHVMY4yEdncEyaNtVxO+QOXbjPoYGPja8mq9G+lC+THfXcun8fvobut59F2I4DAZ8X/hBp6Lol3vl0KmHP5a/pIrcRozJQvGgtJInJHofsGsQ5m3lkdxOafYnoHIYit1oQJD7aniDeYQlIkbP9RTy/WiI0HVJkRytEPXCigo6/RG1lkVlvtI2gKtCmsog0y1RlQoPQ==,iv:G2CPiQv0Wf1AD9VpFhy0Xu9/v64+dPFeB8ubtB7PjmE=,tag:bpbhdWxmhClVQtAnsSCy8Q==,type:str]
+        config.json: ENC[AES256_GCM,data:fjm2FaKo0IzQ73dqs+Bv7kuOSCtdTD2ivSv15UvidFDKLFMdz5fUNqjWElZZf8K8ZT+F55SUMyoQid34MpUd72ylXsYGHM5rdDJknlswcaOnYfX218ysfqpe/75qJO4EGEvswsnNi4dA7PUahPDsoZfnfHL9/8ROy1NhYetQwmrkqFJi/Xi0YgxJ0tZJyo7oP9eTizkDKra7Xt6OZ7ygNikNL3z0u8JqNGAIQZWvtufkin1RXjWpUuCmwJ/UMA3gO0MpZCD+XVoElLj1TJCY2rHcTr/AsQqWsfs4ZMZjkMEV5ytbTYf//2LPX0AwQVL/+RBdCgikXfF9Y0Jc/FtITzFCLkMczqfX04pr/7xcWDE6BuJzG9LS5jytl/90J7V4IBAsV4YUgyVrClEh+0gocWV78rOSpbCe7RoMv48TDO3MEx1O0FFL5TWSXlLYEo/pU6fpzhclK29j2w==,iv:AGEO/uXacANama67wNS5L/1vq5OdB+C9S3HUntHk2KM=,tag:KofVA3Cf05q774Lyq9uO2A==,type:str]
     - name: infralytics-minio-creds
       stringData:
-        accessKey: ENC[AES256_GCM,data:nXQOS4N8zyNqVA4jFnB576Nf40w67g==,iv:Noi4B/wYEc/xvTbwlulNGH6hN2i3aUlEXIgg7dDXjcE=,tag:h7r5imDYZom7Uez5fMBwHg==,type:str]
-        secretKey: ENC[AES256_GCM,data:KL0L2F0eq7KS4fHj3RdRwAnOZFVInbyGAlphOWKKeBJ0NCayU4p0CQ==,iv:WmuYLJNHreXGIYmb1SA61/YcnidiXU/AkFrC4s+SZlM=,tag:gYkIhSdw9vu2y+c0AxN11A==,type:str]
+        accessKey: ENC[AES256_GCM,data:gTDXw0vh7tVW/sItGkjuI9dSXHEiww==,iv:cWW5oAgpLEI5hBINPjjG5yeigbz96DOG5nytPrRBwZA=,tag:UUzLL8O1LNr+47CD3qdrcg==,type:str]
+        secretKey: ENC[AES256_GCM,data:gy21jxGzbeP7q+n5UapcTKuwmK5/Wd0qlNxDr7chWAzDuR6NElK4mA==,iv:U9jldeXh85XO0WyPHP/oDmXekhdVLJkDsFUhRK0l3m0=,tag:8fl0NsHqLQI/p9e/ic43zw==,type:str]
     - name: infralytics-mongodb-creds
       stringData:
-        password: ENC[AES256_GCM,data:jhZ5xev+Og4U2g==,iv:SDMUs3s3A1/wQE2q2g4uy1QD5iN5MSxupwZv6S6yfTI=,tag:dr1N9uJbwqDwDv+K2B2dBA==,type:str]
-        username: ENC[AES256_GCM,data:F3jmPTWfVbFn6fQ=,iv:FbBtoFs67QHELOlg54Vffcr93Q5bxT5dbh+rDz2f7kk=,tag:r3wsIFRsC6pYECCe+6tLnw==,type:str]
+        password: ENC[AES256_GCM,data:21HdBkd24B3Xnw==,iv:eEAyp68UQjaQe9Klx5zIXgsjyvbsDLAJ9Y+AKKk2RsA=,tag:/J9Mpyy8LcVphBjD5bRVJA==,type:str]
+        username: ENC[AES256_GCM,data:/mfrzjsOlwLV5QI=,iv:7cLWPZ9+Tdzo72KSns5zTRPOn03/6p0JktDUEUbbUCk=,tag:4BJqCOUK9dDGZAlk0HgEIQ==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWZUp1bHBrRWVIQzBaMUVW
-        eG5KZDhUUmI5TzQreE8zWlZSekRnVHNhZ25RCmdiT2hPdmhEdlpyWm5uRnNEOXdr
-        QlNORkRjemQwTjY2c1lDS3FBeU9uNTAKLS0tIGkrT1RPUTJHc1gyMjRsZy9iZTJN
-        U0gzWGpTUldCaFEzNHlaclFpdE5oV00KVpmod/RjyXNOm01ymqbguHb8ISe2WQXI
-        AoS57ftCrGUl3TXKZu77GUIgO74q2esG8MqXSnqRN0rakO0/gTMGbg==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsYWdKWXlaS01aeUhUWDc5
+        K0NxWGZKYkxickM3SXlrSHVKU3NqVmRSLzJZCkJFR2k2SElta0NweGJOYkxka0xx
+        MXFwQUNYcm4rWVZrSmNMMFROMHBkQmcKLS0tIDhDazBWRFNPREVrK1R3TEN0Yk9z
+        andaa2orOFh2bFk3VUg2WnJITko0NzQKd1H2UMC5/H5wwL9n4raOqOF6J937bheQ
+        8FvZhVo3JOFcTPCdeMM9z6B5Dh8I0w/XDykT+g7f1pldHYS7MBYZKA==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-07-31T12:41:38Z"
-  mac: ENC[AES256_GCM,data:uxAcVi76k8yTWRNg3rxBnZxMOgBWPRQMkelEkoqr6U/UfcDvv62CN2QH02WsfqOfTc5UbvYsH0woAZzjjy7m/DTINCWPbEpoWwS8lZHmPZlWD5dm+2BY8hpWWi4dJ6/G1OSDBBy3xdx/NF3J+G5Zct38tWQKvkt9zjOFm4Fooso=,iv:4Ix5sYo+ZVbm58wJwyNi8mynoGin2NWmGsQf+XQMaNo=,tag:FsQ5eJXgHTyIMb0+0DbS7Q==,type:str]
+  lastmodified: "2026-08-11T17:27:15Z"
+  mac: ENC[AES256_GCM,data:c2M2ExjoSRuGsKJ9AfT0tI0pgTO4agDW8qYApqfs+n0gzhZdFH73hqvnnrGeAVsAsQjHZ6dx/DD3x28E5Dv4bjPxHj4/oK+w0jHqTYvHVQviN/YrpcyhbZx3hCWSvULDcBhR3bAe3jPQk1g7V1Ozbe2y0y0Z1GqJx/7TlKUH3Ls=,iv:mj9eH+sWfW99M+6xITif3M42lrkMqiiGC2sIpJLIfDc=,tag:l60jtFA/lo3FcVMjfC9E7A==,type:str]
   version: 3.13.3

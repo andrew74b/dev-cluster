@@ -8,20 +8,20 @@ spec:
   secretTemplates:
     - name: cloudflare-api-token
       stringData:
-        api-token: ENC[AES256_GCM,data:dAHMGNGUAo2LlgHauDogy/aN/A8w/RLuWW6znDh8bXJMJyWlfy1JYlMoPtkp5q2O78ELKHU=,iv:lbJGV7qIO0SRK49TkJAbPX5JQpQE7mnQRvZfjKVgLCE=,tag:L8lZBD6BlZPgWGd0MPDNbg==,type:str]
+        api-token: ENC[AES256_GCM,data:5VsievpEbPFEox7V9F+M9/L09P2VQ4QJA5rnRHhj8/eMRgPuJ3VUx9foiAKAOYegV0TYdVM=,iv:2/y97w0XvChU3pKfNdafbzHYzRRwRZtJSzEpED9WYvM=,tag:KkxJ64o/eOpDzhbmawKEAQ==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3UXk5TkhETnlFM3h4YVBE
-        V3dKZDFlb04rd0FoUkd5cnNCcE1tSDNBVGpnCkRMblB6cXROMVk4RFlFUDFNRXNw
-        ZWZhMm5DUGZVdzZVZXgyZHFGbmx1YWcKLS0tIDF2K1Nic2hVeFRiS2RjdGlqM3lC
-        aGl3OGZqMVppaUVLbUlCZjlYVEFGQzAKr6/n/mSFKV5fK5WyQFb2EK7tQ4YONZae
-        9QwOzMbF/AzKqfiYDxPzUr/v9kuX7LTjpSqxVjmrfZwMhMA8g4Expg==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA2RGU3MklobkZKSXJ0UEcv
+        SmRUU1drY1lFR2VKZ2RxakZRTVZ2SDF5U0RFCnR3MnlCeEliMlFJWjdjM2lXaDVC
+        dkVSWG9hMVNvb0RLb2JlcDBXb2wxUE0KLS0tIFV4czdYYi9oYTg2cGtXZHdEVGhY
+        TWVJaGdJS3RVZDJtQWdORDV5R3dOdEUK8cpzunI/wA96qATekSjlKgpW106zNvYQ
+        06i7+VBdLEb5t2V+wuOw8TXNt0sVsSApFg+z8dW3QkbOyRm7Sca1Eg==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-07-31T12:41:38Z"
-  mac: ENC[AES256_GCM,data:cpcOiOtdx+aM9PK1DtGT37PdLJZ7MTeS3p3HrDqLukCzOWIt1Ns7FBCScOodMnP+/AyjjQzdyFyBPfjh+lVmjbnAOkwoOTP2N2v5bgyu7KLuTGy8SBKP4oaj/rwJk0D98i0kEyakePCN0eG+Zd1NQsKb9NU/h/2ZNJLtduP6Nlw=,iv:jNp/wi9C6/lJrqWL5RjB68PE2NDYd9KLdBR14soQnJY=,tag:gjD1q9ZC9KRURlJT/SOSgA==,type:str]
+  lastmodified: "2026-08-11T17:27:15Z"
+  mac: ENC[AES256_GCM,data:uwkpX0uKStWuU9gcsCazHDGjE51aggp4nydDOqfL+tolS8e41joh511aSGlgSJaKsUZ1efoPaQqtONzwwIxMxEngSZnP66QW4iheshcTJ8Q53yeDtJscXyF1kCGMD2As6/0XVa2QpZRyUveWksSBV78hNal/BRa8SLr56szts/o=,iv:C8VSIaA0LvHbYngtl1OSOgNBKiI7Yspa4mgW9Je2uMA=,tag:WrKBfziKIFFRgDXxfwbocw==,type:str]
   version: 3.13.3

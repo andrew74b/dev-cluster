@@ -8,32 +8,32 @@ spec:
   secretTemplates:
     - name: mongodb-infralytics-password
       stringData:
-        password: ENC[AES256_GCM,data:DPe/uRJFNy3WOg==,iv:udm64grKmdF1Kr0HyQUPQOi3V6QsYYoZHrBMWtAWbg4=,tag:tke0Jn3kZz5z6YqNoasoBw==,type:str]
+        password: ENC[AES256_GCM,data:FyA9PBXur7NZYA==,iv:Bu4k/KG0oq3pb0ns9NJLi4llbQqkdUx7LoEOD4HRQ7g=,tag:OKa3Z/VYRKSLVW0Y+x6g9g==,type:str]
     - name: mongodb-api-password
       stringData:
-        password: ENC[AES256_GCM,data:G9O6rMMMFNoj+Q==,iv:3h1qYbReyCgKXznWWWCNJCSeJxOQPOzqfv3IJt2XQ/w=,tag:mPI0TykPY27IzJ4RmsdVbw==,type:str]
+        password: ENC[AES256_GCM,data:ArpMBszcPwkPfg==,iv:ByqIJ6UVhL/3PkybTb2jOUlWjGJ9ddgkCTEiWC1WlQY=,tag:pz8bEDK/FdG2rOzhPQmy2w==,type:str]
     - name: mongodb-ingest-password
       stringData:
-        password: ENC[AES256_GCM,data:KUm4973alrq+TA==,iv:4CUKzOIww8fW5XjWynlTmeHdjdlpqRhohM103avHiUA=,tag:V85nZkOPEHd2e26pwS0cPg==,type:str]
+        password: ENC[AES256_GCM,data:8LivlmBhXvtA8g==,iv:pThFmHjoAxBoKO1ixMHIWbU+XzAXIsIQwDrrDJeizns=,tag:4EN6aOI9gD0I0vRG3Uj6hw==,type:str]
     - name: mongodb-smart-password
       stringData:
-        password: ENC[AES256_GCM,data:zBrIqGLq54Q1eA==,iv:+M9MdHIOPoserWVWFc0l6jGb3a09C8k7YLpOwUDoI/E=,tag:x+/fI5CFq8WuTGQWc1lD4A==,type:str]
+        password: ENC[AES256_GCM,data:rvlUWRsVjBIqvg==,iv:AQW7qFwvOY+280qF/uSrAQ/XjFuYEdLbOF3kZl/Jf20=,tag:lGU88cuxincJA3UZB64XtA==,type:str]
     - name: mongodb-collector-password
       stringData:
-        password: ENC[AES256_GCM,data:IkVSkfA+/fjctg==,iv:iSkXttPhUNRqFUKlp4tGCb332D5dWUMtLeU5VejW9M8=,tag:M56PJRDG37Fbu+xnS1Hhlw==,type:str]
+        password: ENC[AES256_GCM,data:6ZLpUHBeJER8Bw==,iv:PW9aA7jLMbdx7eRfV8bxYOrUpzunjBWb6dpQoR4VdXU=,tag:9o25oty7R88nS8R6P8U9Qw==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBvaStGQnJIQTdNSW9aVDZt
-        ckZYY0xpWFpaSmVOeEtSVWZJbE1ydnBRQ0VBCjdTRHpPa3YvVURpUVdBcXU3RjZ0
-        a0p0VW00KzRJUE14amVRQkhYNU4yaEEKLS0tIFNxSEVXbXB0akpKOEwxcDdLUmw1
-        TWVnRGFWa01jSW5sSnlEeUZVTGFzRE0KQJG2qFWRcAf2btdIJnOaBqZRYOcIsJ+f
-        15U/12v1C9F0ADxiMGR0GM/epwu7K5N8AoSJjcj98SKE5+e1C5YAwA==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBHdTU2WDg3ZFIzZjdodzZu
+        bGRLMjloTW5TVDVvMUE3Q1F1SXFEU2V2alFZCnN4aG5NMTVUV2ZkUmk3aEVnUFVl
+        VWwyclFrZElWNDhWT3VxQ2lQQUYxSXcKLS0tIEtWWUxlbGZ0TU9Dcy9kU2ozUlIy
+        WVI5ZjdnREJUa055V3JVZHR6OVdUOVkKw4KInC+itHJCFUzbUg1PfgF9WvPdnmBS
+        /IWXQN77aNaGa0D+b0QU2TNlV4Dpa8eMynCMWFld4Z8Mcn4OumjQRA==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-07-31T12:41:38Z"
-  mac: ENC[AES256_GCM,data:07AytOvgyPdhHFZVKzC2wnVZ0Bsx7iBWlIIQiGYoac6C/IHuAWiCKovhDr8Vri7CrSpnz2XebbmS2IQgXW1FpCwTLKqDaG+6hfKOcQub4TXezaElNDXVVa1s7RSB0yjHk2q5dZfJTyWrawv929JVajgCtBVYdz3LgoJBRlNNetA=,iv:UndjGDtsOr3Mhjp1hN6FHEM7+NJWsQYSca5eo4+askA=,tag:uEOUnzn4Cc310Am2lErUPQ==,type:str]
+  lastmodified: "2026-08-11T17:27:15Z"
+  mac: ENC[AES256_GCM,data:WdxBTIajlxp7YWjhSycER0+XaGwezuphYVNrf9tWAsM3hJgZNGQ4LzOR1bXNj2nIMN1G5Ma1sYTUh3f1QV75fooietqIMe/JfW64s40DaC6Ce0tz9INUeX8hQgezcgRrv2tukWapYoyY6NPPCeM3pcYJ3Nis0tH0YPtNkQallWU=,iv:tlue7MiIeMZfvQXFy1643uMcgnC9Gsiyu/aigwOSu/w=,tag:8unAs8//TGjnLfg/v+ekcQ==,type:str]
   version: 3.13.3

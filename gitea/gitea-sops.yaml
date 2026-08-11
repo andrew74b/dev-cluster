@@ -8,33 +8,33 @@ spec:
   secretTemplates:
     - name: gitea-admin-creds
       stringData:
-        password: ENC[AES256_GCM,data:RJ5Tsi4jyD4nvA==,iv:GDb6rPKpXyiHAebZ/OgM1CYfPqudSi4fg0ERv/5qcWw=,tag:xf7pfF0+Zv4k1Lrxf8WRzA==,type:str]
-        username: ENC[AES256_GCM,data:c136lVo=,iv:BGbl0wwpO2zG1odLy504GwG1cPXvzRXolXzhw3/efrQ=,tag:LjR7KmFG8yI86Yx8DrR/2Q==,type:str]
+        password: ENC[AES256_GCM,data:dcK6mo5Wk0a0cw==,iv:ZcFZDZ1BkOqD9BMOI4JM1KIFaWDfJ+NNRqEIyR4cJdA=,tag:pypNnWo+zAjxYXik/oU/eA==,type:str]
+        username: ENC[AES256_GCM,data:nHMmTDo=,iv:/WAs3iuFJOKNiyNdbsSHxtrw/OSDZWc/XWCZC6tsNJ0=,tag:4Duvj0GFXlTHbQMWcEG7aA==,type:str]
     - name: gitea-oauth-client
       stringData:
-        key: ENC[AES256_GCM,data:DmrUtj8=,iv:9qEi1wOTNoW7p06NpEh5P9ZefGctjrGb44xqOwmaNPo=,tag:zvdXp0wSqYgYS2EWVXOTxw==,type:str]
-        secret: ENC[AES256_GCM,data:QMs1eusX1ayurihMxB+2ldy+y+olyqsFtNao0399mqI=,iv:JzgIR2yDY5TfkFGcKMlYFfv6fL4iWD2fIWNZOHTFn3w=,tag:igr3D0+5Fv48+I5K4ge7uA==,type:str]
+        key: ENC[AES256_GCM,data:u4A0Nt0=,iv:bo3LkLd33b5XwCK0S/toHTWZnaRzmYy/sJgYn9eULSc=,tag:MIdb8BMA5qQGxX/XmdIDsw==,type:str]
+        secret: ENC[AES256_GCM,data:vps7MGQLM6djHwItoXTW+bR4BZ55UMxaQeJUwZY83NE=,iv:aQWp+ihP8MO7pRuWof3Z6spcMN3TG7R6rvXELlLAxGQ=,tag:aBnE3hXQkWZr9Wq46Ct6cA==,type:str]
     - name: gitea-smtp-creds
       stringData:
         password: ""
         username: ""
     - name: gitea-minio-creds
       stringData:
-        accessKey: ENC[AES256_GCM,data:A6Q77D6RGvBVBrhTM3IbNA==,iv:wlLGrBqdlGc98vUywZ6t4Hwqah06RRS14jL6ul2XN2U=,tag:BidTRS05x7tel7XkcOb7xA==,type:str]
-        secretKey: ENC[AES256_GCM,data:kFXQtqVIp3B43RIiniYs15Dfx7FfN92q32Mi/5hobb5Yk/yyNHWzOQ==,iv:x+14rmdfYs/pwzfNJN+BhW2a0GXxaZc/CFuQ47ZVq3s=,tag:z/SYF4Ql3HWupLjoQLxftQ==,type:str]
+        accessKey: ENC[AES256_GCM,data:Pe48TV56jbE1sy+FVImfIQ==,iv:EPv+gLZU1kl3gSsGFVulph0CWW8wHEOh10pePvS3rio=,tag:sTnxGrGLVVOdoH7efUGNOg==,type:str]
+        secretKey: ENC[AES256_GCM,data:3LZwAJvmvyfoHULZWsD5qXVwoMpFLjcgKnoSwVWTsHm2f5q9Xl/BbA==,iv:4gvtnj8TB+0D3eI2KM/qInvy79YugQ0qEfixYsujolE=,tag:HnaLAVhspm9ugIKbv8zcag==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnUlNwY2k2a1pOUjRYaThW
-        aUhWRHJnMDRwZDMweXNTRkx6OERBV2hpajAwCm5EakViOUpOMk1GWlAreXpuZkJm
-        dUgrR2U0ZTVmTXQ4amJZZ1pUdDZDanMKLS0tIDJTRDdmcE90R2V1K0lGdnExeUFo
-        bkNHdjQxTFJwS09VaTREMndhSUZIWkEKri8dF4B/8aEAUf4+dkqvfDMaeA9lUV8M
-        9SZXtZ51CK6DSPBqD6k0YrB/1a8YnTlqYFvU7ToHvf7AjrVIs/lCbA==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnbmZJNElsanNDUnVyOEVl
+        a1JKKzFrc2VScGtjQnAycWlnOHA3UmI3U1ZrCm1XbnFUZi9hQW1XVGtwL3ZNbGpM
+        SXlxM3c0ampaTXhERDI2b1I3OEFPOXcKLS0tIEkydFZBcjZJSHlzTnJ4Q2JtNXRk
+        UHV5eTRLMkk4aE9LV0g0OCs4QXV5RXMKU2vIuWOfVlRTXeGGGJbrJEyuCXSeHH6f
+        ViuHdOOOBhhiQNlDyqFREoY678KkdqlkCrLR4qOYJT1CNaHmVC240Q==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age1umjsnzeel08tjeu5ye82v42suz5qhmcwm43x035gc75yyd8h5faqkmv4ew
+      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-07-31T12:41:38Z"
-  mac: ENC[AES256_GCM,data:zkZwR5O+otehOxUQOCeVcygOQt6g2dcvj/RptsiM4PUFBsjcSOsvzM9ZB2WvwJDXDk76zZiAPA5VfmVoH1im7R2k1ACn6/QeVmaMF4LK5rSjqqwxilNFCvOUdfwsdJZR9eIVMN967WtXZfkZa14jhFDdGF4U/6Mu83mPAn82hGw=,iv:3TYr0wb5u9tqUgz0PgTbh6/d5Xr5CzmP1rUx+JFosfI=,tag:UYMBrepf2Le3ClulbV0N+A==,type:str]
+  lastmodified: "2026-08-11T17:27:15Z"
+  mac: ENC[AES256_GCM,data:ljDxYIp9T3dOiksp/QyL59dgQA77A+GxdCyHqKx5q0o6y0sCtkTpHWtCGjd1TlILZYgD6D1tw3xXzFb7EMlfJu+aZZ6juDfYDPJJYFNlzohNi9m/bjTtpt6sMso0rju5XX26NfLTiG2lzYa1ScEhC+/+33YKMmdiQ9JuePXjkxM=,iv:X5nCmsemXkHZ/kCe4krNCHhwrXYbJ1dWLEenXwkeBJk=,tag:OQCidiBWLijEmKSqb9tkZA==,type:str]
   version: 3.13.3
