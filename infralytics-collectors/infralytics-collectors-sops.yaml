@@ -2,26 +2,26 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: f3e6d39e77b0541723e8be8eee177ef7be40b352
+    decrypted-sha1: d7bfc4d555d25f43f3ecf7fd38129073dd116117
   name: infralytics-collectors
 spec:
   secretTemplates:
     - name: infralytics-mongodb-config
       stringData:
-        config.json: ENC[AES256_GCM,data:n5E/l3vInUX6V3/pZme+YHrNFX021I+fbtELK1SmMLtu4tD4i7kPxrAzmQJdl+Cu2gdkKfvvav6CJz1oZIyUpJJMKqYuuj1Od5CHYW0VYhWdHPuDb9EqCIn43uiPQIa9KE12xpwXnUwLaW4m89HB4KANrR3e4W5xsH5ODmQfPWBrr2WUfvbXILyYn4qr4mVwFSNd0Eme5TU3g2m7MN5brK/jF0vYu/tJVgRxMXfOV4L+B1PUG5Xnpx8JZx049wn+Ph9brtPUUTvVzxc2v/ZaqKwxoJ4VR3b1BIEUrniys8grzKeV3350i1I174K2t0IGopvBy4l7s0xsljISj2WGkU37B8vyWBSDnqM0nvrDVnev+y5mk84qO5yErbPgGdath7SjqOwotmvtKgpEoKU3A/G9KkKExJsts6qWbTa3ROiG06ufOdFdMXIvSN2yfJjHFoJGpQpZIWc=,iv:u8JkIx7biLGN0SaDgvFo6IPG18S5CDEl0oVgez83W4U=,tag:GoVZTnj26FWWNk/br2wSZg==,type:str]
+        config.json: ENC[AES256_GCM,data:lVbGnZa4RXZUPqYhZoNgwWabJ/9ZiKcAZ7pvfZOg8v6VC2sqEiewzDDrCcsHiliytYPTaiowvqynBWGteWW1Yc6h4Z5wKVeBM0LlqMzkgH3xqtDufJHxer/Fpkd/CFY4WM9aaENpPyMWyrembqmqbT7fYBnxDj4vkL2qd+3QEVpulyaJ4MZJSwknZAPnMfA1q01dptm80/mSyiaK2fwZdI/Q+5muWRbgcaBD6gptFohvXjrBCGvHDk8bCqeXX5K6RljeOzuHtJ6oBVoI3Vf+k3LhRe69EY7gZEkDODOKFelijlHfWQZGEYzs8Sz7MB+aGvtDN9fEuI2OAtLZMvWLiakjugVtZ9aZ3Vq+RR5fmjZfnR1LaRTo9Z9aQqwCXJJ1VnfyVfNdwM40PJ7TvtuhjCh3UYw19JEHPh6zCCtQZ7G9LjGZaBdFLVUmdyboobimCey3G023QDUiyg==,iv:ZsrpUaDKDzmZOreciQy091YAdyQc+8zO2vo/Q9OpukQ=,tag:F53nyWyvkWFS5JUZNJXc+Q==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBla1BjMEVmcm1qRVVvUVBE
-        WUJuWTY5Mm5XaHlrOGZoV0NOWm1lZEY4U3pnCmVFamNrYzhKUTVGVEtFejZGUlVW
-        MkNIaTZ5UG5Rc1ozenVsM1BSUjRPZVkKLS0tIE5GdE8ycGJUT1hUQWNROTJqZWk5
-        SG5TVWl6QnllSjUrRVQrN3RWWDM2TEUK3axvEiN+zhdLw5P1Q+Irq2W1EnKWSWzi
-        syLeia9J4oBe1+7x23wYGpvBVM3yuHWITB82Oj9BCdMOPkcqiIqeXw==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3MFYrQlA3bDQ5VmtuakNM
+        Rzk1RDRDTFFHVnlwMHp1WVgvczB1VTY0cHhZCjNzdGMwOHd5WlZyNmZSVDJyZmEx
+        ZDZTOVZ6bEhMQnp4T3BRdW90WTJuTUEKLS0tIE5FTEhKNSt2RTNmaEtiTGpVZmJw
+        V2R1RW52OEw5aXVBSW5nRHpFQ1F0MFkKDjR9rRDRAZd7f7FNPm2sm0MBstv7vuSf
+        8xrT0EdnOWkLW2zvOfet61nnvQL31go2bu1lTZOQ3xo84ZA6uqzZOA==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
+      recipient: age1gf6fxcc2wk03y5p0hrv0wgww2m6xq0mc8ts6390rwdcs0mlqka6qau7r52
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-08-11T17:58:15Z"
-  mac: ENC[AES256_GCM,data:skzxk8foGDeEK4fJhaS3HCGzMNQr/zddaBkXayRDZBRMQt8KAotPG36ZbGI/k7uVi/j3uK18JEBlqR4lq47jHZSowyGjWU1ECpQoq2vzl1gsg+qrGfY9vqdNdPHvmse5DQV3ry5oP2Rvu//12HpEZa7U5hkQz6/RdCBTLk4+mno=,iv:HFZXl9bu7+JzeV5PRbOrbUTmGB3WHewWvhahvpJNau4=,tag:AYgcF/7zGuV9vB56TK8rCw==,type:str]
+  lastmodified: "2026-08-12T00:33:09Z"
+  mac: ENC[AES256_GCM,data:DCfXZthfvfYp5P80qiXTXSwQFLwagPF1chxRwshUjcOS28Aw1gMsCU1Z/BOkha0ueiWxgSNWgniFEheUv/CU3EdMvnjy7Nav6EOnf5rLuK+TVL9Ny471ljEcObCy5mD+pdqkqvBmegwc0oI8vQdBMTs1BP8/1kxM8E1HmlfHqXk=,iv:qpWJMgXV41HrUm8NJTx33T/ACOEVW9LAiNivmuimpao=,tag:JSNnWOsH9fXvKAMxMWRkHw==,type:str]
   version: 3.13.3

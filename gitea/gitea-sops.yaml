@@ -2,39 +2,39 @@ apiVersion: isindir.github.com/v1alpha3
 kind: SopsSecret
 metadata:
   labels:
-    decrypted-sha1: 539f6c8df7525bfcced744a530cc3d63769732be
+    decrypted-sha1: 3783a9e5642b326b1e72dabe0f24f16811ded66b
   name: gitea
 spec:
   secretTemplates:
     - name: gitea-admin-creds
       stringData:
-        password: ENC[AES256_GCM,data:/dnh0Ra8Tak=,iv:e1EElfu7Wl5Et518bY1txhfuAf3r6ZEboeNeZ1EWy8A=,tag:EfWnTm6Cfxp63tDQgMDtgg==,type:str]
-        username: ENC[AES256_GCM,data:APOjwTg=,iv:x5RsWy2e9EErc5j2pTVlJ3Ln4b8oIiRAb8lubWKQ85k=,tag:zM7ArxsIE6yXQea8zKXTzw==,type:str]
+        password: ENC[AES256_GCM,data:0lRlvTv+oO7FLw==,iv:SP5yCsn6PZGWojebtmQqbBjUFmLM1j7YmrSFFdd9S1w=,tag:ourr2fv6rch3ErVhVs1fOA==,type:str]
+        username: ENC[AES256_GCM,data:jRwC9Q4=,iv:uAYAJ438lepGyIzTaabTKsT0GC9GkOVhX70REcL7RWU=,tag:gGhm0z3dNb2Gnhjm5cJSYA==,type:str]
     - name: gitea-oauth-client
       stringData:
-        key: ENC[AES256_GCM,data:rjH08tU=,iv:1RS+RzzjqkidBSkhatk0pBx4p4CjGBWEDniQyhAn418=,tag:VZQWuoR3VSKNkPEW2MDvlg==,type:str]
-        secret: ENC[AES256_GCM,data:ISx/Qqn9s/qcTHFmBk0O3R5/cqdfXBN6BmWuDMszuKo=,iv:4zrBVB02iQdH9DVPTI4KALx5TVNDDX4Q6PP69uMMBJQ=,tag:x0WQAnF1w81wh+8aPuBXqQ==,type:str]
+        key: ENC[AES256_GCM,data:0uFwDbs=,iv:5DDfODqaKuGJZXNHIEEMZbvLLmVo30QTM6/tmtJzSNc=,tag:mW5T9AMqo1Y3a+xuIdswSg==,type:str]
+        secret: ENC[AES256_GCM,data:1Krdfo5pvMiFGmIA8AjZsI1dBWDXIG2v0x9WKxNqXns=,iv:+BI1ito8PAdT+Mm9XTs+wpk2rLuwTcqk8+OCKThf3E0=,tag:jBM6RXpXWeODjE0lDMbfVA==,type:str]
     - name: gitea-smtp-creds
       stringData:
         password: ""
         username: ""
     - name: gitea-minio-creds
       stringData:
-        accessKey: ENC[AES256_GCM,data:ToCHKsClaeR+/pip8sKAgg==,iv:njEb21IdRKLBufpGFvr/Jcb7jQhqAJ/DON0tAEG15og=,tag:nAik+93kKghzMpkGrVmYhw==,type:str]
-        secretKey: ENC[AES256_GCM,data:eUV0c7XU8dsHZGPnPG4GRAPhcrM+Y8Oq8UJ9nJkRLCSwNPEpRvUYNQ==,iv:zOPWmD/IUBiivuxi8WqitkVYi9g6i6qJvlMHhbLAULU=,tag:vj9lUoDXQ7hxctRLk3pGFw==,type:str]
+        accessKey: ENC[AES256_GCM,data:NpmwN+2YZ2L6USMJa7YKBQ==,iv:KuDYbO8W8U724uF7V9n9cppkWl0v4no1gv4SeOLRYdg=,tag:iN50ZzC7zbkk6gOPO0aFCw==,type:str]
+        secretKey: ENC[AES256_GCM,data:df/lLtR06Rp1Lb6nxW99QXhw1gBvcUfeqxFZmhjva8R8cEZ2zX45jw==,iv:pXlFmelMrSWzqBpgHMPgt1rCTblkPxWj+Lr1MuAdxZQ=,tag:CBLaVfnNCVQmt877j17Wkg==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWVVd4VXY3TlpaRUtzZHQ3
-        OXYweWNzSVBVNEMyb0ltMFNwRkZhamNKaGdZClVXTVhWdlNRWTJIK2QxR2FyVWg1
-        d3Y2aUVxK1VwNEE4REpZMnIxdHRMMHcKLS0tIGppZkdVNm02cWc1K3JYdStJcmJC
-        V0ViY1lVSW5WRDNMRkJQUTg3QmRvak0KvUhYmdgTSWYwbj7oXGTWGlQrhqlIm3g4
-        dQZRNvgrIRJV6lPvqvTMuAV5QUquc2f/ubntP0WOpHqy5sZCZwUfIA==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1dHJJNG1UaVM3SWFId1o0
+        Zm5QRnNQcVJUZyt1c0FRcC8rekZCMXl0dkVJCi9Ba0RaczFpYmhkQ0ppMkJnckRp
+        bnpTNXowaWd5dmQwUThpNmVMOGZxUkUKLS0tIE83TVlmUDF0c25uay81VVVWa0U0
+        a2hYazB5VVBjSC8wU3kxVUFoaDVVM3MK9EEqCKs55iZ7qLZL7sUDshu0LaP/ZGWZ
+        JAFohkRhp1COUeWqQT5evEyoAI4BdAId0xFz4mczgMTFIbljFHwx8Q==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
+      recipient: age1gf6fxcc2wk03y5p0hrv0wgww2m6xq0mc8ts6390rwdcs0mlqka6qau7r52
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-08-11T17:58:15Z"
-  mac: ENC[AES256_GCM,data:TuyAuuhceiVW2isWTEpIBT0qbrpp/vQdGYp3jVVjxb/9qqQnq8NPkCLiDGD3FYVzQ76xATZH9iJpXIWv4RckxXSnxSMIwGf1EjaZP2DP6lVU+Ly/54sZWPZP3dEyhfktA7n/L2Ko5qTcsbNIAuw5CAjrjYFxNNTstqcOxeQsRTw=,iv:rkuDV9tpIolz6bbAjPRgALwe0BDO4gwpqPf4OaUbJTc=,tag:bVB8xq1U1l3KAAd8c45Nxg==,type:str]
+  lastmodified: "2026-08-12T00:33:09Z"
+  mac: ENC[AES256_GCM,data:5q25B6a+ja519zWKacRLKizbF7dvmdaf5teh7qRv7YCtHXy2Xxfo8XtTLmjavaoLnWsuHrg8HCyCRq0h96EGdBghHWWyvr/kY2ymW5Q2Wby/KGpoyUIJqcyy8hEom4rFnDLe0dlaymGZ3bhqNmGu9F0np+tmkufGyxa+EPp4CA4=,iv:B+L8Ak5SKJRZDx0+ChXi25OMVM1lYqt+BhHGMPBINhk=,tag:4eb0oAfehnO3L8biw7zqNA==,type:str]
   version: 3.13.3

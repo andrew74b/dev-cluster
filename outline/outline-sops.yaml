@@ -8,27 +8,27 @@ spec:
   secretTemplates:
     - name: outline-env
       stringData:
-        AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:Q1nTS+vpHJXhxMwcxW+zQ+hp,iv:LUAWmfdDGIiOobi5HyNIEJ35WKrunyekKHzm+IWo4YI=,tag:8mcx4xvEW6NNFu6FgvfjiQ==,type:str]
-        AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:OgtZKJYcClfAs1LC74QehnbUW1KELaVzHW8yVzbULIU9CWG9VHF7Mw==,iv:4IjcIyV0tt+BBmJtD1GpbhSHl0vZn5pNhdEwMBoLWjg=,tag:pSSKorPAfzlcS6t9F0i8QQ==,type:str]
-        OIDC_CLIENT_ID: ENC[AES256_GCM,data:UbVGOQccFQ==,iv:3btjY/otp8afT4ikYb9BgWTyMAxf1ekgjo1+8xz1FDE=,tag:ibHJghKDCXYHnrb/5kj+Yw==,type:str]
-        OIDC_CLIENT_SECRET: ENC[AES256_GCM,data:hjrYfJCkIVmW7ou2sKf7QKV2aQ/gN4mCopLeXzndM3I=,iv:BgOxheUlkcaaGWzfeV36LCPFOtqgaNsA7WEzSkOPOrY=,tag:ah12q1Yo+WYR60EFjmcAsA==,type:str]
-        SECRET_KEY: ENC[AES256_GCM,data:ne3CasIeyCOpVkcFN/2tb6DtPLupK4VOybVrMXZ3soh8K4VWLNAT+Zt+0KufGimPutumjnAVhVP9ai3OHiC+vQ==,iv:73Y9Vb0DTA1UKq2fA3tgQtrAfolQp3SYeB7h0yu9nlE=,tag:lYQNWgVo3oAaurKQpN8QGA==,type:str]
+        AWS_ACCESS_KEY_ID: ENC[AES256_GCM,data:jpUqyxHhW4zUupHdG5sUB05m,iv:R1kJXZDDejdYy2sKbi1WuR1NRfhuLQPb+Ybkw8Extqc=,tag:bN4WFlNPU35FYSmZdFqLXw==,type:str]
+        AWS_SECRET_ACCESS_KEY: ENC[AES256_GCM,data:BwiVkgNG83J/vku966XVcyu6T8QafIsItyoymxWLwY4g1B4fwsCmtQ==,iv:LX16IahvFI/5BKUi/9jNXQXTSSyuSrJ1mbTxh2kthTs=,tag:y1lWyPTmb+BZWY5hD3Cttg==,type:str]
+        OIDC_CLIENT_ID: ENC[AES256_GCM,data:xa17paVumw==,iv:wTYqhj2F4b5SpFHLasjpGVBSwwEKhKIBbWjiyQUl56w=,tag:k5YPyBacr+qoz2wSwnjD/w==,type:str]
+        OIDC_CLIENT_SECRET: ENC[AES256_GCM,data:xIOKuh+v5KScxg3+cCgH/LHnom4BAv/7xAZRupI4qKM=,iv:Jsf8wYhUpIJjJsYJG0nDI3IgTnfmw3IWenjWqb00tT0=,tag:F3sJmWu2IvGMRvrVZJcxpw==,type:str]
+        SECRET_KEY: ENC[AES256_GCM,data:kTWhVYp8XR5oWoIqrn+RTeI9Wne9ZcERXqYcSCR2dYROBhvruuH9PPjKcbu3uyNOrMoXH8dZQtD5SvnUD4foyQ==,iv:MN0WZ8H39RrnZjHje2sT9gJRGXKdP9mM4oru1yEQxXk=,tag:m59UsJuSi2sVjVFfvB/lBA==,type:str]
         SMTP_PASSWORD: ""
         SMTP_USERNAME: ""
-        UTILS_SECRET: ENC[AES256_GCM,data:65fHOwRE26K1kSDwpIeB1l8pXWcCNnhh7CZEdgeKvujqFusrYaxfeKAOUXT7VnvTNKwoD+s0F6vYbr6uhpAnHw==,iv:P1H/Goa5U+RNeIdhVQZP/l3EvIP+UUDniEWCOKLtPus=,tag:EOaHasQCMmuLgYtupOoGug==,type:str]
+        UTILS_SECRET: ENC[AES256_GCM,data:4UQ2UKz5rCAA8K6USI46enmyw4MLZlwYhnhpD+/9IHftka1+GZdwHdXlOfxMZKiyqCq+3d9Kkk0oiZvrLKiWcg==,iv:zj5q89WfqERFkCeGBFfckE6Fee+3liOFiRM/bBInGzs=,tag:bZKknNtUdGkuafeOsH6XUg==,type:str]
   suspend: false
 sops:
   age:
     - enc: |
         -----BEGIN AGE ENCRYPTED FILE-----
-        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuak9na3JZdUNFakRVYWhQ
-        aXo0c3pUOXdXZDlMWkxQNlVBQ3h2ZzR6RmhNCjAyd2xkaytYRWVtMDlEaFduaHdu
-        UWpxNllCTXVwajhPMU1tWmhoS1RHOEUKLS0tIGhRM0xBSTZUUVVUSVh6TkxKQSs4
-        ZWcvbXhueGh2Y0N5MEVOUEI5QXZEQUkKENmgI56rx4JrKuTfteFBePARymVVs/kD
-        C3WcNnua0+oqpXDJL6Z3Bn56EvhsFPXkBA8vt3eml6vOl0+bqYNe1A==
+        YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBPbzFSeFRlbXk4d2dPUTd0
+        OEMyN2dBL1dON3hZRDVqMzhVU2hvZWVsTUZrCm03MzgzdjFNVlhFTEFOdXc3UTVa
+        MXlNWENCbWJrN3RhdTlpNVFpZTRpLzAKLS0tIDRKNWg0WGFzK1E1R3dtODBRMzhn
+        MnR5Y0JveVZTWEl2Mmk2bGNmOUVJOGMKhx4mJtOuA1Kd4x1Zp/aBc4+CDWIquoVq
+        tb9Zc2TjMk4JS2nWYJXVuoRLvVgBVlBTPhrR1mlTx+aRVa4o8OQz7w==
         -----END AGE ENCRYPTED FILE-----
-      recipient: age13rl9kyy5eu4yy8qrqlgrw5n8wtvtzslcuea6l7wc60l98lzrnu5s0qddr2
+      recipient: age1gf6fxcc2wk03y5p0hrv0wgww2m6xq0mc8ts6390rwdcs0mlqka6qau7r52
   encrypted_regex: ^(data|stringData)$
-  lastmodified: "2026-08-11T17:27:15Z"
-  mac: ENC[AES256_GCM,data:2+5EGipbCb/uIr9Qr1NzBFZ1xH+qDqJe1l59ahMcvWDOY6BDzqzwuP8D9nuWQIAxY0k9EvBAYS9k/NBLJDlIKT4KxREdNXEWyfQ9+en5vsu1OFNNJzM0gm8vv7XPJRBTf/gZV2lK6P2Y59hgQBJijRYZrQL3xJNV99rzykeMSd0=,iv:a05ArYhEa6MjuMxuZ3IOpYLTG8on8Zi//keDNrkwrGA=,tag:9FiYmHj8sq5gEIfrpe8Fqg==,type:str]
+  lastmodified: "2026-08-12T00:33:09Z"
+  mac: ENC[AES256_GCM,data:5RP0/WXWp2P8oFlFTsqQ/kgDl2QTUhZm4BP+7GulQEibXhoM93sZW6PjI7hDxP9zP7cLFjobIk8WbhL2Qsjp4fgIP6w2dJa+H3hxlD1IsC/7cKl1PXVXfJOd+2sY9WK8hUKGqYmGecKijBKP1xMOBjLO3wODKNGpUuFvQ8fyStQ=,iv:sD8Z9CiWHrqUQzprtSUBH0iXj6yvlZUKsvWdpvQ3/QY=,tag:4Q0w/y5g85qbuoNbnMlfxw==,type:str]
   version: 3.13.3
